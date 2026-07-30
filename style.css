@@ -1,0 +1,9 @@
+body{margin:0;background:#050505;color:white;font-family:tahoma;text-align:center}
+header{padding:25px;border-bottom:1px solid #333;color:#d8b56a}
+.hero{min-height:70vh;display:flex;flex-direction:column;justify-content:center;align-items:center;background:radial-gradient(circle,#251b08,#000)}
+h1{font-size:48px}
+p{font-size:22px;color:#ccc}
+button{padding:15px 40px;border:0;border-radius:30px;background:#d8b56a}
+.cards{display:flex;gap:20px;padding:40px}
+.cards div{flex:1;background:#111;padding:40px;border-radius:20px}
+@media(max-width:700px){.cards{flex-direction:column}h1{font-size:32px}}

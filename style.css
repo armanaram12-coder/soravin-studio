@@ -408,3 +408,43 @@ font-size:16px;
 
 
 }
+.right-content{
+
+position:absolute;
+right:8%;
+top:50%;
+transform:translateY(-50%);
+text-align:right;
+z-index:3;
+
+}
+
+
+.right-content h1{
+
+font-size:55px;
+margin-bottom:15px;
+
+}
+
+
+.right-content h2{
+
+font-size:24px;
+font-weight:400;
+
+}
+
+
+.right-content p{
+
+font-size:18px;
+
+}
+
+
+.hero-buttons{
+
+justify-content:flex-start;
+
+}

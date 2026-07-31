@@ -1554,3 +1554,66 @@ text-align:center;
 padding-bottom:80px;
 
 }
+/* دکمه شناور بازگشت به آموزش AI */
+
+.back-floating-btn {
+
+position: fixed;
+
+bottom: 25px;
+
+right: 25px;
+
+background: #C9A44B;
+
+color: #000;
+
+padding: 14px 22px;
+
+border-radius: 30px;
+
+font-size: 15px;
+
+font-weight: bold;
+
+text-decoration: none;
+
+z-index: 9999;
+
+box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+
+transition: 0.3s;
+
+}
+
+
+
+.back-floating-btn:hover {
+
+transform: translateY(-5px);
+
+background: #e0bb65;
+
+}
+
+
+
+/* موبایل */
+
+@media(max-width:768px){
+
+
+.back-floating-btn{
+
+bottom:18px;
+
+right:15px;
+
+padding:12px 18px;
+
+font-size:14px;
+
+}
+
+
+}

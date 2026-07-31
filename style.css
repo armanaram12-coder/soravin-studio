@@ -1216,5 +1216,10 @@ height:450px;
 /* Portfolio scroll position fix */
 
 #portfolio{
-    scroll-margin-top:10px;
+   html{
+
+scroll-behavior:smooth;
+scroll-padding-top:100px;
+
+}
 }

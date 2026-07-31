@@ -1213,3 +1213,8 @@ height:450px;
 }
 
 }
+/* Portfolio scroll position fix */
+
+#portfolio{
+    scroll-margin-top:100px;
+}

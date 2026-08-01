@@ -7,6 +7,7 @@
 let newsData = [];
 
 
+
 // ===============================
 // LOAD JSON
 // ===============================
@@ -35,6 +36,7 @@ fetch("data/news.json")
 
 
 });
+
 
 
 
@@ -96,8 +98,7 @@ if(news.featured === true && featuredGrid){
 
 
 
-
-// همه خبرها در گرید اصلی
+// کارت اصلی
 
 newsGrid.appendChild(card);
 
@@ -108,6 +109,12 @@ newsGrid.appendChild(card);
 
 
 }
+
+
+
+
+
+
 // ===============================
 // CREATE SINGLE CARD
 // ===============================
@@ -123,7 +130,8 @@ card.className = "tech-card";
 
 
 
-card.dataset.category = news.category.toLowerCase();
+card.dataset.category =
+news.category.toLowerCase();
 
 
 
@@ -219,10 +227,16 @@ return card;
 
 
 }
+
+
+
+
+
+
+
 // ===============================
 // FILTER SYSTEM
 // ===============================
-
 
 
 const filterButtons =

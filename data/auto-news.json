@@ -1,0 +1,15 @@
+[
+  {
+    "id": 101,
+    "title": "خبر خودکار فناوری سوراوین",
+    "category": "AI",
+    "tag": "Auto News",
+    "source": "Soravin Tech",
+    "image": "assets/image/ai-news.jpg",
+    "description": "اخبار جدید تکنولوژی پس از اتصال سیستم خودکار در این بخش نمایش داده می‌شوند.",
+    "date": "امروز",
+    "link": "#",
+    "featured": false,
+    "status": "published"
+  }
+]

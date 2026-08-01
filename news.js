@@ -1,15 +1,13 @@
 // ===============================
 // SORAVIN NEWS SYSTEM
-// Dynamic News Loader
+// Dynamic News Updater
 // ===============================
 
 
 let newsData = [];
 
 
-
-
-// دریافت اخبار از JSON
+// دریافت اخبار JSON
 
 fetch("data/news.json")
 
@@ -17,20 +15,15 @@ fetch("data/news.json")
 
 .then(data => {
 
+    newsData = data;
 
-newsData = data;
-
-
-loadNews(newsData);
-
+    updateNewsCards(newsData);
 
 })
 
 .catch(error => {
 
-
-console.log("News loading error:", error);
-
+    console.log("News loading error:", error);
 
 });
 
@@ -38,63 +31,86 @@ console.log("News loading error:", error);
 
 
 
+// آپدیت کارت‌های موجود
+function updateNewsCards(data){
 
 
-// ساخت کارت خبر
+const cards = document.querySelectorAll(".tech-card");
 
 
-function createNewsCard(news){
+cards.forEach((card,index)=>{
 
 
-return `
+if(!data[index]) return;
 
 
-<article class="tech-card">
-
-
-<div class="news-image">
-
-
-<img src="${news.image}" alt="${news.title}">
-
-
-</div>
+const news = data[index];
 
 
 
-<div class="news-content">
+const img = card.querySelector(".news-image img");
 
+const category = card.querySelector(".category");
 
-<span class="category ${news.category}">
+const title = card.querySelector("h2,h3");
 
-${news.tag}
+const desc = card.querySelector(".news-content p");
 
-</span>
+const meta = card.querySelector(".news-meta");
 
-
-
-<h2>
-
-${news.title}
-
-</h2>
+const link = card.querySelector(".read-more");
 
 
 
-<p>
-
-${news.description}
-
-</p>
 
 
+if(img){
 
-<div class="news-meta">
+img.src = news.image;
 
+img.alt = news.title;
+
+}
+
+
+
+
+if(category){
+
+category.innerHTML = news.tag;
+
+category.className = "category " + news.category;
+
+}
+
+
+
+
+if(title){
+
+title.innerHTML = news.title;
+
+}
+
+
+
+
+if(desc){
+
+desc.innerHTML = news.description;
+
+}
+
+
+
+
+if(meta){
+
+meta.innerHTML = `
 
 <span>
 
-${news.source}
+${news.tag}
 
 </span>
 
@@ -105,108 +121,25 @@ ${news.date}
 
 </span>
 
-
-</div>
-
-
-
-<a href="${news.link || '#'}" class="read-more">
-
-مطالعه خبر →
-
-</a>
-
-
-
-</div>
-
-
-</article>
-
-
 `;
 
-
 }
 
 
 
 
+if(link){
 
-
-
-
-// نمایش اخبار
-
-
-function loadNews(data){
-
-
-
-const mainGrid =
-document.getElementById("newsGrid");
-
-
-const featuredGrid =
-document.getElementById("featuredGrid");
-
-
-const latestGrid =
-document.getElementById("latestNewsGrid");
-
-
-
-
-
-if(mainGrid){
-
-
-mainGrid.innerHTML =
-data
-.slice(0,3)
-.map(createNewsCard)
-.join("");
+link.href = news.link || "#";
 
 }
 
 
 
-
-if(featuredGrid){
-
-
-featuredGrid.innerHTML =
-data
-.slice(3,6)
-.map(createNewsCard)
-.join("");
-
-}
-
-
-
-
-
-if(latestGrid){
-
-
-latestGrid.innerHTML =
-data
-.slice(6,9)
-.map(createNewsCard)
-.join("");
-
-}
-
-
-
+});
 
 
 }
-
-
-
-
 
 
 
@@ -216,7 +149,6 @@ data
 // ===============================
 // FILTER SYSTEM
 // ===============================
-
 
 
 const filterButtons =
@@ -230,7 +162,7 @@ filterButtons.forEach(button=>{
 button.addEventListener("click",()=>{
 
 
-let category =
+const category =
 button.dataset.category;
 
 
@@ -248,31 +180,37 @@ button.classList.add("active");
 
 
 
-if(category==="all"){
+const cards =
+document.querySelectorAll(".tech-card");
 
 
-loadNews(newsData);
 
+cards.forEach((card,index)=>{
+
+
+if(!newsData[index]) return;
+
+
+if(
+category==="all" ||
+newsData[index].category===category
+){
+
+card.style.display="flex";
 
 }
 
 else{
 
 
-let filtered =
-newsData.filter(item=>
-
-item.category === category
-
-);
-
-
-
-loadNews(filtered);
+card.style.display="none";
 
 
 }
 
+
+
+});
 
 
 

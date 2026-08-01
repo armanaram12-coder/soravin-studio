@@ -18,8 +18,19 @@ const outputFile =
 
 // RSS SOURCE
 
-const RSS_URL =
-"https://feeds.feedburner.com/TechCrunch";
+const RSS_SOURCES = [
+
+"https://openai.com/blog/rss.xml",
+
+"https://blogs.nvidia.com/feed/",
+
+"https://blogs.microsoft.com/ai/feed/",
+
+"https://feeds.feedburner.com/TechCrunch",
+
+"https://www.theverge.com/rss/ai/index.xml"
+
+];
 
 
 

@@ -16,13 +16,31 @@ const outputFile =
 
 const RSS_SOURCES = [
 
+
+// =====================
+// GLOBAL SOURCES
+// =====================
+
 "https://feeds.feedburner.com/TechCrunch",
 
 "https://blogs.nvidia.com/feed/",
 
 "https://blogs.microsoft.com/ai/feed/",
 
-"https://openai.com/blog/rss.xml"
+"https://openai.com/blog/rss.xml",
+
+
+
+// =====================
+// IRANIAN SOURCES
+// =====================
+
+"https://www.zoomit.ir/feed/",
+
+"https://digiato.com/feed",
+
+"https://peivast.com/fa/feed"
+
 
 ];
 
@@ -112,7 +130,9 @@ text.includes("artificial intelligence") ||
 
 text.includes("machine learning") ||
 
-text.includes("chatbot")
+text.includes("chatbot") ||
+
+text.includes("هوش مصنوعی")
 
 ){
 
@@ -137,7 +157,11 @@ text.includes("graphics") ||
 
 text.includes("processor") ||
 
-text.includes("chip")
+text.includes("chip") ||
+
+text.includes("پردازنده") ||
+
+text.includes("کارت گرافیک")
 
 ){
 
@@ -158,7 +182,11 @@ text.includes("android") ||
 
 text.includes("iphone") ||
 
-text.includes("mobile")
+text.includes("mobile") ||
+
+text.includes("گوشی") ||
+
+text.includes("موبایل")
 
 ){
 

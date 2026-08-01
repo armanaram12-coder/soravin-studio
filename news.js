@@ -7,8 +7,6 @@
 let newsData = [];
 
 
-// دریافت اخبار JSON
-
 fetch("data/news.json")
 
 .then(response => response.json())
@@ -17,7 +15,7 @@ fetch("data/news.json")
 
     newsData = data;
 
-    updateNewsCards(newsData);
+    createNewsCards(newsData);
 
 })
 
@@ -31,109 +29,110 @@ fetch("data/news.json")
 
 
 
-// آپدیت کارت‌های موجود
-function updateNewsCards(data){
+function createNewsCards(data){
 
 
-const cards = document.querySelectorAll(".tech-card");
+const newsGrid = document.getElementById("newsGrid");
 
+const featuredGrid = document.getElementById("featuredGrid");
 
-cards.forEach((card,index)=>{
-
-
-if(!data[index]) return;
-
-
-const news = data[index];
+const latestGrid = document.getElementById("latestNewsGrid");
 
 
 
-const img = card.querySelector(".news-image img");
-
-const category = card.querySelector(".category");
-
-const title = card.querySelector("h2,h3");
-
-const desc = card.querySelector(".news-content p");
-
-const meta = card.querySelector(".news-meta");
-
-const link = card.querySelector(".read-more");
+if(!newsGrid) return;
 
 
 
-
-
-if(img){
-
-img.src = news.image;
-
-img.alt = news.title;
-
-}
+newsGrid.innerHTML = "";
 
 
 
+data.forEach(news => {
 
-if(category){
 
-category.innerHTML = news.tag;
+const card = document.createElement("div");
 
-category.className = "category " + news.category;
-
-}
+card.className = "tech-card";
 
 
 
+card.innerHTML = `
 
-if(title){
+<div class="news-image">
 
-title.innerHTML = news.title;
+<img src="${news.image}" alt="${news.title}">
 
-}
-
-
-
-
-if(desc){
-
-desc.innerHTML = news.description;
-
-}
+</div>
 
 
+<div class="news-content">
 
 
-if(meta){
-
-meta.innerHTML = `
-
-<span>
+<div class="category ${news.category.toLowerCase()}">
 
 ${news.tag}
 
-</span>
+</div>
 
 
-<span>
+<h3>
 
-${news.date}
+${news.title}
 
-</span>
+</h3>
+
+
+<p>
+
+${news.description}
+
+</p>
+
+
+
+<div class="news-meta">
+
+<span>${news.tag}</span>
+
+<span>${news.date}</span>
+
+</div>
+
+
+
+<a class="read-more" href="${news.link || '#'}">
+
+مطالعه بیشتر
+
+</a>
+
+
+</div>
 
 `;
 
+
+
+if(news.featured && featuredGrid){
+
+featuredGrid.appendChild(card.cloneNode(true));
+
+}
+
+else{
+
+newsGrid.appendChild(card);
+
 }
 
 
 
+if(latestGrid){
 
-if(link){
-
-link.href = news.link || "#";
+latestGrid.appendChild(card.cloneNode(true));
 
 }
-
 
 
 });

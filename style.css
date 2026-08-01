@@ -2649,3 +2649,100 @@ height:160px;
 }
 
 }
+/* ==========================
+   FIX TECH NEWS CARDS
+========================== */
+
+
+.news-grid,
+.featured-grid {
+
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    width: 100%;
+}
+
+
+
+.tech-card {
+
+    width: 100%;
+    min-height: 520px;
+    background: #0d1628;
+    border: 1px solid #1e5cff;
+    border-radius: 22px;
+    overflow: hidden;
+}
+
+
+
+.news-image {
+
+    width: 100%;
+    height: 240px;
+    overflow: hidden;
+
+}
+
+
+
+.news-image img {
+
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+
+}
+
+
+
+.news-content {
+
+    padding: 25px;
+    text-align: right;
+
+}
+
+
+
+.news-content h2,
+.news-content h3 {
+
+    font-size: 22px;
+    line-height: 2;
+}
+
+
+
+.news-content p {
+
+    font-size: 15px;
+    line-height: 2;
+    color: #b8c4dd;
+
+}
+
+
+
+/* موبایل */
+
+@media(max-width:900px){
+
+.news-grid,
+.featured-grid{
+
+    grid-template-columns:1fr;
+
+}
+
+
+.tech-card{
+
+    min-height:auto;
+
+}
+
+
+}

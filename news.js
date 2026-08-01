@@ -87,8 +87,6 @@ const card = createCard(news);
 
 
 
-// خبر ویژه
-
 if(news.featured === true && featuredGrid){
 
 
@@ -102,8 +100,6 @@ if(news.featured === true && featuredGrid){
 
 
 
-
-// کارت اصلی
 
 newsGrid.appendChild(card);
 
@@ -211,7 +207,7 @@ ${news.date}
 
 <a 
 class="read-more" 
-href="${news.link || '#'}"
+href="news-detail.html?id=${news.id}"
 >
 
 مطالعه بیشتر

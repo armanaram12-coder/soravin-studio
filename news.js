@@ -26,7 +26,7 @@ fetch("data/news.json")
     createNewsCards(newsData);
 
 
-    createLatestNews(newsData);
+    loadAutoNews();
 
 
 })

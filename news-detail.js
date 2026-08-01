@@ -1,11 +1,25 @@
 // =====================================
-// SORAVIN NEWS DETAIL
+// SORAVIN NEWS DETAIL SYSTEM
 // =====================================
+
+
+document.addEventListener("DOMContentLoaded", function(){
 
 
 
 const detailBox =
 document.getElementById("newsDetail");
+
+
+
+if(!detailBox){
+
+console.log("newsDetail not found");
+
+return;
+
+}
+
 
 
 
@@ -22,22 +36,32 @@ params.get("id");
 
 
 
-
 fetch("data/auto-news.json")
 
-.then(response => response.json())
+.then(response => {
+
+
+if(!response.ok){
+
+throw new Error("JSON not found");
+
+}
+
+
+return response.json();
+
+
+})
 
 .then(data => {
 
 
 
-const news =
-
-data.find(
+const news = data.find(
 
 item =>
 
-item.id == newsId
+String(item.id) === String(newsId)
 
 );
 
@@ -50,9 +74,20 @@ if(!news){
 
 detailBox.innerHTML = `
 
+
+<div class="news-detail-card">
+
 <h2>
 خبر پیدا نشد
 </h2>
+
+<p>
+شناسه خبر: ${newsId}
+</p>
+
+
+</div>
+
 
 `;
 
@@ -68,8 +103,12 @@ return;
 detailBox.innerHTML = `
 
 
+
 <article class="news-detail-card">
 
+
+
+<div class="news-detail-image">
 
 <img
 
@@ -78,6 +117,24 @@ src="${news.image}"
 alt="${news.title}"
 
 >
+
+</div>
+
+
+
+
+
+<div class="news-detail-content">
+
+
+
+<div class="category">
+
+${news.tag}
+
+</div>
+
+
 
 
 
@@ -89,15 +146,18 @@ ${news.title}
 
 
 
+
+
 <div class="news-detail-meta">
 
-${news.tag}
+${news.source}
 
- |
+|
 
 ${news.date}
 
 </div>
+
 
 
 
@@ -110,7 +170,11 @@ ${news.description}
 
 
 
+
+
 <a
+
+class="source-link"
 
 href="${news.link}"
 
@@ -124,21 +188,54 @@ target="_blank"
 
 
 
+</div>
+
+
+
 </article>
+
 
 
 `;
 
 
 
+
 })
 
-.catch(error=>{
+.catch(error => {
 
 
-detailBox.innerHTML =
+console.log(
+"News detail error:",
+error
+);
 
-"خطا در دریافت خبر";
+
+
+detailBox.innerHTML = `
+
+
+<div class="news-detail-card">
+
+<h2>
+خطا در بارگذاری خبر
+</h2>
+
+
+<p>
+${error.message}
+</p>
+
+
+</div>
+
+
+`;
+
+
+
+});
 
 
 

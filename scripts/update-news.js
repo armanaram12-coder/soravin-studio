@@ -1,6 +1,6 @@
 // =====================================
 // SORAVIN AUTO NEWS UPDATER
-// RSS TO JSON
+// MULTI RSS VERSION
 // =====================================
 
 
@@ -14,21 +14,15 @@ const outputFile =
 
 
 
-
-
-// RSS SOURCE
-
 const RSS_SOURCES = [
 
-"https://openai.com/blog/rss.xml",
+"https://feeds.feedburner.com/TechCrunch",
 
 "https://blogs.nvidia.com/feed/",
 
 "https://blogs.microsoft.com/ai/feed/",
 
-"https://feeds.feedburner.com/TechCrunch",
-
-"https://www.theverge.com/rss/ai/index.xml"
+"https://openai.com/blog/rss.xml"
 
 ];
 
@@ -36,13 +30,8 @@ const RSS_SOURCES = [
 
 
 
-function getRSS(){
-
-
-return new Promise((resolve,reject)=>{
-
-
 function getRSS(url){
+
 
 return new Promise((resolve,reject)=>{
 
@@ -68,7 +57,10 @@ response.on(
 
 resolve(data);
 
-});
+}
+
+);
+
 
 
 }).on(
@@ -77,41 +69,16 @@ error=>{
 
 reject(error);
 
-});
-
-
-});
-
 }
 
-
-
-response.on(
-"end",
-()=>{
-
-
-resolve(data);
-
-
-});
-
-
-}).on(
-"error",
-error=>{
-
-
-reject(error);
-
-
-});
+);
 
 
 });
 
 
 }
+
 
 
 
@@ -126,7 +93,7 @@ xml.match(/<item>[\s\S]*?<\/item>/g) || [];
 
 
 
-return items.slice(0,6).map((item,index)=>{
+return items.slice(0,5).map((item,index)=>{
 
 
 
@@ -148,51 +115,40 @@ const description =
 
 
 
-return {
 
+return {
 
 id:index+1,
 
-
-title:title
-.replace(/<!\[CDATA\[|\]\]>/g,""),
-
-
+title:title.replace(
+/<!\[CDATA\[|\]\]>/g,
+""
+),
 
 category:"Tech",
 
-
 tag:"Technology",
-
 
 source:"Soravin Tech",
 
+image:"assets/image/ai-news.jpg",
 
-image:
-"assets/image/ai-news.jpg",
-
-
-description:
-description
-.replace(/<!\[CDATA\[|\]\]>/g,"")
+description:description
+.replace(
+/<!\[CDATA\[|\]\]>/g,
+""
+)
 .substring(0,150),
-
 
 date:"امروز",
 
-
 link:link,
-
 
 featured:false,
 
-
 status:"published"
 
-
-
 };
-
 
 
 });
@@ -210,7 +166,6 @@ status:"published"
 async function updateNews(){
 
 
-
 try{
 
 
@@ -220,8 +175,20 @@ console.log(
 
 
 
+let allNews=[];
+
+
+
+for(
+const source of RSS_SOURCES
+){
+
+
+try{
+
+
 const xml =
-await getRSS();
+await getRSS(source);
 
 
 
@@ -230,13 +197,43 @@ extractNews(xml);
 
 
 
+allNews.push(
+...news
+);
+
+
+
+}
+
+catch(error){
+
+
+console.log(
+"RSS failed:",
+source
+);
+
+
+}
+
+
+}
+
+
+
+
+
+const finalNews =
+allNews.slice(0,6);
+
+
 
 fs.writeFileSync(
 
 outputFile,
 
 JSON.stringify(
-news,
+finalNews,
 null,
 2
 ),
@@ -249,7 +246,7 @@ null,
 
 console.log(
 "Updated news:",
-news.length
+finalNews.length
 );
 
 
@@ -260,7 +257,7 @@ catch(error){
 
 
 console.log(
-"News update error:",
+"Update error:",
 error.message
 );
 
@@ -268,10 +265,7 @@ error.message
 }
 
 
-
 }
-
-
 
 
 

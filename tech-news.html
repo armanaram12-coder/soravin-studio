@@ -13,9 +13,7 @@
 </title>
 
 
-<meta name="description" content="
-آخرین اخبار هوش مصنوعی، تکنولوژی، کامپیوتر، سخت افزار، موبایل و آینده فناوری در Soravin Studio
-">
+<meta name="description" content="آخرین اخبار هوش مصنوعی، کامپیوتر، سخت افزار، موبایل و فناوری آینده">
 
 
 <link rel="stylesheet" href="style.css">
@@ -24,7 +22,6 @@
 </head>
 
 
-<script src="news.js"></script>
 <body>
 
 
@@ -44,43 +41,30 @@ TECH
 
 
 
-
 <nav>
 
 
 <a href="index.html">
-
 خانه
-
 </a>
-
 
 
 <a href="ai-learning.html">
-
 آموزش AI
-
 </a>
-
 
 
 <a href="tech-news.html">
-
 اخبار
-
 </a>
 
 
-
 <a href="portfolio.html">
-
 نمونه کارها
-
 </a>
 
 
 </nav>
-
 
 
 </header>
@@ -89,6 +73,8 @@ TECH
 
 
 
+
+<!-- NEWS HERO -->
 
 
 <section class="news-hero">
@@ -101,16 +87,14 @@ TECH
 </h1>
 
 
-
 <p>
 
-جدیدترین اخبار AI، کامپیوتر، سخت‌افزار، موبایل و فناوری آینده
+جدیدترین اخبار AI، کامپیوتر، سخت افزار، موبایل و فناوری آینده
 
 </p>
 
 
 </section>
-
 
 
 
@@ -123,10 +107,13 @@ TECH
 
 
 
+<!-- FILTER -->
+
+
 <div class="news-filter">
 
 
-<button class="active">
+<button class="active" data-category="all">
 
 همه اخبار
 
@@ -134,7 +121,7 @@ TECH
 
 
 
-<button>
+<button data-category="ai">
 
 هوش مصنوعی
 
@@ -142,7 +129,7 @@ TECH
 
 
 
-<button>
+<button data-category="pc">
 
 کامپیوتر
 
@@ -150,298 +137,34 @@ TECH
 
 
 
-<button>
+<button data-category="mobile">
 
 موبایل
 
 </button>
 
 
-</div>
-
-
-
-
-
-
-
-
-<section class="news-grid">
-
-
-
-
-
-
-<article class="tech-card">
-
-
-
-<div class="news-image">
-
-
-<img 
-src="assets/image/ai-news.jpg"
-alt="Artificial Intelligence News"
->
-
-
 
 </div>
 
 
 
 
-<div class="news-content">
 
 
 
-<span class="category ai">
 
-AI NEWS
+<!-- اخبار اصلی -->
+<!-- کارت ها توسط news.js ساخته می شوند -->
 
-</span>
 
-
-
-
-<h2>
-
-جدیدترین تحولات هوش مصنوعی جهان
-
-</h2>
-
-
-
-<p>
-
-بررسی مدل‌های جدید هوش مصنوعی، ابزارهای مولد، دستیارهای هوشمند و آینده فناوری AI.
-
-</p>
-
-
-
-<div class="news-meta">
-
-
-<span>
-
-Artificial Intelligence
-
-</span>
-
-
-<span>
-
-امروز
-
-</span>
-
-
-</div>
-
-
-
-<a href="#" class="read-more">
-
-مطالعه خبر →
-
-</a>
-
-
-
-
-</div>
-
-
-
-</article>
-
-
-
-
-
-
-
-<article class="tech-card">
-
-
-
-<div class="news-image">
-
-
-<img 
-src="assets/image/pc-news.jpg"
-alt="Computer Hardware News"
->
-
-
-
-</div>
-
-
-
-
-<div class="news-content">
-
-
-
-<span class="category pc">
-
-PC NEWS
-
-</span>
-
-
-
-
-<h2>
-
-جدیدترین سخت‌افزارهای کامپیوتر
-
-</h2>
-
-
-
-<p>
-
-اخبار پردازنده‌ها، کارت‌های گرافیک، لپ‌تاپ‌ها و فناوری‌های جدید سخت‌افزاری.
-
-</p>
-
-
-
-<div class="news-meta">
-
-
-<span>
-
-Hardware
-
-</span>
-
-
-<span>
-
-امروز
-
-</span>
-
-
-</div>
-
-
-
-<a href="#" class="read-more">
-
-مطالعه خبر →
-
-</a>
-
-
-
-
-</div>
-
-
-
-</article>
-
-
-
-
-
-
-<article class="tech-card">
-
-
-
-<div class="news-image">
-
-
-<img 
-src="assets/image/mobile-news.jpg"
-alt="Mobile Technology News"
->
-
-
-
-</div>
-
-
-
-
-<div class="news-content">
-
-
-
-<span class="category mobile">
-
-MOBILE NEWS
-
-</span>
-
-
-
-
-<h2>
-
-آخرین اخبار دنیای موبایل
-
-</h2>
-
-
-
-<p>
-
-معرفی گوشی‌های جدید، تراشه‌ها، دوربین‌ها، سیستم‌عامل‌ها و فناوری آینده موبایل.
-
-</p>
-
-
-
-<div class="news-meta">
-
-
-<span>
-
-Mobile Technology
-
-</span>
-
-
-<span>
-
-امروز
-
-</span>
-
-
-</div>
-
-
-
-<a href="#" class="read-more">
-
-مطالعه خبر →
-
-</a>
-
-
-
-
-</div>
-
-
-
-</article>
-
-
-
+<section class="news-grid" id="newsGrid">
 
 
 
 </section>
+<!-- اخبار ویژه -->
+
 <section class="featured-news">
 
 
@@ -450,7 +173,6 @@ Mobile Technology
 اخبار ویژه تکنولوژی
 
 </h2>
-
 
 
 <p>
@@ -462,290 +184,7 @@ Mobile Technology
 
 
 
-
-<div class="featured-grid">
-
-
-
-
-
-<article class="tech-card featured-card">
-
-
-
-<div class="news-image">
-
-
-<img
-src="assets/image/ai-news.jpg"
-alt="AI Future"
->
-
-
-</div>
-
-
-
-
-<div class="news-content">
-
-
-
-<span class="category ai">
-
-AI
-
-</span>
-
-
-
-
-<h2>
-
-آینده هوش مصنوعی و نسل جدید AI
-
-</h2>
-
-
-
-
-<p>
-
-بررسی مدل‌های زبانی بزرگ، هوش مصنوعی مولد، ابزارهای هوشمند و تاثیر AI بر آینده کسب‌وکارهای دیجیتال.
-
-</p>
-
-
-
-
-<div class="news-meta">
-
-
-<span>
-
-Artificial Intelligence
-
-</span>
-
-
-
-<span>
-
-ویژه
-
-</span>
-
-
-</div>
-
-
-
-
-<a href="#" class="read-more">
-
-مشاهده تحلیل →
-
-</a>
-
-
-
-</div>
-
-
-
-</article>
-
-
-
-
-
-
-
-
-
-<article class="tech-card featured-card">
-
-
-
-<div class="news-image">
-
-
-<img
-src="assets/image/pc-news.jpg"
-alt="PC Hardware Future"
->
-
-
-</div>
-
-
-
-
-<div class="news-content">
-
-
-
-<span class="category pc">
-
-PC
-
-</span>
-
-
-
-
-<h2>
-
-نسل جدید پردازنده‌ها و کارت‌های گرافیک
-
-</h2>
-
-
-
-
-<p>
-
-بررسی فناوری‌های جدید سخت‌افزاری، پردازنده‌ها، کارت گرافیک، لپ‌تاپ‌های نسل آینده و سیستم‌های قدرتمند.
-
-</p>
-
-
-
-
-<div class="news-meta">
-
-
-<span>
-
-Hardware
-
-</span>
-
-
-
-<span>
-
-ویژه
-
-</span>
-
-
-</div>
-
-
-
-
-<a href="#" class="read-more">
-
-مشاهده خبر →
-
-</a>
-
-
-
-</div>
-
-
-
-</article>
-
-
-
-
-
-
-
-
-
-<article class="tech-card featured-card">
-
-
-
-<div class="news-image">
-
-
-<img
-src="assets/image/mobile-news.jpg"
-alt="Future Mobile Technology"
->
-
-
-</div>
-
-
-
-
-<div class="news-content">
-
-
-
-<span class="category mobile">
-
-MOBILE
-
-</span>
-
-
-
-
-<h2>
-
-آینده گوشی‌های هوشمند
-
-</h2>
-
-
-
-
-<p>
-
-تحلیل فناوری نمایشگرها، تراشه‌های موبایل، دوربین‌ها، سیستم‌عامل‌ها و مسیر آینده تلفن‌های هوشمند.
-
-</p>
-
-
-
-
-<div class="news-meta">
-
-
-<span>
-
-Mobile Tech
-
-</span>
-
-
-
-<span>
-
-ویژه
-
-</span>
-
-
-</div>
-
-
-
-
-<a href="#" class="read-more">
-
-مشاهده خبر →
-
-</a>
-
-
-
-</div>
-
-
-
-</article>
-
-
-
-
+<div class="featured-grid" id="featuredGrid">
 
 
 
@@ -762,9 +201,10 @@ Mobile Tech
 
 
 
+<!-- تحلیل تخصصی سوراوین -->
+
 
 <section class="news-analysis">
-
 
 
 <h2>
@@ -775,19 +215,15 @@ Mobile Tech
 
 
 
-
 <p>
 
-در Soravin فقط خبر منتشر نمی‌شود؛ تاثیر واقعی فناوری‌ها بررسی و تحلیل می‌شود.
+در سوراوین فقط خبر منتشر نمی‌شود؛ تاثیر واقعی فناوری‌ها بررسی و تحلیل می‌شود.
 
 </p>
 
 
 
-
-
 <div class="analysis-box">
-
 
 
 <h3>
@@ -800,14 +236,14 @@ Mobile Tech
 
 <p>
 
-سرعت تغییرات در دنیای تکنولوژی بسیار زیاد است. هدف این بخش بررسی تاثیر هوش مصنوعی، سخت‌افزار و فناوری‌های جدید بر آینده دیجیتال است.
+سرعت تغییرات در دنیای تکنولوژی بسیار زیاد است. 
+هدف این بخش بررسی تاثیر هوش مصنوعی، سخت‌افزار و فناوری‌های جدید بر آینده دیجیتال است.
 
 </p>
 
 
 
 </div>
-
 
 
 
@@ -819,83 +255,11 @@ Mobile Tech
 
 
 
-<section class="news-system">
+
+<!-- آخرین اخبار خودکار -->
 
 
-
-<h2>
-
-سیستم انتشار اخبار Soravin
-
-</h2>
-
-
-
-
-<p>
-
-در آینده این بخش به سیستم هوشمند جمع‌آوری و انتشار اخبار فناوری متصل خواهد شد.
-
-</p>
-
-
-
-
-<div class="news-flow">
-
-
-
-<div>
-
-منابع خبری
-
-<span>
-
-AI / Tech Sources
-
-</span>
-
-</div>
-
-
-
-<div>
-
-تحلیل هوشمند
-
-<span>
-
-AI Analysis
-
-</span>
-
-</div>
-
-
-
-<div>
-
-انتشار Soravin
-
-<span>
-
-Tech Knowledge
-
-</span>
-
-</div>
-
-
-
-</div>
-
-
-
-
-
-</section>
 <section class="latest-news">
-
 
 
 <h2>
@@ -908,330 +272,18 @@ Tech Knowledge
 
 <p>
 
-جدیدترین خبرهای هوش مصنوعی، کامپیوتر، سخت‌افزار و موبایل
+این بخش به سیستم انتشار خودکار اخبار متصل خواهد شد.
 
 </p>
 
 
 
 
-
-
-
-<div class="news-grid">
-
-
-
-
-
-
-<article class="tech-card auto-news">
-
-
-
-<div class="news-image">
-
-
-<img
-src="assets/image/ai-news.jpg"
-alt="Latest AI News"
->
-
-
-</div>
-
-
-
-
-
-<div class="news-content">
-
-
-
-<span class="category ai">
-
-AI NEWS
-
-</span>
-
-
-
-
-
-<h3>
-
-آخرین اخبار هوش مصنوعی
-
-</h3>
-
-
-
-
-
-<p>
-
-جدیدترین مدل‌های AI، ابزارهای هوشمند، دستیارهای دیجیتال و اتفاقات مهم حوزه هوش مصنوعی.
-
-</p>
-
-
-
-
-
-<div class="news-meta">
-
-
-<span>
-
-AI
-
-</span>
-
-
-
-<span>
-
-به‌روزرسانی
-
-</span>
-
-
-</div>
-
-
-
-
-
-<a href="#" class="read-more">
-
-ادامه مطلب →
-
-</a>
-
-
+<div class="news-grid" id="latestNewsGrid">
 
 
 
 </div>
-
-
-
-
-</article>
-
-
-
-
-
-
-
-
-
-<article class="tech-card auto-news">
-
-
-
-<div class="news-image">
-
-
-<img
-src="assets/image/pc-news.jpg"
-alt="Latest Computer News"
->
-
-
-</div>
-
-
-
-
-
-<div class="news-content">
-
-
-
-<span class="category pc">
-
-PC NEWS
-
-</span>
-
-
-
-
-
-<h3>
-
-آخرین اخبار کامپیوتر و سخت‌افزار
-
-</h3>
-
-
-
-
-
-<p>
-
-اخبار پردازنده‌ها، کارت گرافیک، لپ‌تاپ‌ها، سیستم‌های حرفه‌ای و فناوری‌های جدید کامپیوتری.
-
-</p>
-
-
-
-
-
-<div class="news-meta">
-
-
-<span>
-
-Hardware
-
-</span>
-
-
-
-<span>
-
-به‌روزرسانی
-
-</span>
-
-
-</div>
-
-
-
-
-
-<a href="#" class="read-more">
-
-ادامه مطلب →
-
-</a>
-
-
-
-
-
-</div>
-
-
-
-
-</article>
-
-
-
-
-
-
-
-
-
-<article class="tech-card auto-news">
-
-
-
-<div class="news-image">
-
-
-<img
-src="assets/image/mobile-news.jpg"
-alt="Latest Mobile News"
->
-
-
-</div>
-
-
-
-
-
-<div class="news-content">
-
-
-
-<span class="category mobile">
-
-MOBILE NEWS
-
-</span>
-
-
-
-
-
-<h3>
-
-آخرین اخبار موبایل
-
-</h3>
-
-
-
-
-
-<p>
-
-جدیدترین گوشی‌ها، تراشه‌های موبایل، سیستم‌عامل‌ها و فناوری‌های آینده تلفن‌های هوشمند.
-
-</p>
-
-
-
-
-
-<div class="news-meta">
-
-
-<span>
-
-Mobile
-
-</span>
-
-
-
-<span>
-
-به‌روزرسانی
-
-</span>
-
-
-</div>
-
-
-
-
-
-<a href="#" class="read-more">
-
-ادامه مطلب →
-
-</a>
-
-
-
-
-
-</div>
-
-
-
-
-</article>
-
-
-
-
-
-
-
-
-</div>
-
 
 
 
@@ -1244,183 +296,63 @@ Mobile
 
 
 
-<section class="featured-news">
+<!-- مسیر انتشار خبر -->
 
+
+<section class="news-system">
 
 
 <h2>
 
-موضوعات محبوب فناوری
+سیستم هوشمند اخبار Soravin
 
 </h2>
 
 
 
-
-<div class="featured-grid">
-
+<div class="news-flow">
 
 
+<div>
 
+منابع خبری
 
+<span>
 
-<article class="tech-card">
-
-
-
-<div class="news-content">
-
-
-
-<span class="category ai">
-
-AI
+AI / Tech RSS
 
 </span>
-
-
-
-<h3>
-
-ChatGPT و مدل‌های زبانی بزرگ
-
-</h3>
-
-
-
-<p>
-
-بررسی آینده مدل‌های زبانی، کاربردهای حرفه‌ای و تاثیر آن‌ها بر کار و زندگی دیجیتال.
-
-</p>
-
-
-
-<a href="#" class="read-more">
-
-بیشتر بدانید →
-
-</a>
-
-
 
 </div>
 
 
 
-</article>
+<div>
 
+پردازش هوشمند
 
+<span>
 
-
-
-
-
-
-
-<article class="tech-card">
-
-
-
-<div class="news-content">
-
-
-
-<span class="category pc">
-
-HARDWARE
+News Engine
 
 </span>
-
-
-
-<h3>
-
-نسل آینده پردازنده‌ها
-
-</h3>
-
-
-
-<p>
-
-تحلیل مسیر آینده CPU، GPU و سیستم‌های محاسباتی قدرتمند.
-
-</p>
-
-
-
-<a href="#" class="read-more">
-
-بیشتر بدانید →
-
-</a>
-
-
 
 </div>
 
 
 
-</article>
 
+<div>
 
+انتشار
 
+<span>
 
-
-
-
-
-
-<article class="tech-card">
-
-
-
-<div class="news-content">
-
-
-
-<span class="category mobile">
-
-MOBILE
+Soravin Tech
 
 </span>
 
-
-
-<h3>
-
-فناوری آینده موبایل
-
-</h3>
-
-
-
-<p>
-
-بررسی گوشی‌های تاشو، تراشه‌های جدید و نسل آینده ارتباطات.
-
-</p>
-
-
-
-<a href="#" class="read-more">
-
-بیشتر بدانید →
-
-</a>
-
-
-
 </div>
-
-
-
-</article>
-
-
-
-
 
 
 
@@ -1429,11 +361,12 @@ MOBILE
 
 
 </section>
-<!-- بازگشت شناور -->
+<!-- دکمه شناور بازگشت -->
 
-<a href="index.html" class="back-floating-btn">
 
-← بازگشت به صفحه اصلی
+<a href="ai-learning.html" class="back-floating-btn">
+
+← بازگشت به آموزش AI
 
 </a>
 
@@ -1442,8 +375,7 @@ MOBILE
 
 
 
-
-<!-- بازگشت پایین صفحه -->
+<!-- دکمه پایین صفحه -->
 
 
 <div class="article-back">
@@ -1465,9 +397,14 @@ MOBILE
 
 
 
+<!-- FOOTER -->
+
 
 <footer class="tech-footer">
 
+
+
+<div>
 
 
 <h3>
@@ -1477,13 +414,14 @@ SORAVIN STUDIO
 </h3>
 
 
-
 <p>
 
 اخبار هوش مصنوعی، کامپیوتر، موبایل و فناوری‌های آینده
 
 </p>
 
+
+</div>
 
 
 
@@ -1493,13 +431,11 @@ SORAVIN STUDIO
 <div class="footer-links">
 
 
-
 <a href="index.html">
 
 خانه
 
 </a>
-
 
 
 
@@ -1511,7 +447,6 @@ SORAVIN STUDIO
 
 
 
-
 <a href="portfolio.html">
 
 نمونه کارها
@@ -1520,9 +455,7 @@ SORAVIN STUDIO
 
 
 
-
 </div>
-
 
 
 
@@ -1539,19 +472,9 @@ SORAVIN STUDIO
 
 
 </footer>
+<!-- SCRIPT SYSTEM -->
 
-
-
-
-
-
-
-</main>
-
-
-
-
-
+<script src="news.js"></script>
 
 
 </body>

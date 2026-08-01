@@ -241,17 +241,25 @@ return card;
 
 
 // ===============================
-// LATEST NEWS CONNECTION
+// AUTO NEWS CONNECTION
 // ===============================
 
+function loadAutoNews(){
 
-function createLatestNews(data){
 
-
-const latestGrid = document.getElementById("latestNewsGrid");
+const latestGrid =
+document.getElementById("latestNewsGrid");
 
 
 if(!latestGrid) return;
+
+
+
+fetch("data/auto-news.json")
+
+.then(response => response.json())
+
+.then(data => {
 
 
 
@@ -259,52 +267,35 @@ latestGrid.innerHTML = "";
 
 
 
-data.slice(0,5).forEach(news => {
+data.forEach(news => {
 
 
 
-const item = document.createElement("div");
-
-
-item.className = "latest-item";
-
-
-
-item.innerHTML = `
-
-
-<h3>
-
-${news.title}
-
-</h3>
-
-
-<p>
-
-${news.tag} | ${news.date}
-
-</p>
+const card =
+createCard(news);
 
 
 
-<a href="${news.link || '#'}">
-
-مطالعه خبر
-
-</a>
-
-
-`;
-
-
-
-latestGrid.appendChild(item);
+latestGrid.appendChild(card);
 
 
 
 });
 
+
+
+})
+
+.catch(error=>{
+
+
+console.log(
+"Auto news loading error:",
+error
+);
+
+
+});
 
 
 }

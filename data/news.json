@@ -1,0 +1,83 @@
+[
+  {
+    "title": "جدیدترین تحولات هوش مصنوعی جهان",
+    "category": "AI",
+    "tag": "Artificial Intelligence",
+    "image": "assets/image/ai-news.jpg",
+    "description": "بررسی جدیدترین مدل‌های هوش مصنوعی، ابزارهای AI مولد و تاثیر آن‌ها بر آینده فناوری.",
+    "date": "امروز",
+    "link": "ai-models-explained.html"
+  },
+  {
+    "title": "مدل‌های جدید هوش مصنوعی چگونه کار می‌کنند؟",
+    "category": "AI",
+    "tag": "AI Models",
+    "image": "assets/image/ai-news.jpg",
+    "description": "آشنایی با LLM، شبکه‌های عصبی، Transformer و فناوری پشت مدل‌های هوشمند.",
+    "date": "امروز",
+    "link": "ai-models-explained.html"
+  },
+  {
+    "title": "هوش مصنوعی مولد و آینده تولید محتوا",
+    "category": "AI",
+    "tag": "Generative AI",
+    "image": "assets/image/ai-news.jpg",
+    "description": "بررسی تولید متن، تصویر، ویدیو، موسیقی و کد توسط هوش مصنوعی مولد.",
+    "date": "امروز",
+    "link": "generative-ai.html"
+  },
+  {
+    "title": "نسل جدید پردازنده‌ها و کارت‌های گرافیک",
+    "category": "PC",
+    "tag": "Hardware",
+    "image": "assets/image/pc-news.jpg",
+    "description": "آخرین اخبار پردازنده‌ها، GPU، لپ‌تاپ‌ها و فناوری سخت‌افزار کامپیوتر.",
+    "date": "امروز",
+    "link": "#"
+  },
+  {
+    "title": "آینده کامپیوترهای قدرتمند",
+    "category": "PC",
+    "tag": "Computer Technology",
+    "image": "assets/image/pc-news.jpg",
+    "description": "تحلیل مسیر آینده سیستم‌های کامپیوتری، پردازش ابری و سخت‌افزارهای جدید.",
+    "date": "امروز",
+    "link": "#"
+  },
+  {
+    "title": "آخرین فناوری‌های دنیای موبایل",
+    "category": "Mobile",
+    "tag": "Mobile Technology",
+    "image": "assets/image/mobile-news.jpg",
+    "description": "بررسی گوشی‌های جدید، تراشه‌ها، دوربین‌ها و سیستم‌عامل‌های آینده.",
+    "date": "امروز",
+    "link": "#"
+  },
+  {
+    "title": "هوش مصنوعی در گوشی‌های هوشمند",
+    "category": "Mobile",
+    "tag": "AI Mobile",
+    "image": "assets/image/mobile-news.jpg",
+    "description": "چگونه AI تجربه کاربری موبایل‌ها را تغییر می‌دهد.",
+    "date": "امروز",
+    "link": "#"
+  },
+  {
+    "title": "ربات‌ها و نسل آینده فناوری",
+    "category": "AI",
+    "tag": "Future Tech",
+    "image": "assets/image/ai-news.jpg",
+    "description": "بررسی ربات‌های هوشمند، AI Agent و آینده اتوماسیون.",
+    "date": "ویژه",
+    "link": "ai-agents.html"
+  },
+  {
+    "title": "فناوری‌های مهم سال آینده",
+    "category": "Tech",
+    "tag": "Future",
+    "image": "assets/image/ai-news.jpg",
+    "description": "مهم‌ترین روندهای تکنولوژی که آینده دیجیتال را شکل می‌دهند.",
+    "date": "ویژه",
+    "link": "#"
+  }
+]

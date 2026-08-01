@@ -116,21 +116,14 @@ ${news.description}
 
 if(news.featured && featuredGrid){
 
-featuredGrid.appendChild(card.cloneNode(true));
+    featuredGrid.appendChild(card);
 
 }
-
 else{
 
-newsGrid.appendChild(card);
+    newsGrid.appendChild(card);
 
 }
-
-
-
-if(latestGrid){
-
-latestGrid.appendChild(card.cloneNode(true));
 
 }
 

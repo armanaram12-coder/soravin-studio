@@ -1,42 +1,62 @@
-document.addEventListener("DOMContentLoaded", function () {
+// ===============================
+// SORAVIN NEWS SYSTEM
+// Dynamic News Loader
+// ===============================
 
 
-const newsContainer = document.querySelector(".news-grid");
+let newsData = [];
 
 
-if (!newsContainer) return;
 
 
+// دریافت اخبار از JSON
 
 fetch("data/news.json")
 
-
 .then(response => response.json())
 
-
-.then(news => {
-
-
-newsContainer.innerHTML = "";
+.then(data => {
 
 
-
-news.forEach(item => {
-
+newsData = data;
 
 
-const card = document.createElement("article");
+loadNews(newsData);
 
 
-card.className = "tech-card";
+})
+
+.catch(error => {
+
+
+console.log("News loading error:", error);
+
+
+});
 
 
 
-card.innerHTML = `
+
+
+
+
+// ساخت کارت خبر
+
+
+function createNewsCard(news){
+
+
+return `
+
+
+<article class="tech-card">
+
 
 <div class="news-image">
 
-<img src="${item.image}" alt="${item.title}">
+
+<img src="${news.image}" alt="${news.title}">
+
 
 </div>
 
@@ -45,9 +65,9 @@ card.innerHTML = `
 <div class="news-content">
 
 
-<span class="category ${item.category.toLowerCase()}">
+<span class="category ${news.category}">
 
-${item.tag}
+${news.tag}
 
 </span>
 
@@ -55,7 +75,7 @@ ${item.tag}
 
 <h2>
 
-${item.title}
+${news.title}
 
 </h2>
 
@@ -63,7 +83,7 @@ ${item.title}
 
 <p>
 
-${item.description}
+${news.description}
 
 </p>
 
@@ -74,15 +94,14 @@ ${item.description}
 
 <span>
 
-${item.category}
+${news.source}
 
 </span>
 
 
-
 <span>
 
-${item.date}
+${news.date}
 
 </span>
 
@@ -91,7 +110,7 @@ ${item.date}
 
 
 
-<a href="${item.link}" class="read-more">
+<a href="${news.link || '#'}" class="read-more">
 
 مطالعه خبر →
 
@@ -101,28 +120,163 @@ ${item.date}
 
 </div>
 
+
+</article>
+
+
 `;
 
 
+}
 
-newsContainer.appendChild(card);
 
 
+
+
+
+
+
+// نمایش اخبار
+
+
+function loadNews(data){
+
+
+
+const mainGrid =
+document.getElementById("newsGrid");
+
+
+const featuredGrid =
+document.getElementById("featuredGrid");
+
+
+const latestGrid =
+document.getElementById("latestNewsGrid");
+
+
+
+
+
+if(mainGrid){
+
+
+mainGrid.innerHTML =
+data
+.slice(0,3)
+.map(createNewsCard)
+.join("");
+
+}
+
+
+
+
+if(featuredGrid){
+
+
+featuredGrid.innerHTML =
+data
+.slice(3,6)
+.map(createNewsCard)
+.join("");
+
+}
+
+
+
+
+
+if(latestGrid){
+
+
+latestGrid.innerHTML =
+data
+.slice(6,9)
+.map(createNewsCard)
+.join("");
+
+}
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+// ===============================
+// FILTER SYSTEM
+// ===============================
+
+
+
+const filterButtons =
+document.querySelectorAll(".news-filter button");
+
+
+
+filterButtons.forEach(button=>{
+
+
+button.addEventListener("click",()=>{
+
+
+let category =
+button.dataset.category;
+
+
+
+filterButtons.forEach(btn=>{
+
+btn.classList.remove("active");
 
 });
 
 
-})
+button.classList.add("active");
 
 
-.catch(error => {
 
 
-console.log("News loading error:", error);
+
+if(category==="all"){
+
+
+loadNews(newsData);
+
+
+}
+
+else{
+
+
+let filtered =
+newsData.filter(item=>
+
+item.category === category
+
+);
+
+
+
+loadNews(filtered);
+
+
+}
+
+
 
 
 });
-
 
 
 });

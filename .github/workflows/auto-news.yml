@@ -14,12 +14,10 @@ jobs:
 
     runs-on: ubuntu-latest
 
-
     steps:
 
       - name: Checkout repository
         uses: actions/checkout@v4
-
 
 
       - name: Setup Node.js
@@ -28,17 +26,15 @@ jobs:
           node-version: 20
 
 
-
       - name: Update news JSON
         run: |
           node scripts/update-news.js
 
 
-
-     - name: Save changes
-  run: |
-    git config --global user.name "Soravin Bot"
-    git config --global user.email "bot@soravin.com"
-    git add .
-    git diff --cached --quiet || git commit -m "Auto update news"
-    git push
+      - name: Save changes
+        run: |
+          git config --global user.name "Soravin Bot"
+          git config --global user.email "bot@soravin.com"
+          git add .
+          git diff --cached --quiet || git commit -m "Auto update news"
+          git push

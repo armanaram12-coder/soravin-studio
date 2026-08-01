@@ -285,7 +285,7 @@ card.dataset.category;
 
 if(
 category === "all" ||
-newsData[index].category.toLowerCase()===category
+cardCategory === category
 ){
 
 

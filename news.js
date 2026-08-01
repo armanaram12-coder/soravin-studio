@@ -26,6 +26,9 @@ fetch("data/news.json")
     createNewsCards(newsData);
 
 
+    createLatestNews(newsData);
+
+
 })
 
 
@@ -111,6 +114,7 @@ newsGrid.appendChild(card);
 
 
 }
+
 
 
 
@@ -229,6 +233,82 @@ return card;
 
 
 }
+
+
+
+
+
+
+
+// ===============================
+// LATEST NEWS CONNECTION
+// ===============================
+
+
+function createLatestNews(data){
+
+
+const latestGrid = document.getElementById("latestNewsGrid");
+
+
+if(!latestGrid) return;
+
+
+
+latestGrid.innerHTML = "";
+
+
+
+data.slice(0,5).forEach(news => {
+
+
+
+const item = document.createElement("div");
+
+
+item.className = "latest-item";
+
+
+
+item.innerHTML = `
+
+
+<h3>
+
+${news.title}
+
+</h3>
+
+
+<p>
+
+${news.tag} | ${news.date}
+
+</p>
+
+
+
+<a href="${news.link || '#'}">
+
+مطالعه خبر
+
+</a>
+
+
+`;
+
+
+
+latestGrid.appendChild(item);
+
+
+
+});
+
+
+
+}
+
 
 
 

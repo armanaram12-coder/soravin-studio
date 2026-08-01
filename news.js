@@ -54,6 +54,8 @@ const newsGrid = document.getElementById("newsGrid");
 
 const featuredGrid = document.getElementById("featuredGrid");
 
+const latestGrid = document.getElementById("latestNewsGrid");
+
 
 
 if(!newsGrid) return;
@@ -72,6 +74,15 @@ if(featuredGrid){
 
 
 
+if(latestGrid){
+
+    latestGrid.innerHTML = "";
+
+}
+
+
+
+
 
 data.forEach(news => {
 
@@ -82,13 +93,28 @@ const card = createCard(news);
 
 
 
-
 // خبر ویژه
 
 if(news.featured === true && featuredGrid){
 
 
     featuredGrid.appendChild(
+        card.cloneNode(true)
+    );
+
+
+}
+
+
+
+
+
+// آخرین اخبار فناوری
+
+if(latestGrid){
+
+
+    latestGrid.appendChild(
         card.cloneNode(true)
     );
 

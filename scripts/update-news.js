@@ -42,7 +42,12 @@ function getRSS(){
 return new Promise((resolve,reject)=>{
 
 
-https.get(RSS_URL,(response)=>{
+function getRSS(url){
+
+return new Promise((resolve,reject)=>{
+
+
+https.get(url,(response)=>{
 
 
 let data="";
@@ -54,6 +59,30 @@ chunk=>{
 data += chunk;
 }
 );
+
+
+
+response.on(
+"end",
+()=>{
+
+resolve(data);
+
+});
+
+
+}).on(
+"error",
+error=>{
+
+reject(error);
+
+});
+
+
+});
+
+}
 
 
 

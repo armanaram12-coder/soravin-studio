@@ -3,11 +3,12 @@
 
 :root{
 
---gold:#c9a227;
---gold-light:#e3c76a;
---black:#050505;
---dark:#0b0b0b;
---gray:#999;
+    --gold:#C9A44B;
+    --gold-light:#E3C76A;
+    --black:#050505;
+    --dark:#0B0B0B;
+    --gray:#999;
+    --blue:#60A5FA;
 
 }
 
@@ -15,10 +16,10 @@
 
 *{
 
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Vazirmatn,sans-serif;
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Vazirmatn,sans-serif;
 
 }
 
@@ -26,7 +27,8 @@ font-family:Vazirmatn,sans-serif;
 
 html{
 
-scroll-behavior:smooth;
+    scroll-behavior:smooth;
+    scroll-padding-top:100px;
 
 }
 
@@ -34,31 +36,61 @@ scroll-behavior:smooth;
 
 body{
 
-background:var(--black);
-color:white;
-overflow-x:hidden;
+    background:var(--black);
+    color:white;
+    overflow-x:hidden;
 
 }
 
 
 
-/* HEADER */
+img{
+
+    max-width:100%;
+    display:block;
+
+}
+
+
+
+a{
+
+    text-decoration:none;
+
+}
+
+
+
+section{
+
+    width:100%;
+
+}
+
+
+
+
+
+/* =========================
+HEADER
+========================= */
 
 
 header{
 
-position:absolute;
-top:0;
-right:0;
-width:100%;
+    position:absolute;
+    top:0;
+    right:0;
 
-padding:30px 7%;
+    width:100%;
 
-display:flex;
-justify-content:space-between;
-align-items:center;
+    padding:30px 7%;
 
-z-index:20;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    z-index:100;
 
 }
 
@@ -66,12 +98,13 @@ z-index:20;
 
 .logo{
 
-font-size:28px;
-font-weight:700;
+    font-size:28px;
 
-letter-spacing:5px;
+    font-weight:700;
 
-color:var(--gold-light);
+    letter-spacing:5px;
+
+    color:var(--gold-light);
 
 }
 
@@ -79,15 +112,25 @@ color:var(--gold-light);
 
 .logo span{
 
-display:block;
+    display:block;
 
-font-size:11px;
+    font-size:11px;
 
-letter-spacing:7px;
+    letter-spacing:7px;
 
-color:white;
+    color:white;
 
-text-align:center;
+    text-align:center;
+
+}
+
+
+
+nav{
+
+    display:flex;
+
+    align-items:center;
 
 }
 
@@ -95,15 +138,13 @@ text-align:center;
 
 nav a{
 
-color:#ddd;
+    color:#ddd;
 
-text-decoration:none;
+    margin:0 14px;
 
-margin:0 14px;
+    font-size:14px;
 
-font-size:14px;
-
-transition:.3s;
+    transition:.3s;
 
 }
 
@@ -111,28 +152,25 @@ transition:.3s;
 
 nav a:hover{
 
-color:var(--gold-light);
+    color:var(--gold-light);
 
 }
-
-
-
-
-
-/* HERO */
+/* =========================
+HERO
+========================= */
 
 
 .hero{
 
-height:100vh;
+    height:100vh;
 
-position:relative;
+    position:relative;
 
-overflow:hidden;
+    overflow:hidden;
 
-display:flex;
+    display:flex;
 
-align-items:center;
+    align-items:center;
 
 }
 
@@ -140,13 +178,13 @@ align-items:center;
 
 .hero video{
 
-position:absolute;
+    position:absolute;
 
-width:100%;
+    width:100%;
 
-height:100%;
+    height:100%;
 
-object-fit:cover;
+    object-fit:cover;
 
 }
 
@@ -154,34 +192,35 @@ object-fit:cover;
 
 .hero-overlay{
 
-position:absolute;
+    position:absolute;
 
-inset:0;
+    inset:0;
 
 
-background:
+    background:
 
-linear-gradient(
-90deg,
-rgba(0,0,0,.85),
-rgba(0,0,0,.35)
-);
+    linear-gradient(
+        90deg,
+        rgba(0,0,0,.85),
+        rgba(0,0,0,.35)
+    );
 
 }
 
 
 
+
 .hero-content{
 
-position:relative;
+    position:relative;
 
-z-index:2;
+    z-index:2;
 
-right:8%;
+    right:8%;
 
-max-width:450px;
+    max-width:450px;
 
-text-align:right;
+    text-align:right;
 
 }
 
@@ -189,11 +228,11 @@ text-align:right;
 
 .subtitle{
 
-font-size:20px;
+    font-size:20px;
 
-line-height:2.2;
+    line-height:2.2;
 
-color:#eee;
+    color:#eee;
 
 }
 
@@ -201,16 +240,20 @@ color:#eee;
 
 
 
-/* BUTTONS */
+
+
+/* =========================
+BUTTONS
+========================= */
 
 
 .hero-buttons{
 
-margin-top:35px;
+    margin-top:35px;
 
-display:flex;
+    display:flex;
 
-gap:15px;
+    gap:15px;
 
 }
 
@@ -218,15 +261,15 @@ gap:15px;
 
 .btn{
 
-padding:13px 32px;
+    padding:13px 32px;
 
-border-radius:40px;
+    border-radius:40px;
 
-text-decoration:none;
+    font-size:15px;
 
-font-size:15px;
+    transition:.4s;
 
-transition:.4s;
+    display:inline-block;
 
 }
 
@@ -234,9 +277,9 @@ transition:.4s;
 
 .gold{
 
-background:var(--gold);
+    background:var(--gold);
 
-color:#000;
+    color:#000;
 
 }
 
@@ -244,9 +287,9 @@ color:#000;
 
 .outline{
 
-border:1px solid var(--gold);
+    border:1px solid var(--gold);
 
-color:white;
+    color:white;
 
 }
 
@@ -254,7 +297,7 @@ color:white;
 
 .btn:hover{
 
-transform:translateY(-5px);
+    transform:translateY(-5px);
 
 }
 
@@ -263,14 +306,17 @@ transform:translateY(-5px);
 
 
 
-/* SERVICES */
+
+/* =========================
+SERVICES
+========================= */
 
 
 .services{
 
-padding:110px 8%;
+    padding:110px 8%;
 
-background:#070707;
+    background:#070707;
 
 }
 
@@ -279,9 +325,9 @@ background:#070707;
 .title,
 .section-title{
 
-text-align:center;
+    text-align:center;
 
-margin-bottom:60px;
+    margin-bottom:60px;
 
 }
 
@@ -290,11 +336,11 @@ margin-bottom:60px;
 .title h2,
 .section-title h2{
 
-font-size:38px;
+    font-size:38px;
 
-color:var(--gold-light);
+    color:var(--gold-light);
 
-margin-bottom:15px;
+    margin-bottom:15px;
 
 }
 
@@ -303,43 +349,45 @@ margin-bottom:15px;
 .title p,
 .section-title p{
 
-color:#999;
+    color:#999;
 
 }
+
 
 
 
 .service-grid{
 
-display:grid;
+    display:grid;
 
-grid-template-columns:repeat(4,1fr);
+    grid-template-columns:repeat(4,1fr);
 
-gap:25px;
+    gap:25px;
 
 }
 
 
 
+
 .service-card{
 
-background:
+    background:
 
-linear-gradient(
-145deg,
-rgba(255,255,255,.06),
-rgba(255,255,255,.01)
-);
+    linear-gradient(
+        145deg,
+        rgba(255,255,255,.06),
+        rgba(255,255,255,.01)
+    );
 
-border:1px solid rgba(201,162,39,.25);
+    border:1px solid rgba(201,162,39,.25);
 
-border-radius:22px;
+    border-radius:22px;
 
-padding:35px 25px;
+    padding:35px 25px;
 
-text-align:center;
+    text-align:center;
 
-transition:.5s;
+    transition:.5s;
 
 }
 
@@ -347,41 +395,52 @@ transition:.5s;
 
 .service-card:hover{
 
-transform:translateY(-10px);
+    transform:translateY(-10px);
 
-border-color:var(--gold);
+    border-color:var(--gold);
 
 }
 
 
 
+
 .service-card span{
 
-width:60px;
+    width:60px;
 
-height:60px;
+    height:60px;
 
-display:flex;
+    display:flex;
 
-align-items:center;
+    align-items:center;
 
-justify-content:center;
+    justify-content:center;
 
-margin:0 auto 25px;
+    margin:0 auto 25px;
 
-border-radius:50%;
-
-
-background:linear-gradient(
-135deg,
-var(--gold-light),
-var(--gold)
-);
+    border-radius:50%;
 
 
-color:#111;
+    background:
 
-font-weight:bold;
+    linear-gradient(
+        135deg,
+        var(--gold-light),
+        var(--gold)
+    );
+
+
+    color:#111;
+
+    font-weight:bold;
+
+}
+
+
+
+.service-card h3{
+
+    margin-bottom:15px;
 
 }
 
@@ -389,28 +448,23 @@ font-weight:bold;
 
 .service-card p{
 
-color:#aaa;
+    color:#aaa;
 
-line-height:2;
+    line-height:2;
 
-font-size:14px;
+    font-size:14px;
 
 }
-
-
-
-
-
-
-
-/* PORTFOLIO */
+/* =========================
+PORTFOLIO
+========================= */
 
 
 .portfolio{
 
-padding:110px 8%;
+    padding:110px 8%;
 
-background:#050505;
+    background:#050505;
 
 }
 
@@ -418,297 +472,163 @@ background:#050505;
 
 .portfolio-container{
 
-display:grid;
+    display:grid;
 
-grid-template-columns:repeat(3,1fr);
+    grid-template-columns:repeat(3,1fr);
 
-gap:30px;
+    gap:30px;
 
 }
+
+
 
 
 
 .portfolio-card{
 
-position:relative;
+    position:relative;
 
-height:420px;
+    height:420px;
 
-overflow:hidden;
+    overflow:hidden;
 
-border-radius:25px;
+    border-radius:25px;
 
-background:#0b0b0b;
+    background:#0b0b0b;
 
-border:1px solid rgba(201,162,39,.25);
+    border:1px solid rgba(201,162,39,.25);
 
-transition:.5s;
+    transition:.5s;
 
-display:block;
-
-text-decoration:none;
+    display:block;
 
 }
+
+
 
 
 
 .portfolio-card img{
 
-width:100%;
+    width:100%;
 
-height:100%;
+    height:100%;
 
-object-fit:cover;
+    object-fit:cover;
 
-transition:.7s;
+    transition:.7s;
 
 }
+
 
 
 
 .portfolio-card:hover{
 
-transform:translateY(-12px);
+    transform:translateY(-12px);
 
-border-color:var(--gold);
+    border-color:var(--gold);
 
 }
+
 
 
 
 .portfolio-card:hover img{
 
-transform:scale(1.1);
+    transform:scale(1.1);
 
 }
+
+
+
+
+.portfolio-card::after{
+
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    background:
+
+    linear-gradient(
+        transparent,
+        rgba(0,0,0,.85)
+    );
+
+}
+
 
 
 
 .portfolio-info{
 
-position:absolute;
+    position:absolute;
 
-bottom:30px;
+    bottom:30px;
 
-right:30px;
+    right:30px;
 
-z-index:2;
+    z-index:2;
 
 }
+
+
 
 
 
 .portfolio-info h3{
 
-font-size:25px;
+    font-size:25px;
 
-color:var(--gold-light);
+    color:var(--gold-light);
+
+    margin-bottom:10px;
 
 }
+
 
 
 
 .portfolio-info p{
 
-color:#ddd;
+    color:#ddd;
 
-font-size:14px;
+    font-size:14px;
 
 }
 
+
+
+
+
+
+
+/* =========================
+PORTFOLIO PLACEHOLDER
+========================= */
 
 
 .portfolio-placeholder{
 
-height:100%;
+    height:100%;
 
-display:flex;
+    display:flex;
 
-align-items:center;
+    align-items:center;
 
-justify-content:center;
+    justify-content:center;
 
-font-size:45px;
+    font-size:45px;
 
-color:var(--gold);
+    color:var(--gold);
 
-background:#111;
-
-}
-/* =========================
-   AI + NEWS SECTIONS
-========================= */
-
-
-/* =========================
-   AI + NEWS SECTIONS
-========================= */
-
-
-/* آموزش AI */
-
-.ai-section{
-
-padding:100px 8%;
-
-text-align:center;
-
-background:#070707;
+    background:#111;
 
 }
 
-
-
-.ai-section h2{
-
-font-size:35px;
-
-color:var(--gold-light);
-
-margin-bottom:20px;
-
-}
-
-
-
-.ai-section p{
-
-color:#aaa;
-
-font-size:17px;
-
-}
-
-
-
-
-
-
-/* اخبار تکنولوژی */
-
-.news-section{
-
-padding:100px 8%;
-
-text-align:center;
-
-background:#080d18;
-
-}
-
-
-
-.news-section h2{
-
-font-size:35px;
-
-color:#60a5fa;
-
-margin-bottom:20px;
-
-}
-
-
-
-.news-section p{
-
-color:#9ca3af;
-
-font-size:17px;
-
-}
-
-
-
-/* کارت‌های اخبار */
-
-.news-card{
-
-background:#111827;
-
-border:1px solid rgba(59,130,246,.25);
-
-border-radius:22px;
-
-overflow:hidden;
-
-transition:.4s;
-
-}
-
-
-
-.news-card:hover{
-
-transform:translateY(-10px);
-
-border-color:#3B82F6;
-
-box-shadow:0 15px 35px rgba(0,0,0,.4);
-
-}
-
-
-
-.news-card img{
-
-width:100%;
-
-height:250px;
-
-object-fit:cover;
-
-}
-
-
-
-.news-card-content{
-
-padding:25px;
-
-text-align:right;
-
-}
-
-
-
-.news-card-content h3{
-
-color:white;
-
-font-size:22px;
-
-}
-
-
-
-.news-card-content p{
-
-color:#9ca3af;
-
-line-height:1.9;
-
-}
-
-
-
-.news-tag{
-
-display:inline-block;
-
-padding:6px 15px;
-
-border-radius:20px;
-
-background:rgba(59,130,246,.15);
-
-color:#60a5fa;
-
-font-size:12px;
-
-margin-bottom:15px;
-
-}
 
 
 
@@ -716,43 +636,46 @@ margin-bottom:15px;
 
 
 /* =========================
-   PROJECT PAGES
+PROJECT PAGE
 ========================= */
 
 
 .project-page{
 
-padding:140px 8%;
+    padding:140px 8%;
 
-background:#050505;
+    background:#050505;
 
-text-align:center;
+    text-align:center;
 
 }
+
+
 
 
 
 .project-page h1{
 
-font-size:42px;
+    font-size:42px;
 
-color:var(--gold-light);
+    color:var(--gold-light);
 
-margin-bottom:20px;
+    margin-bottom:20px;
 
 }
+
 
 
 
 .project-desc{
 
-color:#aaa;
+    color:#aaa;
 
-font-size:18px;
+    font-size:18px;
 
-line-height:2;
+    line-height:2;
 
-margin-bottom:60px;
+    margin-bottom:60px;
 
 }
 
@@ -761,52 +684,53 @@ margin-bottom:60px;
 
 
 
+
 /* =========================
-   LOGO PROJECT GALLERY
+PROJECT GALLERY
 ========================= */
 
 
 .project-gallery{
 
-display:grid;
+    display:grid;
 
-grid-template-columns:repeat(3,1fr);
+    grid-template-columns:repeat(3,1fr);
 
-gap:30px;
+    gap:30px;
 
-max-width:1200px;
+    max-width:1200px;
 
-margin:auto;
+    margin:auto;
 
 }
+
 
 
 
 .project-gallery img{
 
-width:100%;
+    width:100%;
 
-border-radius:25px;
+    border-radius:25px;
 
-border:1px solid rgba(201,162,39,.3);
+    border:1px solid rgba(201,162,39,.3);
 
-transition:.5s;
+    transition:.5s;
 
 }
+
 
 
 
 .project-gallery img:hover{
 
-transform:scale(1.05);
+    transform:scale(1.05);
 
-box-shadow:
+    box-shadow:
 
-0 0 40px rgba(201,162,39,.25);
+    0 0 40px rgba(201,162,39,.25);
 
 }
-
-
 
 
 
@@ -814,41 +738,182 @@ box-shadow:
 
 
 /* =========================
-   MOTION PROJECT HERO
+BRAND PROJECT
 ========================= */
 
 
-/*
-ویدیوی اصلی model1
-برای ویدیوی عمودی 9:16
-*/
+.brand-hero{
+
+    position:relative;
+
+    max-width:1100px;
+
+    height:600px;
+
+    margin:0 auto 80px;
+
+    overflow:hidden;
+
+    border-radius:30px;
+
+    border:1px solid rgba(201,162,39,.3);
+
+}
+
+
+
+
+
+.brand-hero img{
+
+    width:100%;
+
+    height:100%;
+
+    object-fit:cover;
+
+}
+
+
+
+
+
+.brand-overlay{
+
+    position:absolute;
+
+    bottom:40px;
+
+    right:40px;
+
+}
+
+
+
+
+
+.brand-overlay h2{
+
+    color:var(--gold-light);
+
+    font-size:36px;
+
+}
+
+
+
+
+
+.brand-overlay p{
+
+    color:white;
+
+    font-size:18px;
+
+}
+
+
+
+
+
+
+
+.brand-gallery{
+
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:30px;
+
+    max-width:1200px;
+
+    margin:auto;
+
+}
+
+
+
+
+.brand-card{
+
+    height:350px;
+
+    overflow:hidden;
+
+    border-radius:25px;
+
+    border:1px solid rgba(201,162,39,.25);
+
+}
+
+
+
+
+
+.brand-card img{
+
+    width:100%;
+
+    height:100%;
+
+    object-fit:cover;
+
+    transition:.6s;
+
+}
+
+
+
+
+.brand-card:hover img{
+
+    transform:scale(1.08);
+
+}
+
+
+
+
+.brand-card:hover{
+
+    border-color:var(--gold);
+
+    box-shadow:
+
+    0 20px 50px rgba(201,162,39,.25);
+
+}
+/* =========================
+MOTION PROJECT HERO
+========================= */
 
 
 .motion-hero{
 
-position:relative;
+    position:relative;
 
-width:100%;
+    width:100%;
 
-max-width:420px;
+    max-width:420px;
 
-height:720px;
+    height:720px;
 
-margin:0 auto 80px;
+    margin:0 auto 80px;
 
-background:#000;
+    background:#000;
 
-border-radius:30px;
+    border-radius:30px;
 
-overflow:hidden;
+    overflow:hidden;
 
-border:1px solid rgba(201,162,39,.3);
+    border:1px solid rgba(201,162,39,.3);
 
-display:flex;
+    display:flex;
 
-align-items:center;
+    align-items:center;
 
-justify-content:center;
+    justify-content:center;
 
 }
 
@@ -856,15 +921,15 @@ justify-content:center;
 
 .motion-hero video{
 
-height:100%;
+    height:100%;
 
-width:auto;
+    width:auto;
 
-max-width:100%;
+    max-width:100%;
 
-object-fit:contain;
+    object-fit:contain;
 
-display:block;
+    display:block;
 
 }
 
@@ -874,26 +939,26 @@ display:block;
 
 .motion-title{
 
-position:absolute;
+    position:absolute;
 
-bottom:35px;
+    bottom:35px;
 
-right:30px;
+    right:30px;
 
-left:30px;
+    left:30px;
 
-z-index:2;
+    z-index:2;
 
-text-align:right;
+    text-align:right;
 
-padding:20px;
+    padding:20px;
 
-background:
+    background:
 
-linear-gradient(
-transparent,
-rgba(0,0,0,.8)
-);
+    linear-gradient(
+        transparent,
+        rgba(0,0,0,.8)
+    );
 
 }
 
@@ -901,11 +966,11 @@ rgba(0,0,0,.8)
 
 .motion-title h2{
 
-font-size:30px;
+    font-size:30px;
 
-color:var(--gold-light);
+    color:var(--gold-light);
 
-margin-bottom:10px;
+    margin-bottom:10px;
 
 }
 
@@ -913,9 +978,9 @@ margin-bottom:10px;
 
 .motion-title p{
 
-font-size:16px;
+    font-size:16px;
 
-color:white;
+    color:white;
 
 }
 
@@ -926,21 +991,21 @@ color:white;
 
 
 /* =========================
-   MOTION VIDEO CARDS
+MOTION VIDEO CARDS
 ========================= */
 
 
 .motion-gallery{
 
-display:grid;
+    display:grid;
 
-grid-template-columns:repeat(3,1fr);
+    grid-template-columns:repeat(3,1fr);
 
-gap:30px;
+    gap:30px;
 
-max-width:1200px;
+    max-width:1200px;
 
-margin:auto;
+    margin:auto;
 
 }
 
@@ -950,31 +1015,33 @@ margin:auto;
 
 .motion-card{
 
-height:380px;
+    height:380px;
 
-background:#0b0b0b;
+    background:#0b0b0b;
 
-border-radius:25px;
+    border-radius:25px;
 
-overflow:hidden;
+    overflow:hidden;
 
-border:1px solid rgba(201,162,39,.25);
+    border:1px solid rgba(201,162,39,.25);
 
-transition:.5s;
+    transition:.5s;
 
 }
 
 
 
+
+
 .motion-card video{
 
-width:100%;
+    width:100%;
 
-height:100%;
+    height:100%;
 
-object-fit:cover;
+    object-fit:cover;
 
-display:block;
+    display:block;
 
 }
 
@@ -984,55 +1051,13 @@ display:block;
 
 .motion-card:hover{
 
-transform:translateY(-12px);
+    transform:translateY(-12px);
 
-border-color:var(--gold);
+    border-color:var(--gold);
 
-box-shadow:
+    box-shadow:
 
-0 20px 50px rgba(201,162,39,.25);
-
-}
-
-
-
-
-
-
-
-
-/* =========================
-   BACK BUTTON
-========================= */
-
-
-.back-btn{
-
-display:inline-block;
-
-margin-top:60px;
-
-padding:14px 35px;
-
-border-radius:40px;
-
-background:var(--gold);
-
-color:#000;
-
-text-decoration:none;
-
-transition:.4s;
-
-}
-
-
-
-.back-btn:hover{
-
-transform:translateY(-5px);
-
-background:var(--gold-light);
+    0 20px 50px rgba(201,162,39,.25);
 
 }
 
@@ -1044,24 +1069,47 @@ background:var(--gold-light);
 
 
 /* =========================
-   FOOTER
+AI LEARNING SECTION
 ========================= */
 
 
-footer{
+.ai-section{
 
-padding:35px;
+    padding:100px 8%;
 
-text-align:center;
+    text-align:center;
 
-border-top:1px solid #222;
-
-color:#777;
-
-font-size:14px;
+    background:#070707;
 
 }
 
+
+
+
+
+.ai-section h2{
+
+    font-size:35px;
+
+    color:var(--gold-light);
+
+    margin-bottom:20px;
+
+}
+
+
+
+
+
+.ai-section p{
+
+    color:#aaa;
+
+    font-size:17px;
+
+    margin-bottom:30px;
+
+}
 
 
 
@@ -1070,369 +1118,93 @@ font-size:14px;
 
 
 /* =========================
-   RESPONSIVE
+AI LEARNING PAGE
 ========================= */
-
-
-@media(max-width:900px){
-
-
-nav{
-
-display:none;
-
-}
-
-
-
-.hero-content{
-
-right:5%;
-
-left:5%;
-
-text-align:center;
-
-}
-
-
-
-.hero-buttons{
-
-justify-content:center;
-
-flex-direction:column;
-
-}
-
-
-
-.service-grid{
-
-grid-template-columns:1fr 1fr;
-
-}
-
-
-
-.portfolio-container{
-
-grid-template-columns:1fr;
-
-}
-
-
-
-.motion-gallery{
-
-grid-template-columns:1fr;
-
-}
-
-
-
-.motion-hero{
-
-height:650px;
-
-}
-
-
-}
-
-
-
-
-
-@media(max-width:600px){
-
-
-.service-grid{
-
-grid-template-columns:1fr;
-
-}
-
-
-
-.subtitle{
-
-font-size:16px;
-
-}
-
-
-
-.title h2,
-.section-title h2{
-
-font-size:30px;
-
-}
-
-
-
-.motion-hero{
-
-height:600px;
-
-max-width:95%;
-
-}
-
-
-
-.motion-title h2{
-
-font-size:22px;
-
-}
-
-
-
-.motion-card{
-
-height:450px;
-
-}
-
-
-}
-/* =====================
-   BRAND PROJECT PAGE
-===================== */
-
-
-.brand-hero{
-
-position:relative;
-
-max-width:1100px;
-
-height:600px;
-
-margin:0 auto 80px;
-
-overflow:hidden;
-
-border-radius:30px;
-
-border:1px solid rgba(201,162,39,.3);
-
-}
-
-
-
-.brand-hero img{
-
-width:100%;
-
-height:100%;
-
-object-fit:cover;
-
-}
-
-
-
-.brand-overlay{
-
-position:absolute;
-
-bottom:40px;
-
-right:40px;
-
-}
-
-
-
-.brand-overlay h2{
-
-color:var(--gold-light);
-
-font-size:36px;
-
-}
-
-
-
-.brand-overlay p{
-
-color:white;
-
-font-size:18px;
-
-}
-
-
-
-
-.brand-gallery{
-
-display:grid;
-
-grid-template-columns:repeat(3,1fr);
-
-gap:30px;
-
-max-width:1200px;
-
-margin:auto;
-
-}
-
-
-
-.brand-card{
-
-height:350px;
-
-overflow:hidden;
-
-border-radius:25px;
-
-border:1px solid rgba(201,162,39,.25);
-
-}
-
-
-
-.brand-card img{
-
-width:100%;
-
-height:100%;
-
-object-fit:cover;
-
-transition:.6s;
-
-}
-
-
-
-.brand-card:hover img{
-
-transform:scale(1.08);
-
-}
-
-
-
-.brand-card:hover{
-
-border-color:var(--gold);
-
-box-shadow:
-0 20px 50px rgba(201,162,39,.25);
-
-}
-
-
-
-@media(max-width:900px){
-
-.brand-gallery{
-
-grid-template-columns:1fr;
-
-}
-
-
-.brand-hero{
-
-height:450px;
-
-}
-
-}
-/* Portfolio scroll position fix */
-
-#portfolio{
-   html{
-
-scroll-behavior:smooth;
-scroll-padding-top:100px;
-
-}
-}
-/* =====================
- AI LEARNING PAGE
-===================== */
 
 
 .ai-hero{
 
-height:70vh;
+    height:70vh;
 
-display:flex;
+    display:flex;
 
-flex-direction:column;
+    flex-direction:column;
 
-justify-content:center;
+    justify-content:center;
 
-align-items:center;
+    align-items:center;
 
-text-align:center;
+    text-align:center;
 
-background:
+    background:
 
-linear-gradient(
-180deg,
-#050505,
-#111
-);
+    linear-gradient(
+        180deg,
+        #050505,
+        #111
+    );
 
-padding:100px 8%;
+    padding:100px 8%;
 
 }
+
+
 
 
 
 .ai-hero h1{
 
-font-size:55px;
+    font-size:55px;
 
-color:var(--gold-light);
+    color:var(--gold-light);
 
-margin-bottom:20px;
+    margin-bottom:20px;
 
 }
+
+
 
 
 
 .ai-hero p{
 
-font-size:20px;
+    font-size:20px;
 
-color:#aaa;
+    color:#aaa;
 
 }
 
 
 
+
+
+
+
+/* ARTICLES */
 
 
 .articles{
 
-padding:100px 8%;
+    padding:100px 8%;
 
-background:#050505;
+    background:#050505;
 
 }
+
+
 
 
 
 .article-grid{
 
-display:grid;
+    display:grid;
 
-grid-template-columns:repeat(3,1fr);
+    grid-template-columns:repeat(3,1fr);
 
-gap:30px;
+    gap:30px;
 
 }
+
 
 
 
@@ -1440,56 +1212,59 @@ gap:30px;
 
 .article-card{
 
-background:#0c0c0c;
+    background:#0c0c0c;
 
-border:1px solid rgba(201,162,39,.25);
+    border:1px solid rgba(201,162,39,.25);
 
-border-radius:25px;
+    border-radius:25px;
 
-padding:30px;
+    padding:30px;
 
-transition:.5s;
+    transition:.5s;
 
 }
+
 
 
 
 .article-card:hover{
 
-transform:translateY(-12px);
+    transform:translateY(-12px);
 
-border-color:var(--gold);
+    border-color:var(--gold);
 
-box-shadow:
+    box-shadow:
 
-0 20px 50px rgba(201,162,39,.2);
+    0 20px 50px rgba(201,162,39,.2);
 
 }
+
+
 
 
 
 
 .article-image{
 
-height:170px;
+    height:170px;
 
-display:flex;
+    display:flex;
 
-align-items:center;
+    align-items:center;
 
-justify-content:center;
+    justify-content:center;
 
-background:#111;
+    background:#111;
 
-border-radius:20px;
+    border-radius:20px;
 
-margin-bottom:25px;
+    margin-bottom:25px;
 
-color:var(--gold-light);
+    color:var(--gold-light);
 
-font-size:35px;
+    font-size:35px;
 
-font-weight:bold;
+    font-weight:bold;
 
 }
 
@@ -1499,24 +1274,25 @@ font-weight:bold;
 
 .article-card h3{
 
-font-size:23px;
+    font-size:23px;
 
-margin-bottom:15px;
+    margin-bottom:15px;
 
-color:white;
+    color:white;
 
 }
 
 
 
 
+
 .article-card p{
 
-color:#aaa;
+    color:#aaa;
 
-line-height:2;
+    line-height:2;
 
-font-size:15px;
+    font-size:15px;
 
 }
 
@@ -1526,457 +1302,77 @@ font-size:15px;
 
 .article-card a{
 
-display:inline-block;
+    display:inline-block;
 
-margin-top:20px;
+    margin-top:20px;
 
-color:var(--gold-light);
-
-text-decoration:none;
+    color:var(--gold-light);
 
 }
-
-
-
-
-
-.ai-about{
-
-padding:100px 15%;
-
-background:#080808;
-
-text-align:center;
-
-}
-
-
-
-.ai-about h2{
-
-color:var(--gold-light);
-
-margin-bottom:30px;
-
-}
-
-
-
-.ai-about p{
-
-color:#aaa;
-
-line-height:2.5;
-
-font-size:18px;
-
-}
-
-
-
-
-
-@media(max-width:900px){
-
-
-.article-grid{
-
-grid-template-columns:1fr;
-
-}
-
-
-.ai-hero h1{
-
-font-size:35px;
-
-}
-
-}
-/* AI ARTICLE PAGE */
+/* =========================
+AI ARTICLE PAGE
+========================= */
 
 
 .article-hero{
 
-padding:160px 8% 80px;
+    padding:160px 8% 80px;
 
-text-align:center;
+    text-align:center;
 
-background:#070707;
+    background:#070707;
 
 }
+
 
 
 .article-hero h1{
 
-font-size:48px;
+    font-size:48px;
 
-color:var(--gold-light);
+    color:var(--gold-light);
 
-margin-bottom:20px;
+    margin-bottom:20px;
 
 }
+
 
 
 .article-hero p{
 
-color:#aaa;
+    color:#aaa;
 
-font-size:18px;
+    font-size:18px;
 
 }
+
+
 
 
 
 .article-content{
 
-max-width:900px;
+    max-width:900px;
 
-margin:auto;
+    margin:auto;
 
-padding:80px 8%;
+    padding:80px 8%;
 
-line-height:2.5;
+    line-height:2.5;
 
 }
+
+
+
 
 
 .article-content h2{
 
-color:var(--gold-light);
+    color:var(--gold-light);
 
-font-size:30px;
+    font-size:30px;
 
-margin:40px 0 15px;
-
-}
-
-
-
-.article-content p{
-
-color:#ddd;
-
-font-size:17px;
-
-}
-
-
-
-.article-content ul{
-
-color:#ccc;
-
-padding-right:30px;
-
-}
-
-
-
-.article-content li{
-
-margin:15px 0;
-
-}
-
-
-
-.article-back{
-
-text-align:center;
-
-padding-bottom:80px;
-
-}
-/* دکمه شناور بازگشت به آموزش AI */
-
-.back-floating-btn {
-
-position: fixed;
-
-bottom: 25px;
-
-right: 25px;
-
-background: #C9A44B;
-
-color: #000;
-
-padding: 14px 22px;
-
-border-radius: 30px;
-
-font-size: 15px;
-
-font-weight: bold;
-
-text-decoration: none;
-
-z-index: 9999;
-
-box-shadow: 0 5px 20px rgba(0,0,0,0.4);
-
-transition: 0.3s;
-
-}
-
-
-
-.back-floating-btn:hover {
-
-transform: translateY(-5px);
-
-background: #e0bb65;
-
-}
-
-
-
-/* موبایل */
-
-@media(max-width:768px){
-
-
-.back-floating-btn{
-
-bottom:18px;
-
-right:15px;
-
-padding:12px 18px;
-
-font-size:14px;
-
-}
-
-
-}
-/* ===================================
-   SORAVIN ARTICLE SYSTEM
-   Premium AI Knowledge Articles
-=================================== */
-
-
-/* فهرست مطالب مقاله */
-
-.article-toc{
-
-background:#111;
-
-border:1px solid #C9A44B;
-
-padding:30px;
-
-border-radius:18px;
-
-margin:40px auto;
-
-max-width:850px;
-
-box-shadow:0 15px 40px rgba(0,0,0,.35);
-
-}
-
-
-
-.article-toc h2{
-
-color:#C9A44B;
-
-font-size:28px;
-
-text-align:center;
-
-margin-bottom:30px;
-
-}
-
-
-
-.article-toc ul{
-
-list-style:none;
-
-padding:0;
-
-margin:0;
-
-}
-
-
-
-.article-toc li{
-
-margin:18px 0;
-
-padding-right:15px;
-
-position:relative;
-
-}
-
-
-
-.article-toc li::before{
-
-content:"•";
-
-color:#C9A44B;
-
-position:absolute;
-
-right:0;
-
-}
-
-
-
-.article-toc a{
-
-color:#ffffff;
-
-text-decoration:none;
-
-font-size:17px;
-
-transition:.3s;
-
-}
-
-
-
-.article-toc a:hover{
-
-color:#C9A44B;
-
-padding-right:8px;
-
-}
-
-
-
-
-
-
-/* اسکرول نرم بین بخش ها */
-
-html{
-
-scroll-behavior:smooth;
-
-}
-
-
-
-
-
-/* دکمه شناور برگشت */
-
-.back-floating-btn{
-
-
-position:fixed;
-
-bottom:25px;
-
-right:25px;
-
-background:#C9A44B;
-
-color:#000;
-
-padding:15px 25px;
-
-border-radius:35px;
-
-font-weight:bold;
-
-font-size:15px;
-
-text-decoration:none;
-
-z-index:9999;
-
-box-shadow:0 10px 30px rgba(0,0,0,.5);
-
-transition:.3s;
-
-
-}
-
-
-
-.back-floating-btn:hover{
-
-transform:translateY(-5px);
-
-background:#e2c06b;
-
-}
-
-
-
-
-
-
-/* دکمه انتهای مقاله */
-
-.article-back{
-
-
-text-align:center;
-
-margin:60px 0;
-
-}
-
-
-
-.back-btn{
-
-
-display:inline-block;
-
-background:#C9A44B;
-
-color:#000;
-
-padding:15px 35px;
-
-border-radius:30px;
-
-font-weight:bold;
-
-text-decoration:none;
-
-transition:.3s;
-
-}
-
-
-
-.back-btn:hover{
-
-
-transform:scale(1.05);
-
-}
-
-
-
-
-
-/* تیترهای مقاله */
-
-.article-content h2{
-
-color:#C9A44B;
-
-margin-top:60px;
-
-margin-bottom:25px;
-
-font-size:30px;
+    margin:40px 0 15px;
 
 }
 
@@ -1984,11 +1380,11 @@ font-size:30px;
 
 .article-content h3{
 
-color:white;
+    color:white;
 
-margin-top:40px;
+    font-size:24px;
 
-font-size:24px;
+    margin-top:40px;
 
 }
 
@@ -1996,11 +1392,31 @@ font-size:24px;
 
 .article-content p{
 
-line-height:2.2;
+    color:#ddd;
 
-font-size:17px;
+    font-size:17px;
 
-color:#ddd;
+}
+
+
+
+
+
+.article-content ul{
+
+    color:#ccc;
+
+    padding-right:30px;
+
+}
+
+
+
+
+
+.article-content li{
+
+    margin:15px 0;
 
 }
 
@@ -2009,62 +1425,25 @@ color:#ddd;
 
 
 
-/* جدول مقاله */
 
-.article-content table{
-
-
-width:100%;
-
-border-collapse:collapse;
-
-margin:40px 0;
-
-background:#111;
-
-}
-
-
-
-.article-content th{
-
-
-background:#C9A44B;
-
-color:#000;
-
-padding:15px;
-
-}
-
-
-
-.article-content td{
-
-
-border:1px solid #333;
-
-padding:15px;
-
-color:#ddd;
-
-}
-
-
-
-
-
-/* موبایل */
-
-@media(max-width:768px){
-
+/* =========================
+ARTICLE TOC
+========================= */
 
 
 .article-toc{
 
-padding:20px;
+    background:#111;
 
-margin:25px 10px;
+    border:1px solid var(--gold);
+
+    padding:30px;
+
+    border-radius:18px;
+
+    margin:40px auto;
+
+    max-width:850px;
 
 }
 
@@ -2072,7 +1451,29 @@ margin:25px 10px;
 
 .article-toc h2{
 
-font-size:24px;
+    color:var(--gold);
+
+    text-align:center;
+
+    margin-bottom:30px;
+
+}
+
+
+
+.article-toc ul{
+
+    list-style:none;
+
+    padding:0;
+
+}
+
+
+
+.article-toc li{
+
+    margin:18px 0;
 
 }
 
@@ -2080,254 +1481,432 @@ font-size:24px;
 
 .article-toc a{
 
-font-size:15px;
+    color:white;
+
+    text-decoration:none;
+
+    transition:.3s;
 
 }
 
 
 
-.back-floating-btn{
+.article-toc a:hover{
 
-
-bottom:18px;
-
-right:15px;
-
-padding:12px 18px;
-
-font-size:13px;
-
+    color:var(--gold);
 
 }
 
 
 
-.article-content h2{
-
-font-size:24px;
-
-}
 
 
 
-.article-content p{
-
-font-size:16px;
-
-}
 
 
-
-}
 /* =========================
-   TECH NEWS EXTRA STYLE
+TECH NEWS PAGE
 ========================= */
 
 
-.featured-news,
-.latest-news,
-.news-analysis,
-.news-system{
+.news-hero{
 
-padding:90px 8%;
+    padding:120px 8% 60px;
 
-background:#080d18;
+    background:#080d18;
 
-text-align:center;
+    text-align:center;
+
+}
+
+
+
+.news-hero h1{
+
+    color:#60a5fa;
+
+    font-size:42px;
+
+    margin-bottom:20px;
+
+}
+
+
+
+.news-hero p{
+
+    color:#9ca3af;
+
+    font-size:18px;
 
 }
 
 
 
 
-.featured-news h2,
-.latest-news h2,
-.news-analysis h2,
-.news-system h2{
 
-color:#60a5fa;
+.news-container{
 
-font-size:34px;
+    width:85%;
 
-margin-bottom:25px;
+    margin:auto;
 
 }
 
 
 
 
+
+.news-filter{
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:15px;
+
+    flex-wrap:wrap;
+
+    margin:40px 0;
+
+}
+
+
+
+
+
+.news-filter button{
+
+    background:#111827;
+
+    color:white;
+
+    border:1px solid #3B82F6;
+
+    padding:12px 25px;
+
+    border-radius:30px;
+
+    cursor:pointer;
+
+}
+
+
+
+
+
+
+
+/* NEWS GRID */
+
+
+.news-grid,
 .featured-grid{
 
-display:grid;
+    display:grid;
 
-grid-template-columns:
+    grid-template-columns:repeat(3,1fr);
 
-repeat(auto-fit,minmax(300px,1fr));
+    gap:30px;
 
-gap:30px;
-
-margin-top:40px;
+    margin-top:40px;
 
 }
 
 
 
 
-.featured-card{
-
-background:#111827;
-
-}
 
 
 
+.tech-card{
 
-.analysis-box{
+    background:#111827;
 
-background:
+    border-radius:22px;
 
-rgba(59,130,246,.08);
+    overflow:hidden;
 
-border-right:
+    border:1px solid rgba(59,130,246,.25);
 
-4px solid #3B82F6;
+    text-align:right;
 
-padding:25px;
+    min-height:520px;
 
-border-radius:15px;
+    display:flex;
 
-margin-top:35px;
+    flex-direction:column;
 
-text-align:right;
+    transition:.4s;
 
 }
 
 
 
 
-.analysis-box h3{
 
-color:#60a5fa;
+.tech-card:hover{
 
-}
+    transform:translateY(-10px);
 
+    border-color:#3B82F6;
 
+    box-shadow:
 
-
-.analysis-box p{
-
-color:#aaa;
-
-line-height:2;
+    0 20px 50px rgba(0,0,0,.4);
 
 }
 
 
 
 
-.news-flow{
-
-display:flex;
-
-justify-content:center;
-
-align-items:center;
-
-gap:20px;
-
-flex-wrap:wrap;
-
-margin:50px 0;
-
-}
 
 
 
+.news-image{
 
-.news-flow div{
+    width:100%;
 
-background:#111827;
+    height:240px;
 
-border:1px solid rgba(59,130,246,.3);
+    overflow:hidden;
 
-padding:20px;
+    background:
 
-border-radius:15px;
-
-color:#60a5fa;
+    linear-gradient(
+        135deg,
+        #111827,
+        #0f172a
+    );
 
 }
 
 
 
 
-.news-flow span{
 
-display:block;
+.news-image img{
 
-color:#aaa;
+    width:100%;
 
-font-size:13px;
+    height:100%;
 
-margin-top:8px;
+    object-fit:cover;
 
 }
+
+
+
+
+
+.news-content{
+
+    padding:25px;
+
+}
+
+
+
+
+
+.news-content h2,
+.news-content h3{
+
+    color:white;
+
+    font-size:22px;
+
+    line-height:2;
+
+}
+
+
+
+
+
+.news-content p{
+
+    color:#b8c4dd;
+
+    font-size:15px;
+
+    line-height:2;
+
+}
+
+
+
+
+
+
+
+.category{
+
+    display:inline-block;
+
+    padding:6px 15px;
+
+    border-radius:20px;
+
+    font-size:12px;
+
+    margin-bottom:15px;
+
+}
+
+
+
+
+
+.category.ai{
+
+    background:rgba(59,130,246,.15);
+
+    color:#60a5fa;
+
+}
+
+
+
+
+
+.category.pc{
+
+    background:rgba(16,185,129,.15);
+
+    color:#34d399;
+
+}
+
+
+
+
+
+.category.mobile{
+
+    background:rgba(236,72,153,.15);
+
+    color:#f472b6;
+
+}
+
+
+
+
+
+.news-meta{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    margin-top:20px;
+
+    color:#94a3b8;
+
+    font-size:13px;
+
+}
+
+
+
+
+
+.read-more{
+
+    display:inline-block;
+
+    margin-top:25px;
+
+    color:#60a5fa;
+
+    text-decoration:none;
+
+}
+/* =========================
+FOOTER
+========================= */
+
+
+footer{
+
+    padding:35px;
+
+    text-align:center;
+
+    border-top:1px solid #222;
+
+    color:#777;
+
+    font-size:14px;
+
+}
+
 
 
 
 
 .tech-footer{
 
-background:#05070d;
+    background:#05070d;
 
-padding:50px 8%;
+    padding:50px 8%;
 
-text-align:center;
+    text-align:center;
 
-color:#aaa;
+    color:#aaa;
 
 }
+
 
 
 
 
 .tech-footer h3{
 
-color:#60a5fa;
+    color:#60a5fa;
+
+    margin-bottom:20px;
 
 }
+
 
 
 
 
 .footer-links{
 
-display:flex;
+    display:flex;
 
-justify-content:center;
+    justify-content:center;
 
-gap:25px;
+    gap:25px;
 
-margin:25px 0;
+    margin:25px 0;
 
 }
+
 
 
 
 
 .footer-links a{
 
-color:#ddd;
+    color:#ddd;
 
-text-decoration:none;
+    text-decoration:none;
+
+    transition:.3s;
 
 }
+
+
 
 
 
 .footer-links a:hover{
 
-color:#3B82F6;
+    color:#3B82F6;
 
 }
 
@@ -2338,397 +1917,239 @@ color:#3B82F6;
 
 
 
-
-@media(max-width:768px){
-
-
-.news-flow{
-
-flex-direction:column;
-
-}
-
-
-.footer-links{
-
-flex-direction:column;
-
-}
-
-
-}
 /* =========================
-   TECH NEWS PAGE FIX
+BACK BUTTONS
 ========================= */
 
 
-.news-hero{
+.back-btn{
 
-padding:120px 8% 60px;
+    display:inline-block;
 
-background:#080d18;
+    margin-top:60px;
 
-text-align:center;
+    padding:14px 35px;
 
-}
+    border-radius:40px;
 
+    background:var(--gold);
 
-.news-hero h1{
+    color:#000;
 
-color:#60a5fa;
+    text-decoration:none;
 
-font-size:42px;
+    font-weight:bold;
 
-margin-bottom:20px;
-
-}
-
-
-.news-container{
-
-width:85%;
-
-margin:auto;
+    transition:.4s;
 
 }
 
 
 
-.news-filter{
 
-display:flex;
 
-justify-content:center;
+.back-btn:hover{
 
-gap:15px;
+    transform:translateY(-5px);
 
-flex-wrap:wrap;
-
-margin:40px 0;
+    background:var(--gold-light);
 
 }
 
 
 
-.news-filter button{
 
-background:#111827;
-
-color:white;
-
-border:1px solid #3B82F6;
-
-padding:12px 25px;
-
-border-radius:30px;
-
-}
-
-
-
-.news-grid,
-.featured-grid{
-
-display:grid;
-
-grid-template-columns:repeat(3,1fr);
-
-gap:30px;
-
-margin-top:40px;
-
-}
-
-
-
-.tech-card{
-
-background:#111827;
-
-border-radius:20px;
-
-overflow:hidden;
-
-border:1px solid rgba(59,130,246,.25);
-
-text-align:right;
-
-}
-
-
-
-.news-image{
-
-height:220px;
-
-}
-
-
-
-.news-image img{
-
-width:100%;
-
-height:100%;
-
-object-fit:cover;
-
-}
-
-
-
-.news-content{
-
-padding:25px;
-
-}
-
-
-
-.news-content h2,
-.news-content h3{
-
-color:white;
-
-}
-
-
-
-.news-content p{
-
-color:#aaa;
-
-line-height:2;
-
-}
-
-
-
-@media(max-width:900px){
-
-.news-grid,
-.featured-grid{
-
-grid-template-columns:1fr;
-
-}
-
-}
-/* =========================
-   NEWS PAGE FINAL POLISH
-========================= */
-
-
-.tech-card{
-
-min-height:520px;
-
-display:flex;
-
-flex-direction:column;
-
-}
-
-
-
-.news-image{
-
-height:180px;
-
-background:
-
-linear-gradient(
-135deg,
-#111827,
-#0f172a
-);
-
-display:flex;
-
-align-items:center;
-
-justify-content:center;
-
-}
-
-
-
-.news-image::after{
-
-content:"AI • TECH • FUTURE";
-
-color:#3B82F6;
-
-font-size:18px;
-
-font-weight:bold;
-
-}
-
-
-
-.news-content h2,
-.news-content h3{
-
-font-size:22px;
-
-line-height:1.8;
-
-}
-
-
-
-.news-content p{
-
-font-size:15px;
-
-line-height:2;
-
-}
-
-
-
-.featured-news,
-.latest-news,
-.news-analysis,
-.news-system{
-
-padding:70px 8%;
-
-}
-
-
-
-.news-analysis{
-
-background:#070b14;
-
-}
-
-
-
-.news-system{
-
-background:#050505;
-
-}
 
 
 
 .back-floating-btn{
 
+    position:fixed;
 
-right:30px;
+    bottom:25px;
 
-bottom:30px;
+    right:25px;
 
-padding:12px 25px;
+    background:#C9A44B;
 
-font-size:14px;
+    color:#000;
 
-border-radius:40px;
+    padding:14px 25px;
 
-}
+    border-radius:40px;
 
+    font-size:14px;
 
+    font-weight:bold;
 
-@media(max-width:768px){
+    text-decoration:none;
 
+    z-index:9999;
 
-.tech-card{
+    box-shadow:
 
-min-height:auto;
+    0 10px 30px rgba(0,0,0,.5);
 
-}
-
-
-.news-image{
-
-height:160px;
-
-}
-
-}
-/* ==========================
-   FIX TECH NEWS CARDS
-========================== */
-
-
-.news-grid,
-.featured-grid {
-
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 30px;
-    width: 100%;
-}
-
-
-
-.tech-card {
-
-    width: 100%;
-    min-height: 520px;
-    background: #0d1628;
-    border: 1px solid #1e5cff;
-    border-radius: 22px;
-    overflow: hidden;
-}
-
-
-
-.news-image {
-
-    width: 100%;
-    height: 240px;
-    overflow: hidden;
+    transition:.3s;
 
 }
 
 
 
-.news-image img {
-
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-
-}
 
 
+.back-floating-btn:hover{
 
-.news-content {
+    transform:translateY(-5px);
 
-    padding: 25px;
-    text-align: right;
+    background:#e2c06b;
 
 }
 
 
 
-.news-content h2,
-.news-content h3 {
-
-    font-size: 22px;
-    line-height: 2;
-}
 
 
 
-.news-content p {
-
-    font-size: 15px;
-    line-height: 2;
-    color: #b8c4dd;
-
-}
 
 
+/* =========================
+GLOBAL MOBILE FIX
+========================= */
 
-/* موبایل */
 
 @media(max-width:900px){
+
+
+
+header{
+
+    padding:25px 5%;
+
+}
+
+
+
+nav{
+
+    display:none;
+
+}
+
+
+
+.logo{
+
+    font-size:24px;
+
+}
+
+
+
+.hero{
+
+    height:90vh;
+
+}
+
+
+
+
+
+.hero-content{
+
+    right:5%;
+
+    left:5%;
+
+    text-align:center;
+
+}
+
+
+
+
+
+.subtitle{
+
+    font-size:17px;
+
+}
+
+
+
+
+
+.hero-buttons{
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    align-items:center;
+
+}
+
+
+
+.btn{
+
+    width:220px;
+
+}
+
+
+
+
+
+
+.service-grid{
+
+    grid-template-columns:1fr 1fr;
+
+}
+
+
+
+.portfolio-container{
+
+    grid-template-columns:1fr;
+
+}
+
+
+
+.project-gallery{
+
+    grid-template-columns:1fr;
+
+}
+
+
+
+.brand-gallery{
+
+    grid-template-columns:1fr;
+
+}
+
+
+
+.motion-gallery{
+
+    grid-template-columns:1fr;
+
+}
+
+
+
+.article-grid{
+
+    grid-template-columns:1fr;
+
+}
+
+
 
 .news-grid,
 .featured-grid{
@@ -2738,11 +2159,235 @@ height:160px;
 }
 
 
-.tech-card{
 
-    min-height:auto;
+.ai-hero h1{
+
+    font-size:36px;
 
 }
 
+
+
+.news-hero h1{
+
+    font-size:32px;
+
+}
+
+
+
+.article-hero h1{
+
+    font-size:34px;
+
+}
+
+
+
+.brand-hero{
+
+    height:420px;
+
+}
+
+
+
+.motion-hero{
+
+    height:600px;
+
+    max-width:95%;
+
+}
+
+
+
+}
+
+
+
+
+
+
+
+
+
+@media(max-width:600px){
+
+
+
+.service-grid{
+
+    grid-template-columns:1fr;
+
+}
+
+
+
+.title h2,
+.section-title h2{
+
+    font-size:30px;
+
+}
+
+
+
+
+
+.hero video{
+
+    object-position:center;
+
+}
+
+
+
+
+
+.portfolio-card{
+
+    height:350px;
+
+}
+
+
+
+
+
+.motion-card{
+
+    height:430px;
+
+}
+
+
+
+
+
+.article-content{
+
+    padding:50px 6%;
+
+}
+
+
+
+
+
+.article-content h2{
+
+    font-size:24px;
+
+}
+
+
+
+
+
+.article-content p{
+
+    font-size:16px;
+
+}
+
+
+
+
+
+.news-container{
+
+    width:92%;
+
+}
+
+
+
+
+
+.back-floating-btn{
+
+    right:15px;
+
+    bottom:18px;
+
+    padding:12px 18px;
+
+    font-size:13px;
+
+}
+
+
+
+.footer-links{
+
+    flex-direction:column;
+
+}
+
+
+
+}
+
+
+
+
+
+
+
+
+/* =========================
+SMOOTH SCROLL FINAL
+========================= */
+
+
+html{
+
+    scroll-behavior:smooth;
+
+    scroll-padding-top:100px;
+
+}
+
+
+
+
+
+/* =========================
+VIDEO PERFORMANCE
+========================= */
+
+
+video{
+
+    max-width:100%;
+
+}
+
+
+
+
+
+img{
+
+    max-width:100%;
+
+}
+
+
+
+
+
+
+/* =========================
+GOLD SELECTION
+========================= */
+
+
+::selection{
+
+    background:var(--gold);
+
+    color:#000;
 
 }

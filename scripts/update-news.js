@@ -1,36 +1,37 @@
-// ===============================
+// =====================================
 // SORAVIN AUTO NEWS UPDATER
-// Safe Version
-// ===============================
+// RSS TO JSON
+// =====================================
 
 
 const fs = require("fs");
-
 const https = require("https");
 
 
 
-
-
-// مسیر خروجی
-
-const outputFile = "./data/auto-news.json";
+const outputFile =
+"./data/auto-news.json";
 
 
 
 
 
-// دریافت خبر از API خودمان
+// RSS SOURCE
 
-function getNews(){
+const RSS_URL =
+"https://feeds.feedburner.com/TechCrunch";
+
+
+
+
+
+function getRSS(){
 
 
 return new Promise((resolve,reject)=>{
 
 
-https.get(
-"https://YOUR-DOMAIN.com/api/news-feed",
-(response)=>{
+https.get(RSS_URL,(response)=>{
 
 
 let data="";
@@ -50,33 +51,13 @@ response.on(
 ()=>{
 
 
-try{
+resolve(data);
 
 
-const json = JSON.parse(data);
+});
 
 
-resolve(json.news || []);
-
-
-}
-
-catch(error){
-
-reject(error);
-
-}
-
-
-}
-
-
-);
-
-
-}
-
-).on(
+}).on(
 "error",
 error=>{
 
@@ -97,19 +78,115 @@ reject(error);
 
 
 
+function extractNews(xml){
+
+
+const items =
+xml.match(/<item>[\s\S]*?<\/item>/g) || [];
+
+
+
+return items.slice(0,6).map((item,index)=>{
+
+
+
+const title =
+(item.match(/<title>(.*?)<\/title>/)||[])[1]
+|| "خبر فناوری";
+
+
+
+const link =
+(item.match(/<link>(.*?)<\/link>/)||[])[1]
+|| "#";
+
+
+
+const description =
+(item.match(/<description>(.*?)<\/description>/)||[])[1]
+|| "آخرین اخبار فناوری";
+
+
+
+return {
+
+
+id:index+1,
+
+
+title:title
+.replace(/<!\[CDATA\[|\]\]>/g,""),
+
+
+
+category:"Tech",
+
+
+tag:"Technology",
+
+
+source:"Soravin Tech",
+
+
+image:
+"assets/image/ai-news.jpg",
+
+
+description:
+description
+.replace(/<!\[CDATA\[|\]\]>/g,"")
+.substring(0,150),
+
+
+date:"امروز",
+
+
+link:link,
+
+
+featured:false,
+
+
+status:"published"
+
+
+
+};
+
+
+
+});
+
+
+}
+
+
+
+
+
+
 
 
 async function updateNews(){
 
 
+
 try{
 
 
-console.log("Loading Soravin news...");
+console.log(
+"Loading technology news..."
+);
 
 
 
-const news = await getNews();
+const xml =
+await getRSS();
+
+
+
+const news =
+extractNews(xml);
 
 
 
@@ -118,7 +195,11 @@ fs.writeFileSync(
 
 outputFile,
 
-JSON.stringify(news,null,2),
+JSON.stringify(
+news,
+null,
+2
+),
 
 "utf8"
 
@@ -126,9 +207,8 @@ JSON.stringify(news,null,2),
 
 
 
-
 console.log(
-"News updated:",
+"Updated news:",
 news.length
 );
 
@@ -140,17 +220,17 @@ catch(error){
 
 
 console.log(
-"Update error:",
+"News update error:",
 error.message
 );
 
 
-
 }
 
 
 
 }
+
 
 
 

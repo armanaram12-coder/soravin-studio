@@ -229,27 +229,68 @@ item.match(/<summary[^>]*>([\s\S]*?)<\/summary>/i);
 
 // FIX SOURCE LINK
 
-let linkMatch =
-
-item.match(/<link[^>]*>([\s\S]*?)<\/link>/i)
-
-||
-
-item.match(/<guid[^>]*>([\s\S]*?)<\/guid>/i)
-
-||
-
-item.match(/href="(https?:\/\/[^"]+)"/i);
-
-
+// =====================================
+// SOURCE LINK FIX
+// =====================================
 
 let link = "";
 
 
+// RSS normal
 
-if(linkMatch){
+let normalLink = item.match(
+/<link>([\s\S]*?)<\/link>/i
+);
 
-link = cleanHTML(linkMatch[1]);
+
+if(normalLink){
+
+link = cleanHTML(normalLink[1]);
+
+}
+
+
+// Atom RSS
+
+if(!link){
+
+let atomLink = item.match(
+/<link[^>]+href=["']([^"']+)["']/i
+);
+
+
+if(atomLink){
+
+link = atomLink[1];
+
+}
+
+}
+
+
+// GUID fallback
+
+if(!link){
+
+let guidLink = item.match(
+/<guid[^>]*>([\s\S]*?)<\/guid>/i
+);
+
+
+if(guidLink){
+
+link = cleanHTML(guidLink[1]);
+
+}
+
+}
+
+
+// validate
+
+if(!link.startsWith("http")){
+
+link="";
 
 }
 

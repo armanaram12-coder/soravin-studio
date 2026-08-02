@@ -660,7 +660,7 @@ unique.push(news);
 let finalNews =
 
 unique
-.slice(0,50)
+.slice(0,10)
 .map((news,index)=>{
 
 

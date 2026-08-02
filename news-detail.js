@@ -1,7 +1,7 @@
 // =====================================
 // SORAVIN NEWS DETAIL SYSTEM
-// VERSION 2
-// FULL ARTICLE + SOURCE FIX
+// VERSION 3
+// CLEAN ARTICLE DISPLAY
 // =====================================
 
 
@@ -23,16 +23,61 @@ document.getElementById(
 
 if(!detailBox){
 
-
 console.log(
 "newsDetail not found"
 );
 
-
 return;
+
+}
+
+
+
+
+
+
+function cleanNewsText(text=""){
+
+
+return text
+
+.replace(/<!\[CDATA\[/gi,"")
+
+.replace(/\]\]>/gi,"")
+
+.replace(/<script[\s\S]*?<\/script>/gi,"")
+
+.replace(/<style[\s\S]*?<\/style>/gi,"")
+
+.replace(/<img[^>]*>/gi,"")
+
+.replace(/<a[^>]*>/gi,"")
+
+.replace(/<\/a>/gi,"")
+
+.replace(/<br\s*\/?>/gi," ")
+
+.replace(/<p[^>]*>/gi,"")
+
+.replace(/<\/p>/gi," ")
+
+.replace(/<[^>]+>/gi,"")
+
+.replace(/&nbsp;/gi," ")
+
+.replace(/&amp;/gi,"&")
+
+.replace(/&quot;/gi,'"')
+
+.replace(/&#39;/gi,"'")
+
+.replace(/\s+/g," ")
+
+.trim();
 
 
 }
+
 
 
 
@@ -56,7 +101,6 @@ params.get("id");
 
 
 
-
 fetch("data/auto-news.json")
 
 .then(response=>{
@@ -64,27 +108,19 @@ fetch("data/auto-news.json")
 
 if(!response.ok){
 
-
 throw new Error(
 "JSON not found"
 );
 
-
 }
-
 
 
 return response.json();
 
 
-
 })
 
-
-
 .then(data=>{
-
-
 
 
 
@@ -112,30 +148,19 @@ if(!news){
 
 detailBox.innerHTML = `
 
-
 <div class="news-detail-card">
 
-
 <h2>
-
 خبر پیدا نشد
-
 </h2>
 
-
 <p>
-
 شناسه خبر: ${newsId}
-
 </p>
-
-
 
 </div>
 
-
 `;
-
 
 
 return;
@@ -148,14 +173,32 @@ return;
 
 
 
-
 let articleText =
+
+cleanNewsText(
 
 news.description ||
 
 news.summary_fa ||
 
+"متن خبر موجود نیست"
+
+);
+
+
+
+
+
+
+if(!articleText){
+
+
+articleText =
+
 "متن خبر موجود نیست";
+
+
+}
 
 
 
@@ -164,7 +207,6 @@ news.summary_fa ||
 
 
 let sourceButton = "";
-
 
 
 
@@ -203,7 +245,6 @@ rel="noopener noreferrer"
 
 
 }
-
 
 
 
@@ -280,9 +321,7 @@ ${news.title}
 
 <div class="news-detail-meta">
 
-
 ${news.source || "Soravin Tech"}
-
 
 |
 
@@ -302,7 +341,6 @@ new Date(news.date)
 
 }
 
-
 </div>
 
 
@@ -312,7 +350,6 @@ new Date(news.date)
 
 
 <div class="news-full-text">
-
 
 <p>
 
@@ -351,15 +388,9 @@ ${sourceButton}
 
 
 
-
 })
 
-
-
-
-
 .catch(error=>{
-
 
 
 console.log(
@@ -372,13 +403,10 @@ error
 
 
 
-
-
 detailBox.innerHTML = `
 
 
 <div class="news-detail-card">
-
 
 <h2>
 
@@ -395,7 +423,6 @@ ${error.message}
 
 
 </div>
-
 
 
 `;

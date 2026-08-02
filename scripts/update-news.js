@@ -1,7 +1,7 @@
 // =====================================
 // SORAVIN AUTO NEWS UPDATER
-// IRAN DIGITAL NEWS ENGINE VERSION 10
-// SITE SPECIFIC ARTICLE EXTRACTOR
+// IRAN DIGITAL NEWS ENGINE VERSION 11
+// UNIVERSAL ARTICLE EXTRACTOR
 // PART 1
 // =====================================
 
@@ -24,42 +24,35 @@ const outputFile = "./data/auto-news.json";
 
 const RSS_SOURCES = [
 
-
 {
 name:"Zoomit",
 url:"https://www.zoomit.ir/feed/"
 },
-
 
 {
 name:"Digiato",
 url:"https://digiato.com/feed"
 },
 
-
 {
 name:"ITResan",
 url:"https://itresan.com/feed"
 },
-
 
 {
 name:"GadgetNews",
 url:"https://gadgetnews.net/feed/"
 },
 
-
 {
 name:"Toranji",
 url:"https://toranji.ir/feed/"
 },
 
-
 {
 name:"Peivast",
 url:"https://peivast.com/feed"
 }
-
 
 ];
 
@@ -68,8 +61,9 @@ url:"https://peivast.com/feed"
 
 
 
+
 // =====================================
-// HTTP FETCH
+// FETCH URL
 // =====================================
 
 
@@ -84,17 +78,14 @@ https.get(url,{
 headers:{
 
 "User-Agent":
-
-"Mozilla/5.0 (Soravin News Bot)"
+"Mozilla/5.0 (Soravin AI News Bot)"
 
 }
-
 
 },response=>{
 
 
 let data="";
-
 
 
 response.on(
@@ -106,7 +97,6 @@ data += chunk;
 });
 
 
-
 response.on(
 "end",
 ()=>{
@@ -114,7 +104,6 @@ response.on(
 resolve(data);
 
 });
-
 
 
 }).on(
@@ -128,6 +117,7 @@ reject
 
 
 }
+
 
 
 
@@ -156,10 +146,6 @@ return text
 .replace(/&quot;/gi,'"')
 
 .replace(/&#39;/gi,"'")
-
-.replace(/<script[\s\S]*?<\/script>/gi,"")
-
-.replace(/<style[\s\S]*?<\/style>/gi,"")
 
 .replace(/\s+/g," ")
 
@@ -229,13 +215,13 @@ return "";
 
 
 
+
 // =====================================
-// EXTRACT RSS CONTENT
+// EXTRACT RSS DESCRIPTION
 // =====================================
 
 
-function extractRSSContent(item){
-
+function extractDescription(item){
 
 
 let content =
@@ -253,7 +239,6 @@ if(content){
 return cleanText(content[1]);
 
 }
-
 
 
 
@@ -276,11 +261,10 @@ return cleanText(description[1]);
 
 
 
-
-
 return "";
 
 }
+
 
 
 
@@ -332,7 +316,9 @@ item.match(
 
 
 
-let news = {
+
+let news={
+
 
 
 title:
@@ -347,9 +333,11 @@ cleanText(title[1])
 
 
 
+
 description:
 
-extractRSSContent(item),
+extractDescription(item),
+
 
 
 
@@ -359,7 +347,11 @@ extractLink(item),
 
 
 
-source:source.name
+
+source:
+
+source.name
+
 
 
 };
@@ -388,7 +380,6 @@ result.push(news);
 
 
 
-
 return result;
 
 
@@ -402,12 +393,11 @@ return result;
 
 
 // =====================================
-// ARTICLE EXTRACTORS
+// UNIVERSAL ARTICLE EXTRACTOR
 // =====================================
 
 
-
-async function extractArticle(url,source){
+async function extractArticle(url){
 
 
 try{
@@ -423,46 +413,110 @@ const $ = cheerio.load(html);
 
 
 
-let text="";
+
+let paragraphs=[];
 
 
 
 
 
-// -----------------------------
-// ZOOMIT
-// -----------------------------
+// حذف عناصر غیر محتوا
 
 
-if(source==="Zoomit"){
+$(
+"script,style,nav,header,footer,aside,form,button"
+)
+
+.remove();
 
 
-const selectors=[
-
-".article-body p",
-
-".content-body p",
-
-"article p"
-
-];
 
 
-selectors.forEach(selector=>{
 
 
-$(selector).each((i,el)=>{
+$("p").each((i,el)=>{
 
 
-text +=
 
-$(el).text()+" ";
+let text =
+
+$(el).text();
+
+
+
+text = cleanText(text);
+
+
+
+
+
+
+if(
+
+text.length > 50 &&
+
+!text.includes("تبلیغات") &&
+
+!text.includes("عضویت") &&
+
+!text.includes("اشتراک")
+
+){
+
+
+
+paragraphs.push(text);
+
+
+
+}
+
 
 
 });
 
 
+
+
+
+
+// مرتب کردن بر اساس طول
+
+
+paragraphs.sort((a,b)=>{
+
+return b.length-a.length;
+
 });
+
+
+
+
+
+
+
+// گرفتن بهترین پاراگراف‌ها
+
+
+let article="";
+
+
+
+for(const p of paragraphs){
+
+
+
+article += p+" ";
+
+
+
+
+if(article.length > 5000){
+
+break;
+
+}
+
 
 
 }
@@ -472,169 +526,7 @@ $(el).text()+" ";
 
 
 
-// -----------------------------
-// DIGIATO
-// -----------------------------
-
-
-if(source==="Digiato"){
-
-
-const selectors=[
-
-".post-content p",
-
-".entry-content p",
-
-"article p"
-
-];
-
-
-selectors.forEach(selector=>{
-
-
-$(selector).each((i,el)=>{
-
-
-text +=
-
-$(el).text()+" ";
-
-
-});
-
-
-});
-
-
-}
-
-
-
-
-
-// -----------------------------
-// ITRESAN
-// -----------------------------
-
-
-if(source==="ITResan"){
-
-
-$("article p").each((i,el)=>{
-
-
-text +=
-
-$(el).text()+" ";
-
-
-});
-
-
-}
-
-
-
-
-
-
-
-// -----------------------------
-// GADGET NEWS
-// -----------------------------
-
-
-if(source==="GadgetNews"){
-
-
-const selectors=[
-
-".single-content p",
-
-".post-content p",
-
-"article p"
-
-];
-
-
-selectors.forEach(selector=>{
-
-
-$(selector).each((i,el)=>{
-
-
-text +=
-
-$(el).text()+" ";
-
-
-});
-
-
-});
-
-
-}
-
-
-
-
-
-
-// -----------------------------
-// TORANJI
-// -----------------------------
-
-
-if(source==="Toranji"){
-
-
-$("article p").each((i,el)=>{
-
-
-text +=
-
-$(el).text()+" ";
-
-
-});
-
-
-}
-
-
-
-
-
-
-// -----------------------------
-// PEIVAST
-// -----------------------------
-
-
-if(source==="Peivast"){
-
-
-$("article p").each((i,el)=>{
-
-
-text +=
-
-$(el).text()+" ";
-
-
-});
-
-
-}
-
-
-
-
-return cleanText(text);
+return cleanText(article);
 
 
 
@@ -643,13 +535,15 @@ return cleanText(text);
 catch(error){
 
 
+
 console.log(
 
-"Extractor error:",
+"ARTICLE FETCH ERROR",
 
-source
+url
 
 );
+
 
 
 return "";
@@ -661,9 +555,8 @@ return "";
 }
 // =====================================
 // PART 2
-// MAIN ENGINE
+// NEWS BUILDER
 // =====================================
-
 
 
 
@@ -725,7 +618,7 @@ text.includes("کامپیوتر") ||
 
 text.includes("پردازنده") ||
 
-text.includes("gpu")
+text.includes("کارت گرافیک")
 
 )
 
@@ -739,7 +632,6 @@ return "Technology";
 
 
 }
-
 
 
 
@@ -766,7 +658,6 @@ if(text.length > 350){
 
 return text.substring(0,350)+"...";
 
-
 }
 
 
@@ -784,7 +675,7 @@ return text;
 
 
 // =====================================
-// MAIN UPDATE
+// MAIN
 // =====================================
 
 
@@ -798,9 +689,8 @@ let allNews=[];
 
 
 
-// -----------------------------
-// READ RSS
-// -----------------------------
+
+// دریافت RSS
 
 
 for(const source of RSS_SOURCES){
@@ -811,11 +701,12 @@ try{
 
 console.log(
 
-"Reading RSS:",
+"RSS:",
 
 source.name
 
 );
+
 
 
 
@@ -827,9 +718,14 @@ await fetchPage(source.url);
 
 
 
+
+
 const news =
 
 parseRSS(xml,source);
+
+
+
 
 
 
@@ -851,22 +747,20 @@ source.name
 );
 
 
-}
-
-
 
 }
 
 
 
+}
 
 
 
 
 
-// -----------------------------
-// REMOVE DUPLICATES
-// -----------------------------
+
+
+// حذف تکراری‌ها
 
 
 let unique=[];
@@ -876,8 +770,7 @@ let seen=new Set();
 
 
 
-allNews.forEach(news=>{
-
+for(const news of allNews){
 
 
 let key =
@@ -898,7 +791,7 @@ unique.push(news);
 
 
 
-});
+}
 
 
 
@@ -907,7 +800,7 @@ unique.push(news);
 
 
 
-// فقط ۱۰ خبر اول
+// فقط ۱۰ خبر
 
 
 let selected =
@@ -925,9 +818,9 @@ let finalNews=[];
 
 
 
-// -----------------------------
-// SCRAPE ARTICLES
-// -----------------------------
+
+
+// استخراج متن کامل
 
 
 for(let i=0;i<selected.length;i++){
@@ -938,11 +831,10 @@ let news = selected[i];
 
 
 
+
 console.log(
 
 "Extracting:",
-
-news.source,
 
 news.title
 
@@ -952,40 +844,40 @@ news.title
 
 
 
-let articleText =
 
-await extractArticle(
+let fullText =
 
-news.link,
-
-news.source
-
-);
+await extractArticle(news.link);
 
 
 
 
 
 
-
-// اگر استخراج نشد، RSS
+// اگر استخراج نشد
 
 
 if(
 
-!articleText ||
+!fullText ||
 
-articleText.length < 300
+fullText.length < 300
 
 ){
 
 
-articleText =
+console.log(
 
-news.description;
+"Using RSS summary"
+
+);
+
+
+fullText = news.description;
 
 
 }
+
 
 
 
@@ -1000,14 +892,18 @@ id:i+1,
 
 
 
-title:news.title,
+
+title:
+
+news.title,
+
 
 
 
 
 summary_fa:
 
-createSummary(articleText),
+createSummary(fullText),
 
 
 
@@ -1018,9 +914,10 @@ summary_en:"",
 
 
 
+
 description:
 
-articleText,
+fullText,
 
 
 
@@ -1030,11 +927,7 @@ category:
 
 detectCategory(
 
-news.title+
-
-" "+
-
-articleText
+news.title+" "+fullText
 
 ),
 
@@ -1101,7 +994,6 @@ status:"published"
 
 
 
-
 }
 
 
@@ -1111,10 +1003,7 @@ status:"published"
 
 
 
-
-// -----------------------------
-// SAVE JSON
-// -----------------------------
+// ذخیره JSON
 
 
 if(!fs.existsSync("./data")){
@@ -1124,6 +1013,7 @@ fs.mkdirSync("./data");
 
 
 }
+
 
 
 
@@ -1147,6 +1037,7 @@ null,
 "utf8"
 
 );
+
 
 
 

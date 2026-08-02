@@ -1,15 +1,12 @@
 // =====================================
 // SORAVIN AUTO NEWS UPDATER
-// IRAN DIGITAL NEWS ENGINE VERSION 11
-// UNIVERSAL ARTICLE EXTRACTOR
-// PART 1
+// IRAN DIGITAL NEWS ENGINE VERSION 9.1
+// CLEAN CONTENT VERSION
 // =====================================
 
 
 const fs = require("fs");
 const https = require("https");
-const cheerio = require("cheerio");
-
 
 
 const outputFile = "./data/auto-news.json";
@@ -24,35 +21,42 @@ const outputFile = "./data/auto-news.json";
 
 const RSS_SOURCES = [
 
+
 {
 name:"Zoomit",
 url:"https://www.zoomit.ir/feed/"
 },
+
 
 {
 name:"Digiato",
 url:"https://digiato.com/feed"
 },
 
+
 {
 name:"ITResan",
 url:"https://itresan.com/feed"
 },
+
 
 {
 name:"GadgetNews",
 url:"https://gadgetnews.net/feed/"
 },
 
+
 {
 name:"Toranji",
 url:"https://toranji.ir/feed/"
 },
 
+
 {
 name:"Peivast",
 url:"https://peivast.com/feed"
 }
+
 
 ];
 
@@ -61,13 +65,12 @@ url:"https://peivast.com/feed"
 
 
 
-
 // =====================================
-// FETCH URL
+// FETCH
 // =====================================
 
 
-function fetchPage(url){
+function fetchRSS(url){
 
 
 return new Promise((resolve,reject)=>{
@@ -76,10 +79,7 @@ return new Promise((resolve,reject)=>{
 https.get(url,{
 
 headers:{
-
-"User-Agent":
-"Mozilla/5.0 (Soravin AI News Bot)"
-
+"User-Agent":"Mozilla/5.0 Soravin Bot"
 }
 
 },response=>{
@@ -92,7 +92,7 @@ response.on(
 "data",
 chunk=>{
 
-data += chunk;
+data+=chunk;
 
 });
 
@@ -112,7 +112,6 @@ reject
 );
 
 
-
 });
 
 
@@ -124,13 +123,12 @@ reject
 
 
 
-
 // =====================================
-// CLEAN TEXT
+// CLEAN HTML
 // =====================================
 
 
-function cleanText(text=""){
+function cleanHTML(text=""){
 
 
 return text
@@ -138,6 +136,20 @@ return text
 .replace(/<!\[CDATA\[/gi,"")
 
 .replace(/\]\]>/gi,"")
+
+.replace(/<script[\s\S]*?<\/script>/gi,"")
+
+.replace(/<style[\s\S]*?<\/style>/gi,"")
+
+.replace(/<img[^>]*>/gi,"")
+
+.replace(/<a[^>]*>/gi,"")
+
+.replace(/<\/a>/gi,"")
+
+.replace(/<br\s*\/?>/gi," ")
+
+.replace(/<[^>]+>/gi,"")
 
 .replace(/&nbsp;/gi," ")
 
@@ -161,117 +173,6 @@ return text
 
 
 // =====================================
-// EXTRACT RSS LINK
-// =====================================
-
-
-function extractLink(item){
-
-
-
-let link =
-
-item.match(
-
-/<link>([\s\S]*?)<\/link>/i
-
-);
-
-
-
-if(link){
-
-return cleanText(link[1]);
-
-}
-
-
-
-
-let atom =
-
-item.match(
-
-/href="([^"]+)"/i
-
-);
-
-
-
-if(atom){
-
-return atom[1];
-
-}
-
-
-
-return "";
-
-}
-
-
-
-
-
-
-
-// =====================================
-// EXTRACT RSS DESCRIPTION
-// =====================================
-
-
-function extractDescription(item){
-
-
-let content =
-
-item.match(
-
-/<content:encoded[^>]*>([\s\S]*?)<\/content:encoded>/i
-
-);
-
-
-
-if(content){
-
-return cleanText(content[1]);
-
-}
-
-
-
-
-let description =
-
-item.match(
-
-/<description[^>]*>([\s\S]*?)<\/description>/i
-
-);
-
-
-
-if(description){
-
-return cleanText(description[1]);
-
-}
-
-
-
-return "";
-
-}
-
-
-
-
-
-
-
-// =====================================
 // PARSE RSS
 // =====================================
 
@@ -279,8 +180,7 @@ return "";
 function parseRSS(xml,source){
 
 
-
-let items =
+let items=
 
 xml.match(
 
@@ -296,13 +196,12 @@ return [];
 
 
 
-
-
 let result=[];
 
 
 
 items.forEach(item=>{
+
 
 
 let title =
@@ -315,6 +214,34 @@ item.match(
 
 
 
+let description =
+
+item.match(
+
+/<description[^>]*>([\s\S]*?)<\/description>/i
+
+)
+
+||
+
+item.match(
+
+/<content:encoded[^>]*>([\s\S]*?)<\/content:encoded>/i
+
+);
+
+
+
+
+
+let link =
+
+item.match(
+
+/<link>([\s\S]*?)<\/link>/i
+
+);
+
 
 
 let news={
@@ -325,7 +252,7 @@ title:
 
 title ?
 
-cleanText(title[1])
+cleanHTML(title[1])
 
 :
 
@@ -336,21 +263,31 @@ cleanText(title[1])
 
 description:
 
-extractDescription(item),
+description ?
+
+cleanHTML(description[1])
+
+:
+
+"",
 
 
 
 
 link:
 
-extractLink(item),
+link ?
+
+cleanHTML(link[1])
+
+:
+
+"",
 
 
 
 
-source:
-
-source.name
+source:source.name
 
 
 
@@ -360,11 +297,12 @@ source.name
 
 
 
+
 if(
 
-news.title &&
+news.title.length > 10 &&
 
-news.link
+news.description.length > 30
 
 ){
 
@@ -393,176 +331,6 @@ return result;
 
 
 // =====================================
-// UNIVERSAL ARTICLE EXTRACTOR
-// =====================================
-
-
-async function extractArticle(url){
-
-
-try{
-
-
-const html =
-
-await fetchPage(url);
-
-
-
-const $ = cheerio.load(html);
-
-
-
-
-let paragraphs=[];
-
-
-
-
-
-// حذف عناصر غیر محتوا
-
-
-$(
-"script,style,nav,header,footer,aside,form,button"
-)
-
-.remove();
-
-
-
-
-
-
-$("p").each((i,el)=>{
-
-
-
-let text =
-
-$(el).text();
-
-
-
-text = cleanText(text);
-
-
-
-
-
-
-if(
-
-text.length > 50 &&
-
-!text.includes("تبلیغات") &&
-
-!text.includes("عضویت") &&
-
-!text.includes("اشتراک")
-
-){
-
-
-
-paragraphs.push(text);
-
-
-
-}
-
-
-
-});
-
-
-
-
-
-
-// مرتب کردن بر اساس طول
-
-
-paragraphs.sort((a,b)=>{
-
-return b.length-a.length;
-
-});
-
-
-
-
-
-
-
-// گرفتن بهترین پاراگراف‌ها
-
-
-let article="";
-
-
-
-for(const p of paragraphs){
-
-
-
-article += p+" ";
-
-
-
-
-if(article.length > 5000){
-
-break;
-
-}
-
-
-
-}
-
-
-
-
-
-
-return cleanText(article);
-
-
-
-}
-
-catch(error){
-
-
-
-console.log(
-
-"ARTICLE FETCH ERROR",
-
-url
-
-);
-
-
-
-return "";
-
-}
-
-
-
-}
-// =====================================
-// PART 2
-// NEWS BUILDER
-// =====================================
-
-
-
-
-
-// =====================================
 // CATEGORY
 // =====================================
 
@@ -570,7 +338,7 @@ return "";
 function detectCategory(text){
 
 
-text = text.toLowerCase();
+text=text.toLowerCase();
 
 
 
@@ -580,9 +348,7 @@ text.includes("هوش مصنوعی") ||
 
 text.includes("ai") ||
 
-text.includes("gpt") ||
-
-text.includes("chatgpt")
+text.includes("gpt")
 
 )
 
@@ -598,9 +364,7 @@ text.includes("گوشی") ||
 
 text.includes("موبایل") ||
 
-text.includes("iphone") ||
-
-text.includes("android")
+text.includes("iphone")
 
 )
 
@@ -614,11 +378,9 @@ if(
 
 text.includes("لپتاپ") ||
 
-text.includes("کامپیوتر") ||
-
 text.includes("پردازنده") ||
 
-text.includes("کارت گرافیک")
+text.includes("کامپیوتر")
 
 )
 
@@ -638,7 +400,6 @@ return "Technology";
 
 
 
-
 // =====================================
 // SUMMARY
 // =====================================
@@ -647,16 +408,15 @@ return "Technology";
 function createSummary(text){
 
 
-if(!text)
-
-return "";
+text=cleanHTML(text);
 
 
 
-if(text.length > 350){
+if(text.length > 300){
 
 
-return text.substring(0,350)+"...";
+return text.substring(0,300)+"...";
+
 
 }
 
@@ -673,7 +433,6 @@ return text;
 
 
 
-
 // =====================================
 // MAIN
 // =====================================
@@ -682,15 +441,8 @@ return text;
 async function updateNews(){
 
 
-
 let allNews=[];
 
-
-
-
-
-
-// دریافت RSS
 
 
 for(const source of RSS_SOURCES){
@@ -701,7 +453,7 @@ try{
 
 console.log(
 
-"RSS:",
+"Reading:",
 
 source.name
 
@@ -709,23 +461,15 @@ source.name
 
 
 
+let xml=
 
-
-const xml =
-
-await fetchPage(source.url);
-
+await fetchRSS(source.url);
 
 
 
-
-
-const news =
+let news=
 
 parseRSS(xml,source);
-
-
-
 
 
 
@@ -740,14 +484,13 @@ catch(error){
 
 console.log(
 
-"RSS ERROR:",
+"RSS ERROR",
 
 source.name
 
 );
 
 
-
 }
 
 
@@ -759,8 +502,7 @@ source.name
 
 
 
-
-// حذف تکراری‌ها
+// DUPLICATE REMOVE
 
 
 let unique=[];
@@ -770,10 +512,10 @@ let seen=new Set();
 
 
 
-for(const news of allNews){
+allNews.forEach(news=>{
 
 
-let key =
+let key=
 
 news.title.toLowerCase();
 
@@ -791,7 +533,7 @@ unique.push(news);
 
 
 
-}
+});
 
 
 
@@ -800,112 +542,26 @@ unique.push(news);
 
 
 
-// فقط ۱۰ خبر
+let finalNews=
 
+unique.slice(0,10)
 
-let selected =
+.map((news,index)=>{
 
-unique.slice(0,10);
 
+return{
 
 
+id:index+1,
 
 
-
-let finalNews=[];
-
-
-
-
-
-
-
-// استخراج متن کامل
-
-
-for(let i=0;i<selected.length;i++){
-
-
-
-let news = selected[i];
-
-
-
-
-console.log(
-
-"Extracting:",
-
-news.title
-
-);
-
-
-
-
-
-
-let fullText =
-
-await extractArticle(news.link);
-
-
-
-
-
-
-// اگر استخراج نشد
-
-
-if(
-
-!fullText ||
-
-fullText.length < 300
-
-){
-
-
-console.log(
-
-"Using RSS summary"
-
-);
-
-
-fullText = news.description;
-
-
-}
-
-
-
-
-
-
-
-finalNews.push({
-
-
-
-id:i+1,
-
-
-
-
-title:
-
-news.title,
-
-
+title:news.title,
 
 
 
 summary_fa:
 
-createSummary(fullText),
-
-
+createSummary(news.description),
 
 
 
@@ -913,13 +569,9 @@ summary_en:"",
 
 
 
-
-
 description:
 
-fullText,
-
-
+cleanHTML(news.description),
 
 
 
@@ -927,23 +579,15 @@ category:
 
 detectCategory(
 
-news.title+" "+fullText
+news.title+" "+news.description
 
 ),
-
-
 
 
 
 tag:
 
-detectCategory(
-
-news.title
-
-),
-
-
+detectCategory(news.title),
 
 
 
@@ -953,13 +597,9 @@ news.source,
 
 
 
-
-
 image:
 
 "assets/image/ai-news.jpg",
-
-
 
 
 
@@ -969,13 +609,9 @@ new Date().toISOString(),
 
 
 
-
-
 link:
 
 news.link,
-
-
 
 
 
@@ -983,10 +619,11 @@ featured:false,
 
 
 
-
-
 status:"published"
 
+
+
+};
 
 
 });
@@ -994,16 +631,6 @@ status:"published"
 
 
 
-}
-
-
-
-
-
-
-
-
-// ذخیره JSON
 
 
 if(!fs.existsSync("./data")){
@@ -1013,7 +640,6 @@ fs.mkdirSync("./data");
 
 
 }
-
 
 
 
@@ -1043,7 +669,6 @@ null,
 
 
 
-
 console.log(
 
 "DONE:",
@@ -1060,12 +685,6 @@ finalNews.length,
 
 
 
-
-
-
-// =====================================
-// START
-// =====================================
 
 
 updateNews();

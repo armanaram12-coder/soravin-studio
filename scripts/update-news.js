@@ -1,7 +1,7 @@
 // =====================================
 // SORAVIN AUTO NEWS UPDATER
-// IRAN DIGITAL NEWS ENGINE VERSION 7
-// FULL DESCRIPTION + REAL SOURCE LINK
+// IRAN DIGITAL NEWS ENGINE VERSION 8
+// FULL RSS CONTENT VERSION
 // =====================================
 
 
@@ -13,24 +13,25 @@ const outputFile = "./data/auto-news.json";
 
 
 
+
 // =====================================
-// IRAN DIGITAL RSS SOURCES
+// RSS SOURCES
 // =====================================
 
 
 const RSS_SOURCES = [
 
-    "https://www.zoomit.ir/feed/",
+"https://www.zoomit.ir/feed/",
 
-    "https://digiato.com/feed",
+"https://digiato.com/feed",
 
-    "https://itresan.com/feed",
+"https://itresan.com/feed",
 
-    "https://gadgetnews.net/feed/",
+"https://gadgetnews.net/feed/",
 
-    "https://toranji.ir/feed/",
+"https://toranji.ir/feed/",
 
-    "https://peivast.com/feed"
+"https://peivast.com/feed"
 
 ];
 
@@ -52,7 +53,7 @@ return new Promise((resolve,reject)=>{
 https.get(url,{
 
 headers:{
-"User-Agent":"Mozilla/5.0 (Soravin News Bot)"
+"User-Agent":"Mozilla/5.0 Soravin Bot"
 }
 
 },response=>{
@@ -61,21 +62,28 @@ headers:{
 let data="";
 
 
-response.on("data",chunk=>{
+response.on(
+"data",
+chunk=>{
 
 data += chunk;
 
 });
 
 
-response.on("end",()=>{
+response.on(
+"end",
+()=>{
 
 resolve(data);
 
 });
 
 
-}).on("error",reject);
+}).on(
+"error",
+reject
+);
 
 
 
@@ -83,6 +91,7 @@ resolve(data);
 
 
 }
+
 
 
 
@@ -131,60 +140,73 @@ return text
 
 
 
+
 // =====================================
-// EXTRACT REAL LINK
+// EXTRACT CONTENT
 // =====================================
 
 
-function extractLink(item){
-
-
-let link="";
+function extractContent(item){
 
 
 
-let normalLink =
+let content =
+
 item.match(
-/<link>([\s\S]*?)<\/link>/i
+
+/<content:encoded[^>]*>([\s\S]*?)<\/content:encoded>/i
+
 );
 
 
 
-if(normalLink){
+if(content){
 
-link =
-normalLink[1];
+return cleanHTML(content[1]);
 
 }
 
 
 
-let atomLink =
+
+
+let description =
 
 item.match(
-/<link[^>]+href="([^"]+)"/i
+
+/<description[^>]*>([\s\S]*?)<\/description>/i
+
 );
 
 
 
-if(!link && atomLink){
+if(description){
 
-link =
-atomLink[1];
+return cleanHTML(description[1]);
 
 }
 
 
 
-link = cleanHTML(link);
+
+
+let summary =
+
+item.match(
+
+/<summary[^>]*>([\s\S]*?)<\/summary>/i
+
+);
 
 
 
-if(
+if(summary){
 
-!link.startsWith("http")
+return cleanHTML(summary[1]);
 
-){
+}
+
+
 
 return "";
 
@@ -192,8 +214,58 @@ return "";
 
 
 
-return link;
 
+
+
+
+// =====================================
+// EXTRACT LINK
+// =====================================
+
+
+function extractLink(item){
+
+
+
+let link =
+
+item.match(
+
+/<link>([\s\S]*?)<\/link>/i
+
+);
+
+
+
+if(link){
+
+return cleanHTML(link[1]);
+
+}
+
+
+
+
+
+let atom =
+
+item.match(
+
+/<link[^>]+href="([^"]+)"/i
+
+);
+
+
+
+if(atom){
+
+return cleanHTML(atom[1]);
+
+}
+
+
+
+return "";
 
 }
 
@@ -221,7 +293,7 @@ return false;
 
 
 
-if(news.description.length < 20)
+if(news.description.length < 30)
 
 return false;
 
@@ -242,8 +314,9 @@ return true;
 
 
 
+
 // =====================================
-// RSS PARSER
+// PARSE RSS
 // =====================================
 
 
@@ -278,31 +351,20 @@ let result=[];
 items.forEach(item=>{
 
 
+
 let title =
 
 item.match(
+
 /<title[^>]*>([\s\S]*?)<\/title>/i
-);
 
-
-
-let description =
-
-item.match(
-/<description[^>]*>([\s\S]*?)<\/description>/i
-)
-
-||
-
-item.match(
-/<summary[^>]*>([\s\S]*?)<\/summary>/i
 );
 
 
 
 
 
-let news={
+let news = {
 
 
 title:
@@ -319,13 +381,7 @@ cleanHTML(title[1])
 
 description:
 
-description ?
-
-cleanHTML(description[1])
-
-:
-
-"",
+extractContent(item),
 
 
 
@@ -336,8 +392,6 @@ extractLink(item),
 
 
 source
-
-
 
 };
 
@@ -363,6 +417,7 @@ return result;
 
 
 }
+
 
 
 
@@ -396,6 +451,8 @@ return "AI";
 
 
 
+
+
 if(
 
 text.includes("گوشی") ||
@@ -409,6 +466,8 @@ text.includes("android")
 )
 
 return "Mobile";
+
+
 
 
 
@@ -428,6 +487,8 @@ return "PC";
 
 
 
+
+
 return "Technology";
 
 
@@ -437,31 +498,30 @@ return "Technology";
 
 
 
+
+
 // =====================================
-// CREATE SHORT SUMMARY
+// SUMMARY
 // =====================================
 
 
 function createSummary(text){
 
 
-let clean =
-cleanHTML(text);
+if(text.length > 300){
+
+return text.substring(0,300)+"...";
+
+}
 
 
+return text;
 
-if(clean.length > 300){
-
-return clean.substring(0,300)+"...";
 
 }
 
 
 
-return clean;
-
-
-}
 
 
 
@@ -473,7 +533,6 @@ return clean;
 
 
 async function updateNews(){
-
 
 
 let allNews=[];
@@ -505,12 +564,14 @@ parseRSS(xml,rss);
 
 console.log(
 news.length,
-"found"
+"news found"
 );
 
 
 
-allNews.push(...news);
+allNews.push(
+...news
+);
 
 
 
@@ -525,21 +586,23 @@ rss
 );
 
 
-}
-
 
 }
 
 
 
+}
 
 
-// REMOVE DUPLICATE
+
+
+
 
 
 let unique=[];
 
 let seen=new Set();
+
 
 
 
@@ -562,6 +625,7 @@ unique.push(news);
 }
 
 
+
 });
 
 
@@ -570,12 +634,8 @@ unique.push(news);
 
 
 
-// =====================================
-// FINAL 10 NEWS
-// =====================================
-
-
 let finalNews =
+
 
 unique
 
@@ -593,7 +653,9 @@ id:index+1,
 title:news.title,
 
 
+
 summary_fa:
+
 createSummary(news.description),
 
 
@@ -603,6 +665,7 @@ summary_en:"",
 
 
 description:
+
 news.description,
 
 
@@ -665,6 +728,7 @@ status:"published"
 
 
 
+
 if(!fs.existsSync("./data")){
 
 
@@ -672,6 +736,8 @@ fs.mkdirSync("./data");
 
 
 }
+
+
 
 
 
@@ -691,9 +757,12 @@ null,
 
 
 
+
+
 console.log(
 
 "DONE:",
+
 finalNews.length,
 
 "news saved"

@@ -3,575 +3,436 @@
 // MULTI RSS + AUTO CATEGORY VERSION
 // =====================================
 
-
 const fs = require("fs");
 const https = require("https");
 
+const outputFile = "./data/auto-news.json";
 
 
-const outputFile =
-"./data/auto-news.json";
-
-
+// =====================================
+// RSS SOURCES
+// =====================================
 
 const RSS_SOURCES = [
 
+    // AI / Technology
+    "https://feeds.feedburner.com/TechCrunch",
 
-// =====================
-// GLOBAL SOURCES
-// =====================
+    "https://blogs.nvidia.com/feed/",
 
-"https://feeds.feedburner.com/TechCrunch",
+    "https://blogs.microsoft.com/ai/feed/",
 
-"https://blogs.nvidia.com/feed/",
+    "https://openai.com/blog/rss.xml",
 
-"https://blogs.microsoft.com/ai/feed/",
+    "https://www.technologyreview.com/feed/",
 
-"https://openai.com/blog/rss.xml",
+    // Computer News
+    "https://www.theverge.com/rss/index.xml",
 
+    "https://www.wired.com/feed/rss",
 
-
-// =====================
-// IRANIAN SOURCES
-// =====================
-
-"https://www.zoomit.ir/feed/",
-
-"https://digiato.com/feed",
-
-"https://peivast.com/fa/feed"
-
+    "https://arstechnica.com/feed/",
 
 ];
 
 
-
-
 // =====================================
-// GET RSS
+// DOWNLOAD RSS
 // =====================================
 
+function fetchRSS(url) {
 
-function getRSS(url){
+    return new Promise((resolve, reject) => {
 
+        https.get(url, {
 
-return new Promise((resolve,reject)=>{
+            headers: {
+                "User-Agent": "Mozilla/5.0"
+            }
 
+        }, response => {
 
-https.get(url,(response)=>{
+            let data = "";
 
-
-let data="";
-
-
-response.on(
-"data",
-chunk=>{
-data += chunk;
-}
-);
+            response.on("data", chunk => {
+                data += chunk;
+            });
 
 
-
-response.on(
-"end",
-()=>{
-
-resolve(data);
-
-}
-
-);
+            response.on("end", () => {
+                resolve(data);
+            });
 
 
+        }).on("error", err => {
 
-}).on(
-"error",
-error=>{
+            reject(err);
 
-reject(error);
+        });
 
-}
-
-);
-
-
-});
-
+    });
 
 }
 
 
+// =====================================
+// REMOVE HTML
+// =====================================
 
+function cleanHTML(text = "") {
+
+    return text
+        .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, "")
+        .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, "")
+        .replace(/<[^>]+>/g, "")
+        .replace(/&nbsp;/g, " ")
+        .replace(/&amp;/g, "&")
+        .replace(/&quot;/g, '"')
+        .replace(/\s+/g, " ")
+        .trim();
+
+}
 
 
 // =====================================
-// AUTO CATEGORY DETECTOR
+// RSS PARSER SIMPLE
 // =====================================
 
+function parseRSS(xml, source){
+
+
+    let items = [];
+
+
+    const entries = xml.match(/<item[\s\S]*?<\/item>/g);
+
+
+    if(!entries) return [];
+
+
+    entries.forEach(item => {
+
+
+        let title =
+            item.match(/<title>([\s\S]*?)<\/title>/);
+
+
+        let link =
+            item.match(/<link>([\s\S]*?)<\/link>/);
+
+
+        let description =
+            item.match(/<description>([\s\S]*?)<\/description>/);
+
+
+
+        title = title ? cleanHTML(title[1]) : "";
+
+        link = link ? cleanHTML(link[1]) : "";
+
+        description = description ?
+            cleanHTML(description[1]) :
+            "";
+
+
+
+        if(title){
+
+            items.push({
+
+                title,
+                link,
+                description,
+                source
+
+            });
+
+        }
+
+
+    });
+
+
+    return items;
+
+}
+
+
+// =====================================
+// AUTO CATEGORY
+// =====================================
 
 function detectCategory(text){
 
 
-text =
-text.toLowerCase();
+    text = text.toLowerCase();
 
 
 
-if(
-
-text.includes("ai") ||
-
-text.includes("openai") ||
-
-text.includes("gpt") ||
-
-text.includes("artificial intelligence") ||
-
-text.includes("machine learning") ||
-
-text.includes("chatbot") ||
-
-text.includes("هوش مصنوعی")
-
-){
-
-return "AI";
-
-
-}
+    if(
+        text.includes("ai") ||
+        text.includes("artificial intelligence") ||
+        text.includes("machine learning") ||
+        text.includes("gpt")
+    ){
+        return "AI";
+    }
 
 
 
+    if(
+        text.includes("security") ||
+        text.includes("hack") ||
+        text.includes("malware")
+    ){
+        return "Security";
+    }
 
 
-if(
 
-text.includes("nvidia") ||
+    if(
+        text.includes("computer") ||
+        text.includes("chip") ||
+        text.includes("processor") ||
+        text.includes("gpu")
+    ){
+        return "Computer";
+    }
 
-text.includes("gpu") ||
 
-text.includes("rtx") ||
 
-text.includes("graphics") ||
+    if(
+        text.includes("business") ||
+        text.includes("market") ||
+        text.includes("company")
+    ){
+        return "Business";
+    }
 
-text.includes("processor") ||
 
-text.includes("chip") ||
 
-text.includes("پردازنده") ||
-
-text.includes("کارت گرافیک")
-
-){
-
-return "PC";
-
+    return "Technology";
 
 }
-
-
-
-
-
-if(
-
-text.includes("phone") ||
-
-text.includes("android") ||
-
-text.includes("iphone") ||
-
-text.includes("mobile") ||
-
-text.includes("گوشی") ||
-
-text.includes("موبایل")
-
-){
-
-return "Mobile";
-
-
-}
-
-
-
-
-
-return "Tech";
-
-
-}
-
-
-
 
 
 
 // =====================================
-// EXTRACT NEWS
+// SUMMARY GENERATOR
 // =====================================
 
+function createSummary(news){
 
-function extractNews(xml){
 
+    let text =
+        news.description ||
+        news.title;
 
 
-const items =
-xml.match(/<item>[\s\S]*?<\/item>/g) || [];
 
+    text = cleanHTML(text);
 
 
 
-return items.slice(0,5).map((item,index)=>{
+    let sentences =
+        text.split(".")
+            .filter(x => x.trim().length > 20);
 
 
 
-const title =
+    let summary =
+        sentences
+        .slice(0,5)
+        .join(". ");
 
-(item.match(/<title>(.*?)<\/title>/)||[])[1]
 
-|| "خبر فناوری";
 
+    if(summary.length < 80){
 
+        summary =
+        `${news.title}. ${text}`;
 
+    }
 
-const link =
 
-(item.match(/<link>(.*?)<\/link>/)||[])[1]
 
-|| "#";
-
-
-
-
-const description =
-
-(item.match(/<description>(.*?)<\/description>/)||[])[1]
-
-|| "آخرین اخبار فناوری";
-
-
-
-
-
-const cleanTitle =
-
-title.replace(
-/<!\[CDATA\[|\]\]>/g,
-""
-);
-
-
-
-
-
-const cleanDescription =
-
-description
-.replace(
-/<!\[CDATA\[|\]\]>/g,
-""
-)
-.substring(0,150);
-
-
-
-
-
-const category =
-
-detectCategory(
-cleanTitle + " " + cleanDescription
-);
-
-
-
-
-
-
-return {
-
-
-id:index + 1,
-
-
-title:
-cleanTitle,
-
-
-category:
-category,
-
-
-
-tag:
-
-category === "AI"
-
-?
-
-"Artificial Intelligence"
-
-:
-
-category === "PC"
-
-?
-
-"Hardware"
-
-:
-
-category === "Mobile"
-
-?
-
-"Mobile Technology"
-
-:
-
-"Technology",
-
-
-
-source:
-
-"Soravin Tech",
-
-
-
-image:
-
-category === "Mobile"
-
-?
-
-"assets/image/mobile-news.jpg"
-
-:
-
-category === "PC"
-
-?
-
-"assets/image/pc-news.jpg"
-
-:
-
-"assets/image/ai-news.jpg",
-
-
-
-description:
-
-cleanDescription,
-
-
-
-date:
-
-"امروز",
-
-
-
-link:
-
-link,
-
-
-
-featured:
-
-false,
-
-
-
-status:
-
-"published"
-
-
-
-};
-
-
-
-});
-
+    return summary.substring(0,500);
 
 }
 
 
-
-
-
-
-
 // =====================================
-// UPDATE NEWS
+// MAIN
 // =====================================
 
 
 async function updateNews(){
 
 
-try{
-
-
-console.log(
-"Loading technology news..."
-);
+    let allNews = [];
 
 
 
-
-let allNews = [];
-
+    for(const rss of RSS_SOURCES){
 
 
+        try{
 
 
-for(
-const source of RSS_SOURCES
-){
+            console.log(
+                "Reading:",
+                rss
+            );
 
 
-try{
-
-
-const xml =
-
-await getRSS(source);
+            let xml =
+                await fetchRSS(rss);
 
 
 
+            let news =
+                parseRSS(
+                    xml,
+                    rss
+                );
 
-const news =
 
-extractNews(xml);
+            allNews.push(
+                ...news
+            );
 
 
 
+        }
+        catch(error){
 
-allNews.push(
-...news
-);
+            console.log(
+                "RSS ERROR:",
+                rss
+            );
 
+        }
+
+
+    }
+
+
+
+    // Remove duplicates
+
+    let unique = [];
+
+    let titles = new Set();
+
+
+
+    allNews.forEach(news => {
+
+
+        let key =
+            news.title.toLowerCase();
+
+
+
+        if(!titles.has(key)){
+
+            titles.add(key);
+
+            unique.push(news);
+
+        }
+
+
+    });
+
+
+
+    // Create final JSON
+
+
+    let finalNews =
+        unique
+        .slice(0,50)
+        .map(news => {
+
+
+            return {
+
+
+                title:
+                    news.title,
+
+
+                summary_fa:
+                    createSummary(news),
+
+
+                summary_en:
+                    "",
+
+
+                category:
+                    detectCategory(
+                        news.title +
+                        " " +
+                        news.description
+                    ),
+
+
+                source:
+                    news.source,
+
+
+                date:
+                    new Date()
+                    .toISOString(),
+
+
+                link:
+                    news.link
+
+
+            };
+
+
+        });
+
+
+
+    // Make folder if missing
+
+    if(!fs.existsSync("./data")){
+
+        fs.mkdirSync("./data");
+
+    }
+
+
+
+    fs.writeFileSync(
+
+        outputFile,
+
+        JSON.stringify(
+            finalNews,
+            null,
+            2
+        ),
+
+        "utf8"
+
+    );
+
+
+
+    console.log(
+        "DONE:",
+        finalNews.length,
+        "news saved"
+    );
 
 
 }
-
-catch(error){
-
-
-console.log(
-"RSS failed:",
-source
-);
-
-
-}
-
-
-
-}
-
-
-
-
-
-// حذف خبرهای تکراری
-
-const uniqueNews =
-
-allNews.filter(
-
-(news,index,self)=>
-
-index ===
-
-self.findIndex(
-
-(item)=>
-
-item.title === news.title
-
-)
-
-);
-
-
-
-
-
-const finalNews =
-
-uniqueNews.slice(0,6);
-
-
-
-
-
-
-
-fs.writeFileSync(
-
-outputFile,
-
-JSON.stringify(
-
-finalNews,
-
-null,
-
-2
-
-),
-
-"utf8"
-
-);
-
-
-
-
-
-
-console.log(
-
-"Updated news:",
-
-finalNews.length
-
-);
-
-
-
-
-
-}
-
-catch(error){
-
-
-console.log(
-
-"Update error:",
-
-error.message
-
-);
-
-
-
-}
-
-
-}
-
-
 
 
 

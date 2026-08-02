@@ -1,6 +1,6 @@
 // =====================================
 // SORAVIN AUTO NEWS UPDATER
-// CLEAN RSS ENGINE VERSION 2
+// CLEAN RSS ENGINE VERSION 3
 // =====================================
 
 
@@ -15,30 +15,35 @@ const outputFile = "./data/auto-news.json";
 // =====================================
 // RSS SOURCES
 // =====================================
+// TechCrunch Feedburner حذف شد چون HTML خراب تولید می‌کرد
 
 
 const RSS_SOURCES = [
 
-    // AI SOURCES
-    "https://openai.com/news/rss.xml",
+    // AI
+
+    "https://blogs.nvidia.com/feed/",
 
     "https://blogs.microsoft.com/ai/feed/",
+
+    "https://openai.com/news/rss.xml",
 
     "https://www.technologyreview.com/feed/",
 
 
-    // TECHNOLOGY SOURCES
-    "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
 
-    "https://arstechnica.com/feed/",
+    // TECHNOLOGY
+
+    "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
 
     "https://www.wired.com/feed/rss",
 
+    "https://arstechnica.com/feed/"
 
-    // NVIDIA LAST
-    "https://blogs.nvidia.com/feed/"
 
 ];
+
+
 
 
 
@@ -87,9 +92,9 @@ resolve(data);
 
 }).on(
 "error",
-err=>{
-reject(err);
-});
+reject
+);
+
 
 
 });
@@ -102,15 +107,20 @@ reject(err);
 
 
 
+
 // =====================================
-// HTML DECODE
+// HTML CLEANER
 // =====================================
 
 
-function decodeHTML(text=""){
+function cleanHTML(text=""){
 
 
 return text
+
+.replace(/<!\[CDATA\[/gi,"")
+
+.replace(/\]\]>/gi,"")
 
 .replace(/&lt;/gi,"<")
 
@@ -122,45 +132,17 @@ return text
 
 .replace(/&#39;/gi,"'")
 
-.replace(/&nbsp;/gi," ");
-
-
-}
-
-
-
-
-
-
-// =====================================
-// CLEAN TEXT
-// =====================================
-
-
-function cleanHTML(text=""){
-
-
-text = decodeHTML(text);
-
-
-
-return text
-
-.replace(/<!\[CDATA\[/gi,"")
-
-.replace(/\]\]>/gi,"")
-
 .replace(/<script[\s\S]*?<\/script>/gi,"")
 
 .replace(/<style[\s\S]*?<\/style>/gi,"")
 
 .replace(/<img[^>]*>/gi,"")
 
-.replace(/<iframe[\s\S]*?<\/iframe>/gi,"")
+.replace(/<div[^>]*>/gi,"")
 
-.replace(/<a[^>]*>/gi,"")
+.replace(/<\/div>/gi,"")
 
-.replace(/<\/a>/gi,"")
+.replace(/<br\s*\/?>/gi," ")
 
 .replace(/<[^>]+>/gi,"")
 
@@ -179,54 +161,54 @@ return text
 
 
 
-
 // =====================================
-// QUALITY CHECK
+// QUALITY FILTER
 // =====================================
 
 
-function isValidNews(news){
-
-
-const badWords = [
-
-"advertisement",
-
-"affiliate",
-
-"newsletter",
-
-"subscribe",
-
-"cookie",
-
-"login",
-
-"sign up"
-
-];
+function validNews(news){
 
 
 
 let text =
+
 (
 news.title +
 " " +
 news.description
 )
+
 .toLowerCase();
 
 
 
-if(text.length < 50)
-return false;
+
+
+const bad = [
+
+"advertisement",
+
+"subscribe",
+
+"newsletter",
+
+"cookie",
+
+"sign up",
+
+"privacy policy"
+
+];
 
 
 
-for(const word of badWords){
+
+
+for(const word of bad){
 
 
 if(text.includes(word))
+
 return false;
 
 
@@ -234,10 +216,29 @@ return false;
 
 
 
+
+
+
+if(news.title.length < 10)
+
+return false;
+
+
+
+if(news.description.length < 30)
+
+return false;
+
+
+
 if(
-text.includes("<") ||
-text.includes(">") ||
-text.includes("style")
+
+text.includes("separator") ||
+
+text.includes("border") ||
+
+text.includes("style=")
+
 )
 
 return false;
@@ -255,6 +256,7 @@ return true;
 
 
 
+
 // =====================================
 // RSS PARSER
 // =====================================
@@ -263,17 +265,23 @@ return true;
 function parseRSS(xml,source){
 
 
+
 let items=[];
 
 
 
 const entries =
-xml.match(/<item[\s\S]*?<\/item>/g);
+
+xml.match(
+/<item[\s\S]*?<\/item>/g
+);
 
 
 
 if(!entries)
+
 return [];
+
 
 
 
@@ -282,44 +290,76 @@ entries.forEach(item=>{
 
 
 let title =
-item.match(/<title>([\s\S]*?)<\/title>/);
+
+item.match(
+/<title>([\s\S]*?)<\/title>/
+);
 
 
 
 let link =
-item.match(/<link>([\s\S]*?)<\/link>/);
+
+item.match(
+/<link>([\s\S]*?)<\/link>/
+);
 
 
 
 let description =
-item.match(/<description>([\s\S]*?)<\/description>/);
+
+item.match(
+/<description>([\s\S]*?)<\/description>/
+);
 
 
 
 
-title =
-title ? cleanHTML(title[1]) : "";
+
+let news={
 
 
 
-link =
-link ? cleanHTML(link[1]) : "";
+title:
+
+title ?
+
+cleanHTML(title[1])
+
+:
+
+"",
 
 
 
-description =
-description ? cleanHTML(description[1]) : "";
+
+
+link:
+
+link ?
+
+cleanHTML(link[1])
+
+:
+
+"",
 
 
 
 
-let news = {
 
-title,
+description:
 
-link,
+description ?
 
-description,
+cleanHTML(description[1])
+
+:
+
+"",
+
+
+
+
 
 source
 
@@ -327,7 +367,11 @@ source
 
 
 
-if(isValidNews(news)){
+
+
+
+
+if(validNews(news)){
 
 
 items.push(news);
@@ -341,7 +385,10 @@ items.push(news);
 
 
 
+
+
 return items;
+
 
 
 }
@@ -361,8 +408,9 @@ return items;
 function detectCategory(text){
 
 
-text =
-text.toLowerCase();
+
+text=text.toLowerCase();
+
 
 
 
@@ -379,6 +427,7 @@ text.includes("machine")
 )
 
 return "AI";
+
 
 
 
@@ -425,6 +474,7 @@ return "Technology";
 
 
 
+
 // =====================================
 // SUMMARY
 // =====================================
@@ -438,7 +488,9 @@ cleanHTML(text);
 
 
 
-let parts =
+
+let sentences =
+
 clean
 .split(".")
 .filter(
@@ -447,26 +499,37 @@ x=>x.trim().length>25
 
 
 
+
+
 let result =
-parts
+
+sentences
 .slice(0,3)
 .join(". ");
 
 
 
+
+
 if(result.length < 60){
+
 
 result =
 clean.substring(0,250);
 
+
 }
+
+
 
 
 
 return result.substring(0,300);
 
 
+
 }
+
 
 
 
@@ -487,10 +550,13 @@ let allNews=[];
 
 
 
+
 for(const rss of RSS_SOURCES){
 
 
+
 try{
+
 
 
 console.log(
@@ -500,8 +566,11 @@ rss
 
 
 
+
 let xml =
 await fetchRSS(rss);
+
+
 
 
 
@@ -513,9 +582,12 @@ rss
 
 
 
+
+
 allNews.push(
 ...news
 );
+
 
 
 
@@ -541,12 +613,15 @@ rss
 
 
 
+
+
 // REMOVE DUPLICATES
 
 
 let unique=[];
 
-let titles=new Set();
+let seen=new Set();
+
 
 
 
@@ -558,10 +633,11 @@ news.title.toLowerCase();
 
 
 
-if(!titles.has(key)){
+
+if(!seen.has(key)){
 
 
-titles.add(key);
+seen.add(key);
 
 unique.push(news);
 
@@ -578,8 +654,7 @@ unique.push(news);
 
 
 
-
-// CREATE FINAL JSON
+// FINAL 50 NEWS
 
 
 let finalNews =
@@ -589,14 +664,18 @@ unique
 .map((news,index)=>{
 
 
+
 return {
+
 
 
 id:index+1,
 
 
+
 title:
 news.title,
+
 
 
 summary_fa:
@@ -660,11 +739,13 @@ status:
 "published"
 
 
+
 };
 
 
 
 });
+
 
 
 
@@ -679,6 +760,9 @@ fs.mkdirSync("./data");
 
 
 }
+
+
+
 
 
 
@@ -700,10 +784,15 @@ null,
 
 
 
+
+
+
 console.log(
 
 "DONE:",
+
 finalNews.length,
+
 "news saved"
 
 );

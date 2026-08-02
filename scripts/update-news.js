@@ -1,7 +1,7 @@
 // =====================================
 // SORAVIN AUTO NEWS UPDATER
-// IRAN DIGITAL NEWS ENGINE VERSION 5
-// 10 AUTO NEWS CARDS
+// IRAN DIGITAL NEWS ENGINE VERSION 6
+// FULL ARTICLE DATA VERSION
 // =====================================
 
 
@@ -13,60 +13,27 @@ const outputFile = "./data/auto-news.json";
 
 
 
-// =====================================
-// IRAN DIGITAL RSS SOURCES
-// =====================================
-
-
 const RSS_SOURCES = [
 
+"https://www.zoomit.ir/feed/",
 
-    // ZOOMIT
+"https://digiato.com/feed",
 
-    "https://www.zoomit.ir/feed/",
+"https://itresan.com/feed",
 
+"https://gadgetnews.net/feed/",
 
+"https://toranji.ir/feed/",
 
-    // DIGIATO
-
-    "https://digiato.com/feed",
-
-
-
-    // IT RESAN
-
-    "https://itresan.com/feed",
-
-
-
-    // GADGET NEWS
-
-    "https://gadgetnews.net/feed/",
-
-
-
-    // TORANJI
-
-    "https://toranji.ir/feed/",
-
-
-
-    // PEIVAST
-
-    "https://peivast.com/feed"
+"https://peivast.com/feed"
 
 ];
 
 
 
 
-// =====================================
-// FETCH RSS
-// =====================================
-
 
 function fetchRSS(url){
-
 
 return new Promise((resolve,reject)=>{
 
@@ -85,7 +52,7 @@ let data="";
 
 response.on("data",chunk=>{
 
-data += chunk;
+data+=chunk;
 
 });
 
@@ -100,7 +67,6 @@ resolve(data);
 }).on("error",reject);
 
 
-
 });
 
 
@@ -108,10 +74,6 @@ resolve(data);
 
 
 
-
-// =====================================
-// CLEAN HTML
-// =====================================
 
 
 function cleanHTML(text=""){
@@ -125,7 +87,7 @@ return text
 
 .replace(/&lt;/gi,"<")
 
-.replace(/&gt;/gi,">")
+.replace(/&gt;/>/gi,">")
 
 .replace(/&amp;/gi,"&")
 
@@ -141,8 +103,6 @@ return text
 
 .replace(/<[^>]+>/gi,"")
 
-.replace(/https?:\/\/\S+/gi,"")
-
 .replace(/\s+/g," ")
 
 .trim();
@@ -154,19 +114,14 @@ return text
 
 
 
-// =====================================
-// VALID NEWS
-// =====================================
-
-
 function validNews(news){
 
 
-let text =
+let text=
 
 (
-news.title +
-" " +
+news.title+
+" "+
 news.description
 )
 
@@ -174,43 +129,12 @@ news.description
 
 
 
-const badWords=[
-
-"تبلیغات",
-
-"advertisement",
-
-"اشتراک",
-
-"newsletter",
-
-"cookie",
-
-"privacy"
-
-];
-
-
-
-for(const word of badWords){
-
-
-if(text.includes(word))
+if(news.title.length<10)
 
 return false;
 
 
-}
-
-
-
-if(news.title.length < 10)
-
-return false;
-
-
-
-if(news.description.length < 30)
+if(news.description.length<30)
 
 return false;
 
@@ -225,21 +149,13 @@ return true;
 
 
 
-// =====================================
-// RSS PARSER
-// =====================================
-
-
 function parseRSS(xml,source){
 
 
-
-let items =
+let items=
 
 xml.match(/<item[\s\S]*?<\/item>/g)
-
 ||
-
 xml.match(/<entry[\s\S]*?<\/entry>/g);
 
 
@@ -257,105 +173,53 @@ let result=[];
 items.forEach(item=>{
 
 
-let title =
-
-item.match(
+let title=item.match(
 /<title[^>]*>([\s\S]*?)<\/title>/i
 );
 
 
-
-let description =
-
-item.match(
+let description=item.match(
 /<description[^>]*>([\s\S]*?)<\/description>/i
 )
-
 ||
-
 item.match(
 /<summary[^>]*>([\s\S]*?)<\/summary>/i
 );
 
 
 
-let link =
-
-item.match(
+let link=item.match(
 /<link[^>]*>([\s\S]*?)<\/link>/i
 )
-
 ||
-
 item.match(
 /href="([^"]+)"/i
 );
 
 
 
-
-
 let news={
 
+title:title ? cleanHTML(title[1]) : "",
 
-title:
+description:description ? cleanHTML(description[1]) : "",
 
-title ?
-
-cleanHTML(title[1])
-
-:
-
-"",
-
-
-
-description:
-
-description ?
-
-cleanHTML(description[1])
-
-:
-
-"",
-
-
-
-link:
-
-link ?
-
-cleanHTML(link[1])
-
-:
-
-"",
-
-
+link:link ? cleanHTML(link[1]) : "",
 
 source
-
-
 
 };
 
 
 
-
-
 if(validNews(news)){
 
-
 result.push(news);
-
 
 }
 
 
-
 });
-
 
 
 return result;
@@ -367,11 +231,6 @@ return result;
 
 
 
-// =====================================
-// CATEGORY
-// =====================================
-
-
 function detectCategory(text){
 
 
@@ -380,15 +239,9 @@ text=text.toLowerCase();
 
 
 if(
-
-text.includes("هوش مصنوعی") ||
-
-text.includes("ai") ||
-
-text.includes("chatgpt") ||
-
+text.includes("هوش مصنوعی")||
+text.includes("ai")||
 text.includes("gpt")
-
 )
 
 return "AI";
@@ -396,15 +249,10 @@ return "AI";
 
 
 if(
-
-text.includes("موبایل") ||
-
-text.includes("گوشی") ||
-
-text.includes("iphone") ||
-
-text.includes("android")
-
+text.includes("گوشی")||
+text.includes("موبایل")||
+text.includes("android")||
+text.includes("iphone")
 )
 
 return "Mobile";
@@ -412,15 +260,10 @@ return "Mobile";
 
 
 if(
-
-text.includes("کامپیوتر") ||
-
-text.includes("پردازنده") ||
-
-text.includes("لپتاپ") ||
-
+text.includes("کامپیوتر")||
+text.includes("لپتاپ")||
+text.includes("پردازنده")||
 text.includes("gpu")
-
 )
 
 return "PC";
@@ -436,21 +279,16 @@ return "Technology";
 
 
 
-// =====================================
-// PERSIAN SUMMARY
-// =====================================
-
-
 function createSummary(text){
 
 
-let clean = cleanHTML(text);
+let clean=cleanHTML(text);
 
 
 
-if(clean.length > 300){
+if(clean.length>300){
 
-clean = clean.substring(0,300);
+return clean.substring(0,300)+"...";
 
 }
 
@@ -466,11 +304,6 @@ return clean;
 
 
 
-// =====================================
-// MAIN
-// =====================================
-
-
 async function updateNews(){
 
 
@@ -484,28 +317,15 @@ for(const rss of RSS_SOURCES){
 try{
 
 
-console.log(
-"Reading:",
-rss
-);
+console.log("Reading:",rss);
 
 
 
-let xml = await fetchRSS(rss);
+let xml=await fetchRSS(rss);
 
 
 
-console.log(
-"SIZE:",
-xml.length
-);
-
-
-
-let news = parseRSS(
-xml,
-rss
-);
+let news=parseRSS(xml,rss);
 
 
 
@@ -524,7 +344,6 @@ rss
 );
 
 
-
 }
 
 
@@ -533,10 +352,6 @@ rss
 
 
 
-
-
-
-// REMOVE DUPLICATES
 
 
 let unique=[];
@@ -548,8 +363,7 @@ let seen=new Set();
 allNews.forEach(news=>{
 
 
-let key =
-news.title.toLowerCase();
+let key=news.title.toLowerCase();
 
 
 
@@ -572,17 +386,9 @@ unique.push(news);
 
 
 
-// =====================================
-// FINAL 10 AUTO NEWS
-// =====================================
+let finalNews=
 
-
-let finalNews =
-
-
-unique
-
-.slice(0,10)
+unique.slice(0,10)
 
 .map((news,index)=>{
 
@@ -602,41 +408,36 @@ summary_fa:createSummary(news.description),
 summary_en:"",
 
 
-description:createSummary(news.description),
+
+// متن کامل برای صفحه خبر
+
+description:news.description,
 
 
-category:
 
-detectCategory(
-news.title+
-" "+
-news.description
+category:detectCategory(
+news.title+" "+news.description
 ),
 
 
-tag:
 
-detectCategory(news.title),
+tag:detectCategory(news.title),
+
 
 
 source:news.source,
 
 
-image:
 
-"assets/image/ai-news.jpg",
-
-
-
-date:
-
-new Date().toISOString(),
+image:"assets/image/ai-news.jpg",
 
 
 
-link:
+date:new Date().toISOString(),
 
-news.link,
+
+
+link:news.link,
 
 
 
@@ -645,7 +446,6 @@ featured:false,
 
 
 status:"published"
-
 
 
 };
@@ -658,15 +458,11 @@ status:"published"
 
 
 
-
 if(!fs.existsSync("./data")){
-
 
 fs.mkdirSync("./data");
 
-
 }
-
 
 
 
@@ -687,15 +483,10 @@ null,
 
 
 console.log(
-
 "DONE:",
-
 finalNews.length,
-
 "news saved"
-
 );
-
 
 
 }

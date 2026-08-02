@@ -1,5 +1,24 @@
 {
   "dependencies": {
     "cheerio": "^1.2.0"
-  }
+  },
+  "name": "soravin-studio",
+  "version": "1.0.0",
+  "description": "",
+  "main": "auto-news.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/armanaram12-coder/soravin-studio.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/armanaram12-coder/soravin-studio/issues"
+  },
+  "homepage": "https://github.com/armanaram12-coder/soravin-studio#readme"
 }

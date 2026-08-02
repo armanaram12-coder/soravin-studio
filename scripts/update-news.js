@@ -1,7 +1,8 @@
 // =====================================
 // SORAVIN AUTO NEWS UPDATER
-// VERSION 10.1
-// FIX SOURCE LINK + MULTI SOURCE
+// VERSION 10.2
+// SOURCE LINK FINAL FIX
+// MULTI SOURCE VERSION
 // =====================================
 
 
@@ -62,7 +63,6 @@ name:"Peivast"
 
 function fetchRSS(url){
 
-
 return new Promise((resolve,reject)=>{
 
 
@@ -104,9 +104,8 @@ resolve(data);
 
 
 
-
 // =====================================
-// CLEAN HTML
+// CLEAN TEXT ONLY
 // =====================================
 
 
@@ -137,14 +136,37 @@ return text
 
 .replace(/<[^>]+>/gi,"")
 
-.replace(/https?:\/\/\S+/gi,"")
-
 .replace(/\s+/g," ")
 
 .trim();
 
 
 }
+
+
+
+
+
+
+// =====================================
+// CLEAN URL
+// =====================================
+
+
+function cleanURL(text=""){
+
+
+return text
+
+.replace(/<!\[CDATA\[/gi,"")
+
+.replace(/\]\]>/gi,"")
+
+.trim();
+
+
+}
+
 
 
 
@@ -191,7 +213,9 @@ function parseRSS(xml,source){
 let items =
 
 xml.match(/<item[\s\S]*?<\/item>/g)
+
 ||
+
 xml.match(/<entry[\s\S]*?<\/entry>/g);
 
 
@@ -210,49 +234,52 @@ items.forEach(item=>{
 
 
 
-let title =
+let title = item.match(
+/<title[^>]*>([\s\S]*?)<\/title>/i
+);
 
-item.match(/<title[^>]*>([\s\S]*?)<\/title>/i);
 
 
-
-let description =
-
-item.match(/<description[^>]*>([\s\S]*?)<\/description>/i)
+let description = item.match(
+/<description[^>]*>([\s\S]*?)<\/description>/i
+)
 
 ||
 
-item.match(/<summary[^>]*>([\s\S]*?)<\/summary>/i);
+item.match(
+/<summary[^>]*>([\s\S]*?)<\/summary>/i
+);
 
 
 
 
-// FIX SOURCE LINK
 
 // =====================================
 // SOURCE LINK FIX
 // =====================================
 
-let link = "";
+
+let link="";
 
 
-// RSS normal
 
 let normalLink = item.match(
 /<link>([\s\S]*?)<\/link>/i
 );
 
 
+
 if(normalLink){
 
-link = cleanHTML(normalLink[1]);
+link = cleanURL(normalLink[1]);
 
 }
 
 
-// Atom RSS
+
 
 if(!link){
+
 
 let atomLink = item.match(
 /<link[^>]+href=["']([^"']+)["']/i
@@ -261,16 +288,18 @@ let atomLink = item.match(
 
 if(atomLink){
 
-link = atomLink[1];
+link = cleanURL(atomLink[1]);
 
 }
 
+
 }
 
 
-// GUID fallback
+
 
 if(!link){
+
 
 let guidLink = item.match(
 /<guid[^>]*>([\s\S]*?)<\/guid>/i
@@ -279,20 +308,13 @@ let guidLink = item.match(
 
 if(guidLink){
 
-link = cleanHTML(guidLink[1]);
+link = cleanURL(guidLink[1]);
 
 }
 
-}
-
-
-// validate
-
-if(!link.startsWith("http")){
-
-link="";
 
 }
+
 
 
 
@@ -301,6 +323,7 @@ if(!link.startsWith("http")){
 link="";
 
 }
+
 
 
 
@@ -336,11 +359,13 @@ cleanHTML(description[1])
 link,
 
 
-source
+
+source: source
 
 
 
 };
+
 
 
 
@@ -397,6 +422,7 @@ return "AI";
 
 
 
+
 if(
 
 text.includes("موبایل") ||
@@ -411,6 +437,8 @@ return "Mobile";
 
 
 
+
+
 if(
 
 text.includes("پردازنده") ||
@@ -422,6 +450,8 @@ text.includes("کامپیوتر")
 )
 
 return "PC";
+
+
 
 
 
@@ -444,7 +474,9 @@ return "Technology";
 async function updateNews(){
 
 
+
 let allNews=[];
+
 
 
 
@@ -461,15 +493,11 @@ rss.name
 
 
 
-let xml =
-
-await fetchRSS(rss.url);
+let xml = await fetchRSS(rss.url);
 
 
 
-let news =
-
-parseRSS(
+let news = parseRSS(
 xml,
 rss.name
 );
@@ -489,7 +517,6 @@ console.log(
 "RSS ERROR:",
 rss.name
 );
-
 
 
 }
@@ -515,7 +542,6 @@ allNews.forEach(news=>{
 
 
 let key =
-
 news.title.toLowerCase();
 
 
@@ -538,12 +564,13 @@ unique.push(news);
 
 
 
+
+
 // MIX SOURCES
 
+
 unique.sort(
-
 ()=>Math.random()-0.5
-
 );
 
 
@@ -551,10 +578,8 @@ unique.sort(
 
 
 
-let finalNews =
 
-
-unique
+let finalNews = unique
 
 .slice(0,10)
 
@@ -582,9 +607,7 @@ description:news.description,
 category:
 
 detectCategory(
-news.title+
-" "+
-news.description
+news.title+" "+news.description
 ),
 
 
@@ -599,24 +622,24 @@ source:news.source,
 
 
 image:
-
 "assets/image/ai-news.jpg",
 
 
-date:
 
+date:
 new Date().toISOString(),
 
 
-link:
 
-news.link,
+link:news.link,
+
 
 
 featured:false,
 
 
 status:"published"
+
 
 
 };
@@ -629,12 +652,13 @@ status:"published"
 
 
 
-if(!fs.existsSync("./data")){
 
+if(!fs.existsSync("./data")){
 
 fs.mkdirSync("./data");
 
 }
+
 
 
 
@@ -651,6 +675,7 @@ null,
 "utf8"
 
 );
+
 
 
 

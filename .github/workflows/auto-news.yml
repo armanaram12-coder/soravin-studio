@@ -1,56 +1,91 @@
 name: Soravin Auto News Update
 
+
 on:
+
   schedule:
+
+    # هر روز ساعت 06:00 UTC
+
     - cron: "0 6 * * *"
+
+
 
   workflow_dispatch:
 
 
+
+
+
 jobs:
+
 
   update-news:
 
+
     runs-on: ubuntu-latest
+
 
 
     steps:
 
 
+
       - name: Checkout repository
+
         uses: actions/checkout@v4
 
 
 
+
+
       - name: Setup Node.js
+
         uses: actions/setup-node@v4
+
         with:
+
           node-version: 24
 
 
 
-      - name: Install packages
+
+
+      - name: Install Cheerio
+
         run: |
-          npm init -y
+
           npm install cheerio
 
 
 
-      - name: Update news
+
+
+      - name: Update news JSON
+
         run: |
+
           node scripts/update-news.js
 
 
 
+
+
       - name: Save changes
+
+
         run: |
+
 
           git config --global user.name "Soravin Bot"
 
           git config --global user.email "bot@soravin.com"
 
-          git add .
 
-          git diff --cached --quiet || git commit -m "Auto update full news"
+          git add data/auto-news.json
+
+
+          git diff --cached --quiet || git commit -m "Auto update news"
+
 
           git push

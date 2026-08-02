@@ -1,7 +1,7 @@
 // =====================================
 // SORAVIN AUTO NEWS UPDATER
-// CLEAN RSS ENGINE VERSION 4
-// 9 NEWS CARDS VERSION
+// IRAN DIGITAL NEWS ENGINE VERSION 5
+// 10 AUTO NEWS CARDS
 // =====================================
 
 
@@ -14,29 +14,46 @@ const outputFile = "./data/auto-news.json";
 
 
 // =====================================
-// RSS SOURCES
+// IRAN DIGITAL RSS SOURCES
 // =====================================
 
 
 const RSS_SOURCES = [
 
-    // AI
 
-    "https://blogs.nvidia.com/feed/",
+    // ZOOMIT
 
-    "https://blogs.microsoft.com/ai/feed/",
-
-    "https://www.technologyreview.com/feed/",
+    "https://www.zoomit.ir/feed/",
 
 
 
-    // TECHNOLOGY
+    // DIGIATO
 
-    "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+    "https://digiato.com/feed",
 
-    "https://www.wired.com/feed/rss",
 
-    "https://arstechnica.com/feed/"
+
+    // IT RESAN
+
+    "https://itresan.com/feed",
+
+
+
+    // GADGET NEWS
+
+    "https://gadgetnews.net/feed/",
+
+
+
+    // TORANJI
+
+    "https://toranji.ir/feed/",
+
+
+
+    // PEIVAST
+
+    "https://peivast.com/feed"
 
 ];
 
@@ -50,41 +67,41 @@ const RSS_SOURCES = [
 
 function fetchRSS(url){
 
-    return new Promise((resolve,reject)=>{
+
+return new Promise((resolve,reject)=>{
 
 
-        https.get(url,{
+https.get(url,{
 
-            headers:{
-                "User-Agent":"Mozilla/5.0"
-            }
+headers:{
+"User-Agent":"Mozilla/5.0"
+}
 
-        },response=>{
-
-
-            let data="";
+},response=>{
 
 
-            response.on("data",chunk=>{
-
-                data += chunk;
-
-            });
+let data="";
 
 
+response.on("data",chunk=>{
 
-            response.on("end",()=>{
+data += chunk;
 
-                resolve(data);
-
-            });
-
+});
 
 
-        }).on("error",reject);
+response.on("end",()=>{
+
+resolve(data);
+
+});
 
 
-    });
+}).on("error",reject);
+
+
+
+});
 
 
 }
@@ -93,7 +110,7 @@ function fetchRSS(url){
 
 
 // =====================================
-// HTML CLEANER
+// CLEAN HTML
 // =====================================
 
 
@@ -136,8 +153,9 @@ return text
 
 
 
+
 // =====================================
-// QUALITY FILTER
+// VALID NEWS
 // =====================================
 
 
@@ -158,15 +176,17 @@ news.description
 
 const badWords=[
 
+"تبلیغات",
+
 "advertisement",
 
-"subscribe",
+"اشتراک",
 
 "newsletter",
 
 "cookie",
 
-"privacy policy"
+"privacy"
 
 ];
 
@@ -174,8 +194,11 @@ const badWords=[
 
 for(const word of badWords){
 
-    if(text.includes(word))
-        return false;
+
+if(text.includes(word))
+
+return false;
+
 
 }
 
@@ -201,6 +224,7 @@ return true;
 
 
 
+
 // =====================================
 // RSS PARSER
 // =====================================
@@ -209,10 +233,13 @@ return true;
 function parseRSS(xml,source){
 
 
+
 let items =
 
 xml.match(/<item[\s\S]*?<\/item>/g)
+
 ||
+
 xml.match(/<entry[\s\S]*?<\/entry>/g);
 
 
@@ -232,23 +259,39 @@ items.forEach(item=>{
 
 let title =
 
-item.match(/<title[^>]*>([\s\S]*?)<\/title>/i);
+item.match(
+/<title[^>]*>([\s\S]*?)<\/title>/i
+);
 
 
 
 let description =
 
-item.match(/<description[^>]*>([\s\S]*?)<\/description>/i)
+item.match(
+/<description[^>]*>([\s\S]*?)<\/description>/i
+)
+
 ||
-item.match(/<summary[^>]*>([\s\S]*?)<\/summary>/i);
+
+item.match(
+/<summary[^>]*>([\s\S]*?)<\/summary>/i
+);
 
 
 
 let link =
 
-item.match(/<link[^>]*>([\s\S]*?)<\/link>/i)
+item.match(
+/<link[^>]*>([\s\S]*?)<\/link>/i
+)
+
 ||
-item.match(/href="([^"]+)"/i);
+
+item.match(
+/href="([^"]+)"/i
+);
+
+
 
 
 
@@ -260,18 +303,6 @@ title:
 title ?
 
 cleanHTML(title[1])
-
-:
-
-"",
-
-
-
-link:
-
-link ?
-
-cleanHTML(link[1])
 
 :
 
@@ -291,10 +322,25 @@ cleanHTML(description[1])
 
 
 
+link:
+
+link ?
+
+cleanHTML(link[1])
+
+:
+
+"",
+
+
+
 source
 
 
+
 };
+
+
 
 
 
@@ -335,13 +381,13 @@ text=text.toLowerCase();
 
 if(
 
+text.includes("هوش مصنوعی") ||
+
 text.includes("ai") ||
 
-text.includes("artificial") ||
+text.includes("chatgpt") ||
 
-text.includes("gpt") ||
-
-text.includes("machine")
+text.includes("gpt")
 
 )
 
@@ -349,32 +395,35 @@ return "AI";
 
 
 
-
 if(
 
-text.includes("gpu") ||
+text.includes("موبایل") ||
 
-text.includes("chip") ||
+text.includes("گوشی") ||
 
-text.includes("processor")
+text.includes("iphone") ||
 
-)
-
-return "PC";
-
-
-
-
-if(
-
-text.includes("phone") ||
-
-text.includes("mobile")
+text.includes("android")
 
 )
 
 return "Mobile";
 
+
+
+if(
+
+text.includes("کامپیوتر") ||
+
+text.includes("پردازنده") ||
+
+text.includes("لپتاپ") ||
+
+text.includes("gpu")
+
+)
+
+return "PC";
 
 
 
@@ -388,7 +437,7 @@ return "Technology";
 
 
 // =====================================
-// SUMMARY
+// PERSIAN SUMMARY
 // =====================================
 
 
@@ -399,38 +448,19 @@ let clean = cleanHTML(text);
 
 
 
-let sentences =
+if(clean.length > 300){
 
-clean
-
-.split(".")
-
-.filter(x=>x.trim().length>25);
-
-
-
-let result =
-
-sentences
-
-.slice(0,3)
-
-.join(". ");
-
-
-
-if(result.length < 60){
-
-result = clean.substring(0,250);
+clean = clean.substring(0,300);
 
 }
 
 
 
-return result.substring(0,300);
+return clean;
 
 
 }
+
 
 
 
@@ -454,7 +484,10 @@ for(const rss of RSS_SOURCES){
 try{
 
 
-console.log("Reading:",rss);
+console.log(
+"Reading:",
+rss
+);
 
 
 
@@ -462,11 +495,17 @@ let xml = await fetchRSS(rss);
 
 
 
-console.log("SIZE:",xml.length);
+console.log(
+"SIZE:",
+xml.length
+);
 
 
 
-let news = parseRSS(xml,rss);
+let news = parseRSS(
+xml,
+rss
+);
 
 
 
@@ -489,8 +528,9 @@ rss
 }
 
 
-
 }
+
+
 
 
 
@@ -524,7 +564,6 @@ unique.push(news);
 }
 
 
-
 });
 
 
@@ -532,16 +571,18 @@ unique.push(news);
 
 
 
+
 // =====================================
-// FINAL 9 NEWS CARDS
+// FINAL 10 AUTO NEWS
 // =====================================
 
 
 let finalNews =
 
+
 unique
 
-.slice(0,9)
+.slice(0,10)
 
 .map((news,index)=>{
 
@@ -567,7 +608,9 @@ description:createSummary(news.description),
 category:
 
 detectCategory(
-news.title+" "+news.description
+news.title+
+" "+
+news.description
 ),
 
 
@@ -579,16 +622,26 @@ detectCategory(news.title),
 source:news.source,
 
 
-image:"assets/image/ai-news.jpg",
+image:
+
+"assets/image/ai-news.jpg",
 
 
-date:new Date().toISOString(),
+
+date:
+
+new Date().toISOString(),
 
 
-link:news.link,
+
+link:
+
+news.link,
 
 
-featured:index===0,
+
+featured:false,
+
 
 
 status:"published"
@@ -599,6 +652,7 @@ status:"published"
 
 
 });
+
 
 
 

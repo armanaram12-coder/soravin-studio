@@ -1,6 +1,6 @@
 // =====================================
 // SORAVIN AUTO NEWS UPDATER
-// CLEAN RSS ENGINE VERSION
+// CLEAN RSS ENGINE VERSION 2
 // =====================================
 
 
@@ -19,22 +19,24 @@ const outputFile = "./data/auto-news.json";
 
 const RSS_SOURCES = [
 
-    // AI
-    "https://blogs.nvidia.com/feed/",
+    // AI SOURCES
+    "https://openai.com/news/rss.xml",
 
     "https://blogs.microsoft.com/ai/feed/",
-
-    "https://openai.com/news/rss.xml",
 
     "https://www.technologyreview.com/feed/",
 
 
-    // Technology
+    // TECHNOLOGY SOURCES
     "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+
+    "https://arstechnica.com/feed/",
 
     "https://www.wired.com/feed/rss",
 
-    "https://arstechnica.com/feed/"
+
+    // NVIDIA LAST
+    "https://blogs.nvidia.com/feed/"
 
 ];
 
@@ -59,7 +61,6 @@ headers:{
 "User-Agent":"Mozilla/5.0"
 }
 
-
 },response=>{
 
 
@@ -68,23 +69,27 @@ let data="";
 
 response.on(
 "data",
-chunk=>data += chunk
+chunk=>{
+data += chunk;
+}
 );
 
 
 
 response.on(
 "end",
-()=>resolve(data)
+()=>{
+resolve(data);
+}
 );
 
 
 
 }).on(
 "error",
-reject
-);
-
+err=>{
+reject(err);
+});
 
 
 });
@@ -97,9 +102,8 @@ reject
 
 
 
-
 // =====================================
-// DECODE HTML ENTITIES
+// HTML DECODE
 // =====================================
 
 
@@ -150,7 +154,7 @@ return text
 
 .replace(/<style[\s\S]*?<\/style>/gi,"")
 
-.replace(/<img[\s\S]*?>/gi,"")
+.replace(/<img[^>]*>/gi,"")
 
 .replace(/<iframe[\s\S]*?<\/iframe>/gi,"")
 
@@ -158,7 +162,7 @@ return text
 
 .replace(/<\/a>/gi,"")
 
-.replace(/<[^>]+>/g,"")
+.replace(/<[^>]+>/gi,"")
 
 .replace(/https?:\/\/\S+/gi,"")
 
@@ -168,6 +172,83 @@ return text
 
 
 }
+
+
+
+
+
+
+
+
+// =====================================
+// QUALITY CHECK
+// =====================================
+
+
+function isValidNews(news){
+
+
+const badWords = [
+
+"advertisement",
+
+"affiliate",
+
+"newsletter",
+
+"subscribe",
+
+"cookie",
+
+"login",
+
+"sign up"
+
+];
+
+
+
+let text =
+(
+news.title +
+" " +
+news.description
+)
+.toLowerCase();
+
+
+
+if(text.length < 50)
+return false;
+
+
+
+for(const word of badWords){
+
+
+if(text.includes(word))
+return false;
+
+
+}
+
+
+
+if(
+text.includes("<") ||
+text.includes(">") ||
+text.includes("style")
+)
+
+return false;
+
+
+
+return true;
+
+
+}
+
 
 
 
@@ -217,43 +298,22 @@ item.match(/<description>([\s\S]*?)<\/description>/);
 
 
 title =
-title ?
-cleanHTML(title[1])
-:
-"";
+title ? cleanHTML(title[1]) : "";
 
 
 
 link =
-link ?
-cleanHTML(link[1])
-:
-"";
+link ? cleanHTML(link[1]) : "";
 
 
 
 description =
-description ?
-cleanHTML(description[1])
-:
-"";
+description ? cleanHTML(description[1]) : "";
 
 
 
 
-
-// حذف موارد خراب
-
-if(
-!title ||
-description.length < 20
-)
-return;
-
-
-
-
-items.push({
+let news = {
 
 title,
 
@@ -263,8 +323,17 @@ description,
 
 source
 
+};
 
-});
+
+
+if(isValidNews(news)){
+
+
+items.push(news);
+
+
+}
 
 
 
@@ -292,37 +361,55 @@ return items;
 function detectCategory(text){
 
 
-text=text.toLowerCase();
+text =
+text.toLowerCase();
 
 
 
 if(
+
 text.includes("ai") ||
+
 text.includes("artificial") ||
+
 text.includes("gpt") ||
+
 text.includes("machine")
+
 )
 
 return "AI";
 
 
 
+
 if(
-text.includes("chip") ||
+
 text.includes("gpu") ||
+
+text.includes("chip") ||
+
 text.includes("processor")
+
 )
 
 return "PC";
 
 
 
+
+
 if(
-text.includes("mobile") ||
-text.includes("phone")
+
+text.includes("phone") ||
+
+text.includes("mobile")
+
 )
 
 return "Mobile";
+
+
 
 
 
@@ -351,17 +438,17 @@ cleanHTML(text);
 
 
 
-let sentences =
+let parts =
 clean
 .split(".")
 .filter(
-x=>x.trim().length>30
+x=>x.trim().length>25
 );
 
 
 
 let result =
-sentences
+parts
 .slice(0,3)
 .join(". ");
 
@@ -369,7 +456,8 @@ sentences
 
 if(result.length < 60){
 
-result = clean.substring(0,250);
+result =
+clean.substring(0,250);
 
 }
 
@@ -392,6 +480,7 @@ return result.substring(0,300);
 
 
 async function updateNews(){
+
 
 
 let allNews=[];
@@ -457,7 +546,7 @@ rss
 
 let unique=[];
 
-let seen=new Set();
+let titles=new Set();
 
 
 
@@ -469,15 +558,16 @@ news.title.toLowerCase();
 
 
 
-if(!seen.has(key)){
+if(!titles.has(key)){
 
 
-seen.add(key);
+titles.add(key);
 
 unique.push(news);
 
 
 }
+
 
 
 });
@@ -488,7 +578,8 @@ unique.push(news);
 
 
 
-// CREATE JSON
+
+// CREATE FINAL JSON
 
 
 let finalNews =
@@ -498,7 +589,7 @@ unique
 .map((news,index)=>{
 
 
-return{
+return {
 
 
 id:index+1,
@@ -512,8 +603,10 @@ summary_fa:
 createSummary(news.description),
 
 
+
 summary_en:
 "",
+
 
 
 description:
@@ -607,11 +700,12 @@ null,
 
 
 
-
 console.log(
+
 "DONE:",
 finalNews.length,
 "news saved"
+
 );
 
 

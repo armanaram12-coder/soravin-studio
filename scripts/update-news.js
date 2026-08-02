@@ -1,7 +1,7 @@
 // =====================================
 // SORAVIN AUTO NEWS UPDATER
-// IRAN DIGITAL NEWS ENGINE VERSION 9.1
-// CLEAN CONTENT VERSION
+// SIMPLE RSS ENGINE VERSION 8.1
+// CLEAN SIMPLE NEWS VERSION
 // =====================================
 
 
@@ -66,7 +66,7 @@ url:"https://peivast.com/feed"
 
 
 // =====================================
-// FETCH
+// FETCH RSS
 // =====================================
 
 
@@ -79,7 +79,9 @@ return new Promise((resolve,reject)=>{
 https.get(url,{
 
 headers:{
-"User-Agent":"Mozilla/5.0 Soravin Bot"
+
+"User-Agent":"Mozilla/5.0 Soravin News"
+
 }
 
 },response=>{
@@ -92,7 +94,7 @@ response.on(
 "data",
 chunk=>{
 
-data+=chunk;
+data += chunk;
 
 });
 
@@ -149,6 +151,10 @@ return text
 
 .replace(/<br\s*\/?>/gi," ")
 
+.replace(/<p[^>]*>/gi,"")
+
+.replace(/<\/p>/gi," ")
+
 .replace(/<[^>]+>/gi,"")
 
 .replace(/&nbsp;/gi," ")
@@ -171,7 +177,6 @@ return text
 
 
 
-
 // =====================================
 // PARSE RSS
 // =====================================
@@ -180,7 +185,7 @@ return text
 function parseRSS(xml,source){
 
 
-let items=
+let items =
 
 xml.match(
 
@@ -203,7 +208,6 @@ let result=[];
 items.forEach(item=>{
 
 
-
 let title =
 
 item.match(
@@ -220,17 +224,7 @@ item.match(
 
 /<description[^>]*>([\s\S]*?)<\/description>/i
 
-)
-
-||
-
-item.match(
-
-/<content:encoded[^>]*>([\s\S]*?)<\/content:encoded>/i
-
 );
-
-
 
 
 
@@ -244,8 +238,9 @@ item.match(
 
 
 
-let news={
 
+
+let news={
 
 
 title:
@@ -257,7 +252,6 @@ cleanHTML(title[1])
 :
 
 "",
-
 
 
 
@@ -273,7 +267,6 @@ cleanHTML(description[1])
 
 
 
-
 link:
 
 link ?
@@ -286,9 +279,7 @@ cleanHTML(link[1])
 
 
 
-
 source:source.name
-
 
 
 };
@@ -302,7 +293,7 @@ if(
 
 news.title.length > 10 &&
 
-news.description.length > 30
+news.description.length > 20
 
 ){
 
@@ -318,11 +309,11 @@ result.push(news);
 
 
 
+
 return result;
 
 
 }
-
 
 
 
@@ -364,7 +355,9 @@ text.includes("گوشی") ||
 
 text.includes("موبایل") ||
 
-text.includes("iphone")
+text.includes("iphone") ||
+
+text.includes("android")
 
 )
 
@@ -378,9 +371,9 @@ if(
 
 text.includes("لپتاپ") ||
 
-text.includes("پردازنده") ||
+text.includes("کامپیوتر") ||
 
-text.includes("کامپیوتر")
+text.includes("پردازنده")
 
 )
 
@@ -400,37 +393,6 @@ return "Technology";
 
 
 
-// =====================================
-// SUMMARY
-// =====================================
-
-
-function createSummary(text){
-
-
-text=cleanHTML(text);
-
-
-
-if(text.length > 300){
-
-
-return text.substring(0,300)+"...";
-
-
-}
-
-
-
-return text;
-
-
-}
-
-
-
-
-
 
 
 // =====================================
@@ -439,6 +401,7 @@ return text;
 
 
 async function updateNews(){
+
 
 
 let allNews=[];
@@ -461,13 +424,13 @@ source.name
 
 
 
-let xml=
+let xml =
 
 await fetchRSS(source.url);
 
 
 
-let news=
+let news =
 
 parseRSS(xml,source);
 
@@ -484,25 +447,28 @@ catch(error){
 
 console.log(
 
-"RSS ERROR",
+"RSS ERROR:",
 
 source.name
 
 );
 
 
-}
-
-
 
 }
 
 
 
+}
 
 
 
-// DUPLICATE REMOVE
+
+
+
+
+
+// REMOVE DUPLICATES
 
 
 let unique=[];
@@ -511,11 +477,10 @@ let seen=new Set();
 
 
 
-
 allNews.forEach(news=>{
 
 
-let key=
+let key =
 
 news.title.toLowerCase();
 
@@ -542,14 +507,18 @@ unique.push(news);
 
 
 
-let finalNews=
+// CREATE 10 CARDS
+
+
+let finalNews =
+
 
 unique.slice(0,10)
 
 .map((news,index)=>{
 
 
-return{
+return {
 
 
 id:index+1,
@@ -558,31 +527,26 @@ id:index+1,
 title:news.title,
 
 
-
-summary_fa:
-
-createSummary(news.description),
-
+summary_fa:news.description,
 
 
 summary_en:"",
 
 
-
-description:
-
-cleanHTML(news.description),
-
+description:news.description,
 
 
 category:
 
 detectCategory(
 
-news.title+" "+news.description
+news.title+
+
+" "+
+
+news.description
 
 ),
-
 
 
 tag:
@@ -590,11 +554,7 @@ tag:
 detectCategory(news.title),
 
 
-
-source:
-
-news.source,
-
+source:news.source,
 
 
 image:
@@ -602,31 +562,25 @@ image:
 "assets/image/ai-news.jpg",
 
 
-
 date:
 
 new Date().toISOString(),
 
 
-
-link:
-
-news.link,
-
+link:news.link,
 
 
 featured:false,
 
 
-
 status:"published"
-
 
 
 };
 
 
 });
+
 
 
 
@@ -640,6 +594,7 @@ fs.mkdirSync("./data");
 
 
 }
+
 
 
 

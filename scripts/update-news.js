@@ -1,7 +1,7 @@
 // =====================================
 // SORAVIN AUTO NEWS UPDATER
-// IRAN DIGITAL NEWS ENGINE VERSION 10
-// STABLE RSS VERSION
+// VERSION 10.1
+// FIX SOURCE LINK + MULTI SOURCE
 // =====================================
 
 
@@ -20,17 +20,35 @@ const outputFile = "./data/auto-news.json";
 
 const RSS_SOURCES = [
 
-"https://www.zoomit.ir/feed/",
+{
+url:"https://www.zoomit.ir/feed/",
+name:"Zoomit"
+},
 
-"https://digiato.com/feed",
+{
+url:"https://digiato.com/feed",
+name:"Digiato"
+},
 
-"https://itresan.com/feed",
+{
+url:"https://itresan.com/feed",
+name:"ITResan"
+},
 
-"https://gadgetnews.net/feed/",
+{
+url:"https://gadgetnews.net/feed/",
+name:"GadgetNews"
+},
 
-"https://toranji.ir/feed/",
+{
+url:"https://toranji.ir/feed/",
+name:"Toranji"
+},
 
-"https://peivast.com/feed"
+{
+url:"https://peivast.com/feed",
+name:"Peivast"
+}
 
 ];
 
@@ -75,7 +93,6 @@ resolve(data);
 
 
 }).on("error",reject);
-
 
 
 });
@@ -192,22 +209,59 @@ let result=[];
 items.forEach(item=>{
 
 
+
 let title =
+
 item.match(/<title[^>]*>([\s\S]*?)<\/title>/i);
 
 
 
 let description =
+
 item.match(/<description[^>]*>([\s\S]*?)<\/description>/i)
+
 ||
+
 item.match(/<summary[^>]*>([\s\S]*?)<\/summary>/i);
 
 
 
-let link =
+
+// FIX SOURCE LINK
+
+let linkMatch =
+
 item.match(/<link[^>]*>([\s\S]*?)<\/link>/i)
+
 ||
-item.match(/href="([^"]+)"/i);
+
+item.match(/<guid[^>]*>([\s\S]*?)<\/guid>/i)
+
+||
+
+item.match(/href="(https?:\/\/[^"]+)"/i);
+
+
+
+let link = "";
+
+
+
+if(linkMatch){
+
+link = cleanHTML(linkMatch[1]);
+
+}
+
+
+
+if(!link.startsWith("http")){
+
+link="";
+
+}
+
+
 
 
 
@@ -215,21 +269,39 @@ let news={
 
 
 title:
-title ? cleanHTML(title[1]) : "",
+
+title ?
+
+cleanHTML(title[1])
+
+:
+
+"",
+
 
 
 description:
-description ? cleanHTML(description[1]) : "",
+
+description ?
+
+cleanHTML(description[1])
+
+:
+
+"",
 
 
-link:
-link ? cleanHTML(link[1]) : "",
+
+link,
 
 
 source
 
 
+
 };
+
+
 
 
 
@@ -271,9 +343,13 @@ text=text.toLowerCase();
 
 
 if(
+
 text.includes("هوش مصنوعی") ||
+
 text.includes("ai") ||
+
 text.includes("gpt")
+
 )
 
 return "AI";
@@ -281,9 +357,13 @@ return "AI";
 
 
 if(
-text.includes("گوشی") ||
+
 text.includes("موبایل") ||
+
+text.includes("گوشی") ||
+
 text.includes("iphone")
+
 )
 
 return "Mobile";
@@ -291,9 +371,13 @@ return "Mobile";
 
 
 if(
+
 text.includes("پردازنده") ||
+
 text.includes("لپتاپ") ||
+
 text.includes("کامپیوتر")
+
 )
 
 return "PC";
@@ -329,17 +413,25 @@ for(const rss of RSS_SOURCES){
 try{
 
 
-console.log("READ:",rss);
+console.log(
+"READ:",
+rss.name
+);
 
 
 
 let xml =
-await fetchRSS(rss);
+
+await fetchRSS(rss.url);
 
 
 
 let news =
-parseRSS(xml,rss);
+
+parseRSS(
+xml,
+rss.name
+);
 
 
 
@@ -353,22 +445,23 @@ catch(error){
 
 
 console.log(
-"RSS ERROR",
-rss
+"RSS ERROR:",
+rss.name
 );
 
 
-}
-
 
 }
 
 
+}
 
 
 
 
-// DUPLICATE REMOVE
+
+
+// REMOVE DUPLICATE
 
 
 let unique=[];
@@ -381,6 +474,7 @@ allNews.forEach(news=>{
 
 
 let key =
+
 news.title.toLowerCase();
 
 
@@ -396,7 +490,6 @@ unique.push(news);
 }
 
 
-
 });
 
 
@@ -404,9 +497,21 @@ unique.push(news);
 
 
 
+// MIX SOURCES
+
+unique.sort(
+
+()=>Math.random()-0.5
+
+);
+
+
+
+
 
 
 let finalNews =
+
 
 unique
 
@@ -434,27 +539,37 @@ description:news.description,
 
 
 category:
+
 detectCategory(
-news.title+" "+news.description
+news.title+
+" "+
+news.description
 ),
 
 
 tag:
-detectCategory(news.title),
+
+detectCategory(
+news.title
+),
 
 
 source:news.source,
 
 
 image:
+
 "assets/image/ai-news.jpg",
 
 
 date:
+
 new Date().toISOString(),
 
 
-link:news.link,
+link:
+
+news.link,
 
 
 featured:false,
@@ -475,10 +590,10 @@ status:"published"
 
 if(!fs.existsSync("./data")){
 
+
 fs.mkdirSync("./data");
 
 }
-
 
 
 
@@ -499,14 +614,18 @@ null,
 
 
 console.log(
+
 "DONE:",
-finalNews.length
+
+finalNews.length,
+
+"news saved"
+
 );
 
 
 
 }
-
 
 
 

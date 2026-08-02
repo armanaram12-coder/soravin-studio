@@ -1,24 +1,23 @@
 // =====================================
 // SORAVIN AUTO NEWS UPDATER
-// VERSION 10
-// FULL ARTICLE EXTRACTOR
-// CHEERIO ENGINE
+// VERSION 10.1
+// RSS CLEAN + GZIP FIX + FULL TEXT
 // =====================================
 
 
 const fs = require("fs");
 const https = require("https");
-const cheerio = require("cheerio");
+const zlib = require("zlib");
 
 
-
-const outputFile = "./data/auto-news.json";
+const outputFile =
+"./data/auto-news.json";
 
 
 
 
 // =====================================
-// RSS SOURCES
+// SOURCES
 // =====================================
 
 
@@ -52,12 +51,6 @@ url:"https://gadgetnews.net/feed/"
 {
 name:"Toranji",
 url:"https://toranji.ir/feed/"
-},
-
-
-{
-name:"Peivast",
-url:"https://peivast.com/feed"
 }
 
 
@@ -68,10 +61,8 @@ url:"https://peivast.com/feed"
 
 
 
-
-
 // =====================================
-// FETCH
+// FETCH WITH GZIP SUPPORT
 // =====================================
 
 
@@ -84,26 +75,83 @@ return new Promise((resolve,reject)=>{
 https.get(url,{
 
 headers:{
+
 "User-Agent":
-"Mozilla/5.0 SoravinBot"
+"Mozilla/5.0",
+
+"Accept-Encoding":
+"gzip"
+
 }
 
-},res=>{
+
+},response=>{
 
 
-let data="";
+let chunks=[];
 
 
-res.on(
+
+response.on(
 "data",
-chunk=>data+=chunk
+chunk=>chunks.push(chunk)
 );
 
 
 
-res.on(
+response.on(
 "end",
-()=>resolve(data)
+()=>{
+
+
+let buffer =
+Buffer.concat(chunks);
+
+
+
+if(
+response.headers["content-encoding"]
+==="gzip"
+){
+
+
+try{
+
+
+buffer =
+zlib.gunzipSync(buffer);
+
+
+}
+
+catch(e){
+
+
+console.log(
+"GZIP ERROR"
+);
+
+
+}
+
+
+
+}
+
+
+
+
+
+resolve(
+buffer.toString("utf8")
+);
+
+
+
+}
+
+
+
 );
 
 
@@ -128,14 +176,48 @@ reject
 
 
 // =====================================
-// CLEAN TEXT
+// CLEAN HTML
 // =====================================
 
 
-function cleanText(text=""){
+function cleanHTML(text=""){
 
 
 return text
+
+.replace(/<!\[CDATA\[/gi,"")
+
+.replace(/\]\]>/gi,"")
+
+.replace(/&lt;/gi,"<")
+
+.replace(/&gt;/gi,">")
+
+.replace(/&amp;/gi,"&")
+
+.replace(/&quot;/gi,'"')
+
+.replace(/&#39;/gi,"'")
+
+.replace(/<script[\s\S]*?<\/script>/gi,"")
+
+.replace(/<style[\s\S]*?<\/style>/gi,"")
+
+.replace(/<a[^>]*>/gi,"")
+
+.replace(/<\/a>/gi,"")
+
+.replace(/<img[^>]*>/gi,"")
+
+.replace(/<br\s*\/?>/gi," ")
+
+.replace(/<p[^>]*>/gi,"")
+
+.replace(/<\/p>/gi,"")
+
+.replace(/<[^>]+>/gi,"")
+
+.replace(/https?:\/\/\S+/gi,"")
 
 .replace(/\s+/g," ")
 
@@ -152,135 +234,11 @@ return text
 
 
 // =====================================
-// EXTRACT ARTICLE
-// =====================================
-
-
-async function getArticle(url){
-
-
-try{
-
-
-let html =
-
-await fetchURL(url);
-
-
-
-const $ = cheerio.load(html);
-
-
-
-$("script").remove();
-
-$("style").remove();
-
-$("img").remove();
-
-$("nav").remove();
-
-$("header").remove();
-
-$("footer").remove();
-
-$("aside").remove();
-
-
-
-
-
-let articleText="";
-
-
-
-
-
-const selectors=[
-
-"article",
-
-".article-content",
-
-".entry-content",
-
-".post-content",
-
-".content"
-
-];
-
-
-
-
-
-for(const selector of selectors){
-
-
-let text=$(selector).text();
-
-
-
-if(text.length > articleText.length){
-
-articleText=text;
-
-}
-
-
-}
-
-
-
-
-
-
-if(articleText.length < 200){
-
-
-articleText=$("body").text();
-
-
-}
-
-
-
-
-
-
-return cleanText(articleText)
-.substring(0,3000);
-
-
-
-}
-
-catch(error){
-
-
-return "";
-
-}
-
-
-
-}
-
-
-
-
-
-
-
-
-
-// =====================================
 // PARSE RSS
 // =====================================
 
 
 function parseRSS(xml,source){
-
 
 
 let items =
@@ -298,7 +256,6 @@ return [];
 
 
 
-
 let result=[];
 
 
@@ -306,17 +263,13 @@ let result=[];
 items.forEach(item=>{
 
 
-
 let title =
-
 item.match(
 /<title[^>]*>([\s\S]*?)<\/title>/i
 );
 
 
-
 let description =
-
 item.match(
 /<description[^>]*>([\s\S]*?)<\/description>/i
 );
@@ -324,11 +277,9 @@ item.match(
 
 
 let link =
-
 item.match(
-/<link[^>]*>([\s\S]*?)<\/link>/i
+/<link>([\s\S]*?)<\/link>/i
 );
-
 
 
 
@@ -337,36 +288,24 @@ item.match(
 if(title && link){
 
 
-
 result.push({
 
 
-title:title[1]
-.replace(/<[^>]+>/g,"")
-.trim(),
-
+title:
+cleanHTML(title[1]),
 
 
 description:
-
 description
-
 ?
-
-description[1]
-.replace(/<[^>]+>/g,"")
-.trim()
-
+cleanHTML(description[1])
 :
-
 "",
 
 
 
 link:
-
-link[1]
-.trim(),
+cleanHTML(link[1]),
 
 
 
@@ -398,12 +337,45 @@ return result;
 
 
 
+
+
+// =====================================
+// ARTICLE SUMMARY
+// =====================================
+
+
+function makeSummary(text){
+
+
+text =
+cleanHTML(text);
+
+
+
+if(text.length > 250)
+
+return text.substring(0,250)+"...";
+
+
+
+return text;
+
+
+}
+
+
+
+
+
+
+
+
 // =====================================
 // CATEGORY
 // =====================================
 
 
-function category(text){
+function detectCategory(text){
 
 
 text=text.toLowerCase();
@@ -426,9 +398,13 @@ return "AI";
 
 if(
 
+text.includes("گوشی") ||
+
 text.includes("موبایل") ||
 
-text.includes("گوشی")
+text.includes("iphone") ||
+
+text.includes("android")
 
 )
 
@@ -438,9 +414,11 @@ return "Mobile";
 
 if(
 
-text.includes("کامپیوتر") ||
+text.includes("پردازنده") ||
 
-text.includes("پردازنده")
+text.includes("لپتاپ") ||
+
+text.includes("کامپیوتر")
 
 )
 
@@ -461,6 +439,7 @@ return "Technology";
 
 
 
+
 // =====================================
 // MAIN
 // =====================================
@@ -470,56 +449,56 @@ async function updateNews(){
 
 
 
-let all=[];
+let allNews=[];
+
 
 
 
 for(const source of RSS_SOURCES){
 
 
-
 try{
 
 
 console.log(
-"RSS:",
+"Reading:",
 source.name
 );
 
 
 
-let xml=
-
+let xml =
 await fetchURL(source.url);
 
 
 
-let news=
-
+let news =
 parseRSS(xml,source);
 
 
 
-all.push(...news);
+allNews.push(...news);
 
 
 
 }
 
-catch(e){
+catch(error){
 
 
 console.log(
-"RSS ERROR",
+"RSS ERROR:",
 source.name
 );
 
 
-}
-
-
 
 }
+
+
+
+}
+
 
 
 
@@ -533,11 +512,10 @@ let seen=new Set();
 
 
 
-all.forEach(news=>{
+allNews.forEach(news=>{
 
 
-let key=
-
+let key =
 news.title.toLowerCase();
 
 
@@ -562,59 +540,34 @@ unique.push(news);
 
 
 
-let final=[];
+
+let finalNews =
+
+unique
+.slice(0,10)
+.map((news,index)=>{
 
 
-
-
-
-for(
-
-const [index,news]
-
-of unique.slice(0,10).entries()
-
-){
-
-
-
-console.log(
-"ARTICLE:",
-news.title
-);
-
-
-
-
-
-let fullText=
-
-await getArticle(news.link);
-
-
-
-
-
-final.push({
+return {
 
 
 
 id:index+1,
 
 
-title:news.title,
+
+title:
+news.title,
 
 
 
 summary_fa:
-
-news.description.substring(0,220),
+makeSummary(news.description),
 
 
 
 content_fa:
-
-fullText || news.description,
+makeSummary(news.description),
 
 
 
@@ -623,41 +576,35 @@ summary_en:"",
 
 
 category:
-
-category(
+detectCategory(
 news.title+
 " "+
-fullText
+news.description
 ),
 
 
 
 tag:
-
-category(news.title),
+detectCategory(news.title),
 
 
 
 source:
-
 news.source,
 
 
 
 image:
-
 "assets/image/ai-news.jpg",
 
 
 
 date:
-
 new Date().toISOString(),
 
 
 
 link:
-
 news.link,
 
 
@@ -670,13 +617,11 @@ status:"published"
 
 
 
+};
+
+
+
 });
-
-
-
-}
-
-
 
 
 
@@ -685,9 +630,12 @@ status:"published"
 
 if(!fs.existsSync("./data")){
 
+
 fs.mkdirSync("./data");
 
+
 }
+
 
 
 
@@ -698,7 +646,7 @@ fs.writeFileSync(
 outputFile,
 
 JSON.stringify(
-final,
+finalNews,
 null,
 2
 ),
@@ -716,16 +664,15 @@ console.log(
 
 "DONE:",
 
-final.length,
+finalNews.length,
 
-"FULL NEWS SAVED"
+"NEWS SAVED"
 
 );
 
 
 
 }
-
 
 
 

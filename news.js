@@ -1,6 +1,6 @@
 // ===============================
 // SORAVIN NEWS SYSTEM
-// AUTO NEWS ONLY VERSION
+// AUTO NEWS DISPLAY VERSION 2
 // ===============================
 
 
@@ -72,12 +72,17 @@ function createNewsCards(data){
 const newsGrid =
 document.getElementById("newsGrid");
 
+
 const featuredGrid =
 document.getElementById("featuredGrid");
 
 
 
-if(!newsGrid) return;
+if(!newsGrid){
+
+return;
+
+}
 
 
 
@@ -104,8 +109,11 @@ createCard(news);
 
 
 if(
+
 news.featured === true &&
+
 featuredGrid
+
 ){
 
 
@@ -123,7 +131,6 @@ newsGrid.appendChild(card);
 
 
 });
-
 
 
 }
@@ -154,9 +161,13 @@ card.className =
 
 
 card.dataset.category =
+
 (
-news.category || "technology"
+news.category ||
+"technology"
+
 )
+
 .toLowerCase();
 
 
@@ -168,12 +179,18 @@ card.innerHTML = `
 
 <div class="news-image">
 
+
 <img
+
 src="${news.image || 'assets/image/ai-news.jpg'}"
+
 alt="${news.title}"
+
 >
 
+
 </div>
+
 
 
 
@@ -182,11 +199,14 @@ alt="${news.title}"
 
 
 
+
+
 <div class="category ${card.dataset.category}">
 
-${news.tag || news.category}
+${news.tag || news.category || "Technology"}
 
 </div>
+
 
 
 
@@ -202,11 +222,13 @@ ${news.title}
 
 
 
+
 <p>
 
-${news.description || news.summary_fa || ""}
+${news.summary_fa || ""}
 
 </p>
+
 
 
 
@@ -224,15 +246,29 @@ ${news.source || "Soravin Tech"}
 
 
 
+
 <span>
 
-${news.date || ""}
+${
+
+news.date
+
+?
+
+new Date(news.date).toLocaleDateString("fa-IR")
+
+:
+
+""
+
+}
 
 </span>
 
 
 
 </div>
+
 
 
 
@@ -250,6 +286,8 @@ href="news-detail.html?id=${news.id}"
 مطالعه بیشتر
 
 </a>
+
+
 
 
 
@@ -279,7 +317,10 @@ return card;
 
 
 const filterButtons =
-document.querySelectorAll(".news-filter button");
+
+document.querySelectorAll(
+".news-filter button"
+);
 
 
 
@@ -295,6 +336,7 @@ button.addEventListener(
 
 
 const category =
+
 button.dataset.category;
 
 
@@ -321,7 +363,10 @@ button.classList.add("active");
 
 
 const cards =
-document.querySelectorAll(".tech-card");
+
+document.querySelectorAll(
+".tech-card"
+);
 
 
 
@@ -332,6 +377,7 @@ cards.forEach(card=>{
 
 
 const cardCategory =
+
 card.dataset.category;
 
 
@@ -363,7 +409,6 @@ card.style.display="none";
 
 
 });
-
 
 
 

@@ -7,6 +7,8 @@
 let newsData = [];
 
 
+
+
 // ===============================
 // LOAD AUTO NEWS JSON
 // ===============================
@@ -16,24 +18,27 @@ fetch("data/auto-news.json")
 
 .then(response => {
 
-    if(!response.ok){
 
-        throw new Error("auto-news.json not found");
+if(!response.ok){
 
-    }
+throw new Error("auto-news.json not found");
 
-    return response.json();
+}
+
+
+return response.json();
+
 
 })
+
 
 .then(data => {
 
 
-    newsData = data;
+newsData = data;
 
 
-    createNewsCards(newsData);
-
+createNewsCards(newsData);
 
 
 })
@@ -42,13 +47,15 @@ fetch("data/auto-news.json")
 .catch(error => {
 
 
-    console.log(
-        "News loading error:",
-        error
-    );
+console.log(
+"News loading error:",
+error
+);
 
 
 });
+
+
 
 
 
@@ -65,7 +72,6 @@ function createNewsCards(data){
 const newsGrid =
 document.getElementById("newsGrid");
 
-
 const featuredGrid =
 document.getElementById("featuredGrid");
 
@@ -81,10 +87,9 @@ newsGrid.innerHTML = "";
 
 if(featuredGrid){
 
-    featuredGrid.innerHTML = "";
+featuredGrid.innerHTML = "";
 
 }
-
 
 
 
@@ -94,7 +99,6 @@ data.forEach(news => {
 
 const card =
 createCard(news);
-
 
 
 
@@ -111,7 +115,6 @@ card.cloneNode(true)
 
 
 }
-
 
 
 
@@ -132,11 +135,12 @@ newsGrid.appendChild(card);
 
 
 // ===============================
-// CREATE SINGLE CARD
+// CREATE CARD
 // ===============================
 
 
 function createCard(news){
+
 
 
 const card =
@@ -150,8 +154,11 @@ card.className =
 
 
 card.dataset.category =
-(news.category || "tech")
+(
+news.category || "technology"
+)
 .toLowerCase();
+
 
 
 
@@ -162,14 +169,12 @@ card.innerHTML = `
 <div class="news-image">
 
 <img
-
 src="${news.image || 'assets/image/ai-news.jpg'}"
-
 alt="${news.title}"
-
 >
 
 </div>
+
 
 
 
@@ -186,6 +191,7 @@ ${news.tag || news.category}
 
 
 
+
 <h3>
 
 ${news.title}
@@ -198,7 +204,7 @@ ${news.title}
 
 <p>
 
-${news.summary_fa || news.description || ""}
+${news.description || news.summary_fa || ""}
 
 </p>
 
@@ -207,6 +213,7 @@ ${news.summary_fa || news.description || ""}
 
 
 <div class="news-meta">
+
 
 
 <span>
@@ -224,7 +231,9 @@ ${news.date || ""}
 </span>
 
 
+
 </div>
+
 
 
 
@@ -248,6 +257,8 @@ href="news-detail.html?id=${news.id}"
 
 
 `;
+
+
 
 
 
@@ -278,8 +289,9 @@ filterButtons.forEach(button => {
 
 
 
-button.addEventListener("click", () => {
-
+button.addEventListener(
+"click",
+()=>{
 
 
 const category =
@@ -289,7 +301,7 @@ button.dataset.category;
 
 
 
-filterButtons.forEach(btn => {
+filterButtons.forEach(btn=>{
 
 
 btn.classList.remove("active");
@@ -307,6 +319,7 @@ button.classList.add("active");
 
 
 
+
 const cards =
 document.querySelectorAll(".tech-card");
 
@@ -314,7 +327,7 @@ document.querySelectorAll(".tech-card");
 
 
 
-cards.forEach(card => {
+cards.forEach(card=>{
 
 
 
@@ -326,12 +339,15 @@ card.dataset.category;
 
 
 if(
+
 category === "all" ||
+
 cardCategory === category
+
 ){
 
 
-card.style.display = "flex";
+card.style.display="flex";
 
 
 }
@@ -339,7 +355,7 @@ card.style.display = "flex";
 else{
 
 
-card.style.display = "none";
+card.style.display="none";
 
 
 }
@@ -349,7 +365,12 @@ card.style.display = "none";
 });
 
 
-});
+
+
+}
+
+);
+
 
 
 });

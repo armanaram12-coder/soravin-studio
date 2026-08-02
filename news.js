@@ -1,21 +1,30 @@
 // ===============================
 // SORAVIN NEWS SYSTEM
-// Dynamic News Updater
+// AUTO NEWS ONLY VERSION
 // ===============================
 
 
 let newsData = [];
 
 
-
 // ===============================
-// LOAD JSON
+// LOAD AUTO NEWS JSON
 // ===============================
 
 
-fetch("data/news.json")
+fetch("data/auto-news.json")
 
-.then(response => response.json())
+.then(response => {
+
+    if(!response.ok){
+
+        throw new Error("auto-news.json not found");
+
+    }
+
+    return response.json();
+
+})
 
 .then(data => {
 
@@ -26,8 +35,6 @@ fetch("data/news.json")
     createNewsCards(newsData);
 
 
-    loadAutoNews();
-
 
 })
 
@@ -35,11 +42,13 @@ fetch("data/news.json")
 .catch(error => {
 
 
-    console.log("News loading error:", error);
+    console.log(
+        "News loading error:",
+        error
+    );
 
 
 });
-
 
 
 
@@ -53,9 +62,12 @@ fetch("data/news.json")
 function createNewsCards(data){
 
 
-const newsGrid = document.getElementById("newsGrid");
+const newsGrid =
+document.getElementById("newsGrid");
 
-const featuredGrid = document.getElementById("featuredGrid");
+
+const featuredGrid =
+document.getElementById("featuredGrid");
 
 
 
@@ -76,27 +88,29 @@ if(featuredGrid){
 
 
 
-
 data.forEach(news => {
 
 
 
-const card = createCard(news);
+const card =
+createCard(news);
 
 
 
 
 
-if(news.featured === true && featuredGrid){
+if(
+news.featured === true &&
+featuredGrid
+){
 
 
-    featuredGrid.appendChild(
-        card.cloneNode(true)
-    );
+featuredGrid.appendChild(
+card.cloneNode(true)
+);
 
 
 }
-
 
 
 
@@ -125,15 +139,20 @@ newsGrid.appendChild(card);
 function createCard(news){
 
 
-const card = document.createElement("div");
+const card =
+document.createElement("div");
 
 
-card.className = "tech-card";
+
+card.className =
+"tech-card";
 
 
 
 card.dataset.category =
-news.category.toLowerCase();
+(news.category || "tech")
+.toLowerCase();
+
 
 
 
@@ -142,9 +161,12 @@ card.innerHTML = `
 
 <div class="news-image">
 
-<img 
-src="${news.image}" 
+<img
+
+src="${news.image || 'assets/image/ai-news.jpg'}"
+
 alt="${news.title}"
+
 >
 
 </div>
@@ -154,9 +176,10 @@ alt="${news.title}"
 <div class="news-content">
 
 
-<div class="category ${news.category.toLowerCase()}">
 
-${news.tag}
+<div class="category ${card.dataset.category}">
+
+${news.tag || news.category}
 
 </div>
 
@@ -172,11 +195,13 @@ ${news.title}
 
 
 
+
 <p>
 
-${news.description}
+${news.summary_fa || news.description || ""}
 
 </p>
+
 
 
 
@@ -186,7 +211,7 @@ ${news.description}
 
 <span>
 
-${news.tag}
+${news.source || "Soravin Tech"}
 
 </span>
 
@@ -194,7 +219,7 @@ ${news.tag}
 
 <span>
 
-${news.date}
+${news.date || ""}
 
 </span>
 
@@ -205,9 +230,12 @@ ${news.date}
 
 
 
-<a 
-class="read-more" 
+<a
+
+class="read-more"
+
 href="news-detail.html?id=${news.id}"
+
 >
 
 مطالعه بیشتر
@@ -216,9 +244,7 @@ href="news-detail.html?id=${news.id}"
 
 
 
-
 </div>
-
 
 
 `;
@@ -229,73 +255,6 @@ return card;
 
 
 }
-
-
-
-
-
-
-
-// ===============================
-// AUTO NEWS CONNECTION
-// ===============================
-
-function loadAutoNews(){
-
-
-const latestGrid =
-document.getElementById("latestNewsGrid");
-
-
-if(!latestGrid) return;
-
-
-
-fetch("data/auto-news.json")
-
-.then(response => response.json())
-
-.then(data => {
-
-
-
-latestGrid.innerHTML = "";
-
-
-
-data.forEach(news => {
-
-
-
-const card =
-createCard(news);
-
-
-
-latestGrid.appendChild(card);
-
-
-
-});
-
-
-
-})
-
-.catch(error=>{
-
-
-console.log(
-"Auto news loading error:",
-error
-);
-
-
-});
-
-
-}
-
 
 
 
@@ -388,7 +347,6 @@ card.style.display = "none";
 
 
 });
-
 
 
 });

@@ -1,7 +1,7 @@
 // =====================================
 // SORAVIN AUTO NEWS UPDATER
-// SIMPLE RSS ENGINE VERSION 8.1
-// CLEAN SIMPLE NEWS VERSION
+// SIMPLE RSS ENGINE VERSION 8.2
+// HTML CLEAN JSON VERSION
 // =====================================
 
 
@@ -79,9 +79,7 @@ return new Promise((resolve,reject)=>{
 https.get(url,{
 
 headers:{
-
-"User-Agent":"Mozilla/5.0 Soravin News"
-
+"User-Agent":"Mozilla/5.0 Soravin Bot"
 }
 
 },response=>{
@@ -125,6 +123,7 @@ reject
 
 
 
+
 // =====================================
 // CLEAN HTML
 // =====================================
@@ -135,8 +134,24 @@ function cleanHTML(text=""){
 
 return text
 
-.replace(/<!\[CDATA\[/gi,"")
 
+// decode html entities
+
+.replace(/&amp;lt;/gi,"<")
+.replace(/&amp;gt;/gi,">")
+.replace(/&amp;quot;/gi,'"')
+.replace(/&amp;#39;/gi,"'")
+
+.replace(/&lt;/gi,"<")
+.replace(/&gt;/gi,">")
+.replace(/&quot;/gi,'"')
+.replace(/&#39;/gi,"'")
+.replace(/&amp;/gi,"&")
+
+
+// remove html
+
+.replace(/<!\[CDATA\[/gi,"")
 .replace(/\]\]>/gi,"")
 
 .replace(/<script[\s\S]*?<\/script>/gi,"")
@@ -157,13 +172,8 @@ return text
 
 .replace(/<[^>]+>/gi,"")
 
-.replace(/&nbsp;/gi," ")
 
-.replace(/&amp;/gi,"&")
-
-.replace(/&quot;/gi,'"')
-
-.replace(/&#39;/gi,"'")
+// cleanup
 
 .replace(/\s+/g," ")
 
@@ -171,6 +181,8 @@ return text
 
 
 }
+
+
 
 
 
@@ -188,9 +200,7 @@ function parseRSS(xml,source){
 let items =
 
 xml.match(
-
 /<item[\s\S]*?<\/item>/g
-
 );
 
 
@@ -198,6 +208,7 @@ xml.match(
 if(!items)
 
 return [];
+
 
 
 
@@ -211,9 +222,7 @@ items.forEach(item=>{
 let title =
 
 item.match(
-
 /<title[^>]*>([\s\S]*?)<\/title>/i
-
 );
 
 
@@ -221,9 +230,7 @@ item.match(
 let description =
 
 item.match(
-
 /<description[^>]*>([\s\S]*?)<\/description>/i
-
 );
 
 
@@ -231,9 +238,7 @@ item.match(
 let link =
 
 item.match(
-
-/<link>([\s\S]*?)<\/link>/i
-
+/<link[^>]*>([\s\S]*?)<\/link>/i
 );
 
 
@@ -245,36 +250,30 @@ let news={
 
 title:
 
-title ?
-
+title
+?
 cleanHTML(title[1])
-
 :
-
 "",
 
 
 
 description:
 
-description ?
-
+description
+?
 cleanHTML(description[1])
-
 :
-
 "",
 
 
 
 link:
 
-link ?
-
+link
+?
 cleanHTML(link[1])
-
 :
-
 "",
 
 
@@ -283,7 +282,6 @@ source:source.name
 
 
 };
-
 
 
 
@@ -309,11 +307,12 @@ result.push(news);
 
 
 
-
 return result;
 
 
 }
+
+
 
 
 
@@ -395,13 +394,13 @@ return "Technology";
 
 
 
+
 // =====================================
 // MAIN
 // =====================================
 
 
 async function updateNews(){
-
 
 
 let allNews=[];
@@ -415,11 +414,8 @@ try{
 
 
 console.log(
-
 "Reading:",
-
 source.name
-
 );
 
 
@@ -446,15 +442,11 @@ catch(error){
 
 
 console.log(
-
 "RSS ERROR:",
-
 source.name
-
 );
 
 
-
 }
 
 
@@ -466,9 +458,7 @@ source.name
 
 
 
-
-
-// REMOVE DUPLICATES
+// REMOVE DUPLICATE
 
 
 let unique=[];
@@ -506,8 +496,7 @@ unique.push(news);
 
 
 
-
-// CREATE 10 CARDS
+// FINAL 10 NEWS
 
 
 let finalNews =
@@ -539,13 +528,9 @@ description:news.description,
 category:
 
 detectCategory(
-
 news.title+
-
 " "+
-
 news.description
-
 ),
 
 
@@ -599,20 +584,14 @@ fs.mkdirSync("./data");
 
 
 
-
-
 fs.writeFileSync(
 
 outputFile,
 
 JSON.stringify(
-
 finalNews,
-
 null,
-
 2
-
 ),
 
 "utf8"
@@ -637,7 +616,6 @@ finalNews.length,
 
 
 }
-
 
 
 

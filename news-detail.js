@@ -1,7 +1,7 @@
 // =====================================
 // SORAVIN NEWS DETAIL SYSTEM
-// VERSION 3
-// CLEAN ARTICLE DISPLAY
+// VERSION 10 COMPATIBLE
+// FULL ARTICLE VIEW
 // =====================================
 
 
@@ -12,12 +12,7 @@ function(){
 
 
 const detailBox =
-
-document.getElementById(
-"newsDetail"
-);
-
-
+document.getElementById("newsDetail");
 
 
 
@@ -34,36 +29,35 @@ return;
 
 
 
+const params =
+new URLSearchParams(
+window.location.search
+);
 
 
-function cleanNewsText(text=""){
+
+const newsId =
+params.get("id");
+
+
+
+
+
+
+function cleanText(text=""){
 
 
 return text
-
-.replace(/<!\[CDATA\[/gi,"")
-
-.replace(/\]\]>/gi,"")
 
 .replace(/<script[\s\S]*?<\/script>/gi,"")
 
 .replace(/<style[\s\S]*?<\/style>/gi,"")
 
-.replace(/<img[^>]*>/gi,"")
+.replace(/<[^>]+>/g,"")
 
-.replace(/<a[^>]*>/gi,"")
+.replace(/&lt;/gi,"<")
 
-.replace(/<\/a>/gi,"")
-
-.replace(/<br\s*\/?>/gi," ")
-
-.replace(/<p[^>]*>/gi,"")
-
-.replace(/<\/p>/gi," ")
-
-.replace(/<[^>]+>/gi,"")
-
-.replace(/&nbsp;/gi," ")
+.replace(/&gt;/gi,">")
 
 .replace(/&amp;/gi,"&")
 
@@ -78,23 +72,6 @@ return text
 
 }
 
-
-
-
-
-
-
-const params =
-
-new URLSearchParams(
-window.location.search
-);
-
-
-
-const newsId =
-
-params.get("id");
 
 
 
@@ -148,20 +125,24 @@ if(!news){
 
 detailBox.innerHTML = `
 
+
 <div class="news-detail-card">
+
 
 <h2>
 خبر پیدا نشد
 </h2>
 
+
 <p>
 شناسه خبر: ${newsId}
 </p>
 
+
 </div>
 
-`;
 
+`;
 
 return;
 
@@ -173,9 +154,12 @@ return;
 
 
 
-let articleText =
+const fullArticle =
 
-cleanNewsText(
+
+cleanText(
+
+news.content_fa ||
 
 news.description ||
 
@@ -184,68 +168,6 @@ news.summary_fa ||
 "متن خبر موجود نیست"
 
 );
-
-
-
-
-
-
-if(!articleText){
-
-
-articleText =
-
-"متن خبر موجود نیست";
-
-
-}
-
-
-
-
-
-
-
-let sourceButton = "";
-
-
-
-
-if(
-
-news.link &&
-
-news.link.startsWith("http")
-
-){
-
-
-sourceButton = `
-
-
-<a
-
-class="source-link"
-
-href="${news.link}"
-
-target="_blank"
-
-rel="noopener noreferrer"
-
->
-
-مشاهده منبع اصلی خبر
-
-</a>
-
-
-`;
-
-
-
-}
-
 
 
 
@@ -297,7 +219,15 @@ alt="${news.title}"
 
 <div class="category">
 
-${news.tag || news.category || "Technology"}
+${
+
+news.tag ||
+
+news.category ||
+
+"Technology"
+
+}
 
 </div>
 
@@ -321,7 +251,15 @@ ${news.title}
 
 <div class="news-detail-meta">
 
-${news.source || "Soravin Tech"}
+
+${
+
+news.source ||
+
+"Soravin Tech"
+
+}
+
 
 |
 
@@ -341,7 +279,9 @@ new Date(news.date)
 
 }
 
+
 </div>
+
 
 
 
@@ -351,11 +291,24 @@ new Date(news.date)
 
 <div class="news-full-text">
 
-<p>
 
-${articleText}
+${
 
-</p>
+fullArticle
+
+.split("\n")
+
+.map(text=>`
+
+<p>${text}</p>
+
+`)
+
+.join("")
+
+}
+
+
 
 </div>
 
@@ -365,7 +318,23 @@ ${articleText}
 
 
 
-${sourceButton}
+<a
+
+class="source-link"
+
+href="${news.link}"
+
+target="_blank"
+
+rel="noopener noreferrer"
+
+>
+
+مشاهده منبع اصلی خبر
+
+</a>
+
+
 
 
 
@@ -388,18 +357,19 @@ ${sourceButton}
 
 
 
+
 })
+
+
 
 .catch(error=>{
 
 
 console.log(
-
 "News detail error:",
-
 error
-
 );
+
 
 
 
@@ -408,17 +378,14 @@ detailBox.innerHTML = `
 
 <div class="news-detail-card">
 
+
 <h2>
-
 خطا در بارگذاری خبر
-
 </h2>
 
 
 <p>
-
 ${error.message}
-
 </p>
 
 

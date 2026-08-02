@@ -1,6 +1,7 @@
 // =====================================
 // SORAVIN AUTO NEWS UPDATER
-// CLEAN RSS ENGINE VERSION 3
+// CLEAN RSS ENGINE VERSION 4
+// 9 NEWS CARDS VERSION
 // =====================================
 
 
@@ -15,7 +16,6 @@ const outputFile = "./data/auto-news.json";
 // =====================================
 // RSS SOURCES
 // =====================================
-// TechCrunch Feedburner حذف شد چون HTML خراب تولید می‌کرد
 
 
 const RSS_SOURCES = [
@@ -25,8 +25,6 @@ const RSS_SOURCES = [
     "https://blogs.nvidia.com/feed/",
 
     "https://blogs.microsoft.com/ai/feed/",
-
-    "https://openai.com/news/rss.xml",
 
     "https://www.technologyreview.com/feed/",
 
@@ -40,11 +38,7 @@ const RSS_SOURCES = [
 
     "https://arstechnica.com/feed/"
 
-
 ];
-
-
-
 
 
 
@@ -56,54 +50,44 @@ const RSS_SOURCES = [
 
 function fetchRSS(url){
 
-
-return new Promise((resolve,reject)=>{
-
-
-https.get(url,{
-
-headers:{
-"User-Agent":"Mozilla/5.0"
-}
-
-},response=>{
+    return new Promise((resolve,reject)=>{
 
 
-let data="";
+        https.get(url,{
+
+            headers:{
+                "User-Agent":"Mozilla/5.0"
+            }
+
+        },response=>{
 
 
-response.on(
-"data",
-chunk=>{
-data += chunk;
-}
-);
+            let data="";
+
+
+            response.on("data",chunk=>{
+
+                data += chunk;
+
+            });
 
 
 
-response.on(
-"end",
-()=>{
-resolve(data);
-}
-);
+            response.on("end",()=>{
+
+                resolve(data);
+
+            });
 
 
 
-}).on(
-"error",
-reject
-);
+        }).on("error",reject);
 
 
-
-});
+    });
 
 
 }
-
-
-
 
 
 
@@ -138,12 +122,6 @@ return text
 
 .replace(/<img[^>]*>/gi,"")
 
-.replace(/<div[^>]*>/gi,"")
-
-.replace(/<\/div>/gi,"")
-
-.replace(/<br\s*\/?>/gi," ")
-
 .replace(/<[^>]+>/gi,"")
 
 .replace(/https?:\/\/\S+/gi,"")
@@ -158,16 +136,12 @@ return text
 
 
 
-
-
-
 // =====================================
 // QUALITY FILTER
 // =====================================
 
 
 function validNews(news){
-
 
 
 let text =
@@ -182,9 +156,7 @@ news.description
 
 
 
-
-
-const bad = [
+const badWords=[
 
 "advertisement",
 
@@ -194,28 +166,18 @@ const bad = [
 
 "cookie",
 
-"sign up",
-
 "privacy policy"
 
 ];
 
 
 
+for(const word of badWords){
 
-
-for(const word of bad){
-
-
-if(text.includes(word))
-
-return false;
-
+    if(text.includes(word))
+        return false;
 
 }
-
-
-
 
 
 
@@ -231,28 +193,10 @@ return false;
 
 
 
-if(
-
-text.includes("separator") ||
-
-text.includes("border") ||
-
-text.includes("style=")
-
-)
-
-return false;
-
-
-
 return true;
 
 
 }
-
-
-
-
 
 
 
@@ -265,58 +209,50 @@ return true;
 function parseRSS(xml,source){
 
 
+let items =
 
-let items=[];
-
-
-
-const entries =
-
-xml.match(
-/<item[\s\S]*?<\/item>/g
-);
+xml.match(/<item[\s\S]*?<\/item>/g)
+||
+xml.match(/<entry[\s\S]*?<\/entry>/g);
 
 
 
-if(!entries)
+if(!items)
 
 return [];
 
 
 
+let result=[];
 
 
-entries.forEach(item=>{
+
+items.forEach(item=>{
 
 
 let title =
 
-item.match(
-/<title>([\s\S]*?)<\/title>/
-);
-
-
-
-let link =
-
-item.match(
-/<link>([\s\S]*?)<\/link>/
-);
+item.match(/<title[^>]*>([\s\S]*?)<\/title>/i);
 
 
 
 let description =
 
-item.match(
-/<description>([\s\S]*?)<\/description>/
-);
+item.match(/<description[^>]*>([\s\S]*?)<\/description>/i)
+||
+item.match(/<summary[^>]*>([\s\S]*?)<\/summary>/i);
 
 
+
+let link =
+
+item.match(/<link[^>]*>([\s\S]*?)<\/link>/i)
+||
+item.match(/href="([^"]+)"/i);
 
 
 
 let news={
-
 
 
 title:
@@ -328,8 +264,6 @@ cleanHTML(title[1])
 :
 
 "",
-
-
 
 
 
@@ -345,8 +279,6 @@ cleanHTML(link[1])
 
 
 
-
-
 description:
 
 description ?
@@ -359,22 +291,17 @@ cleanHTML(description[1])
 
 
 
-
-
 source
 
+
 };
-
-
-
-
 
 
 
 if(validNews(news)){
 
 
-items.push(news);
+result.push(news);
 
 
 }
@@ -385,16 +312,10 @@ items.push(news);
 
 
 
-
-
-return items;
-
+return result;
 
 
 }
-
-
-
 
 
 
@@ -408,9 +329,7 @@ return items;
 function detectCategory(text){
 
 
-
 text=text.toLowerCase();
-
 
 
 
@@ -431,7 +350,6 @@ return "AI";
 
 
 
-
 if(
 
 text.includes("gpu") ||
@@ -443,7 +361,6 @@ text.includes("processor")
 )
 
 return "PC";
-
 
 
 
@@ -461,15 +378,10 @@ return "Mobile";
 
 
 
-
 return "Technology";
 
 
 }
-
-
-
-
 
 
 
@@ -483,55 +395,42 @@ return "Technology";
 function createSummary(text){
 
 
-let clean =
-cleanHTML(text);
-
+let clean = cleanHTML(text);
 
 
 
 let sentences =
 
 clean
+
 .split(".")
-.filter(
-x=>x.trim().length>25
-);
 
-
+.filter(x=>x.trim().length>25);
 
 
 
 let result =
 
 sentences
+
 .slice(0,3)
+
 .join(". ");
-
-
 
 
 
 if(result.length < 60){
 
-
-result =
-clean.substring(0,250);
-
+result = clean.substring(0,250);
 
 }
-
-
 
 
 
 return result.substring(0,300);
 
 
-
 }
-
-
-
 
 
 
@@ -545,49 +444,33 @@ return result.substring(0,300);
 async function updateNews(){
 
 
-
 let allNews=[];
-
 
 
 
 for(const rss of RSS_SOURCES){
 
 
-
 try{
 
 
-
-console.log(
-"Reading:",
-rss
-);
+console.log("Reading:",rss);
 
 
 
-
-let xml =
-await fetchRSS(rss);
+let xml = await fetchRSS(rss);
 
 
 
-
-
-let news =
-parseRSS(
-xml,
-rss
-);
+console.log("SIZE:",xml.length);
 
 
 
+let news = parseRSS(xml,rss);
 
 
-allNews.push(
-...news
-);
 
+allNews.push(...news);
 
 
 
@@ -602,14 +485,12 @@ rss
 );
 
 
-}
-
-
 
 }
 
 
 
+}
 
 
 
@@ -624,13 +505,11 @@ let seen=new Set();
 
 
 
-
 allNews.forEach(news=>{
 
 
 let key =
 news.title.toLowerCase();
-
 
 
 
@@ -653,100 +532,73 @@ unique.push(news);
 
 
 
-
-// FINAL 50 NEWS
+// =====================================
+// FINAL 9 NEWS CARDS
+// =====================================
 
 
 let finalNews =
 
 unique
-.slice(0,10)
-.map((news,index)=>{
 
+.slice(0,9)
+
+.map((news,index)=>{
 
 
 return {
 
 
-
 id:index+1,
 
 
-
-title:
-news.title,
+title:news.title,
 
 
-
-summary_fa:
-createSummary(news.description),
+summary_fa:createSummary(news.description),
 
 
-
-summary_en:
-"",
+summary_en:"",
 
 
-
-description:
-createSummary(news.description),
-
+description:createSummary(news.description),
 
 
 category:
-detectCategory(
-news.title+
-" "+
-news.description
-),
 
+detectCategory(
+news.title+" "+news.description
+),
 
 
 tag:
-detectCategory(
-news.title
-),
+
+detectCategory(news.title),
 
 
-
-source:
-news.source,
+source:news.source,
 
 
-
-image:
-"assets/image/ai-news.jpg",
+image:"assets/image/ai-news.jpg",
 
 
-
-date:
-new Date()
-.toISOString(),
+date:new Date().toISOString(),
 
 
-
-link:
-news.link,
+link:news.link,
 
 
-
-featured:
-index===0,
+featured:index===0,
 
 
-
-status:
-"published"
+status:"published"
 
 
 
 };
 
 
-
 });
-
-
 
 
 
@@ -760,9 +612,6 @@ fs.mkdirSync("./data");
 
 
 }
-
-
-
 
 
 
@@ -783,10 +632,6 @@ null,
 
 
 
-
-
-
-
 console.log(
 
 "DONE:",
@@ -800,8 +645,6 @@ finalNews.length,
 
 
 }
-
-
 
 
 

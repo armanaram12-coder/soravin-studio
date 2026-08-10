@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>ورود | استودیو سوراوین</title>
+
+<meta name="description" content="ورود به حساب کاربری در استودیو سوراوین">
+
+<link rel="stylesheet" href="css/auth.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+</head>
+
+
+<body>
+
+
+<header class="auth-header">
+
+<a href="index.html" class="logo">
+
+SORAVIN
+
+<span>
+STUDIO
+</span>
+
+</a>
+
+
+<nav>
+
+<a href="register.html">
+ثبت‌نام
+</a>
+
+</nav>
+
+
+</header>
+
+
+
+
+<main class="auth-container">
+
+
+<div class="auth-box">
+
+
+<h1>
+ورود
+</h1>
+
+
+<p class="subtitle">
+برای ورود، ایمیل و رمز عبور خود را وارد کنید
+</p>
+
+
+<div id="message" class="message"></div>
+
+
+<form id="loginForm">
+
+
+<div class="form-group">
+
+<label for="email">ایمیل</label>
+
+<input 
+    type="email" 
+    id="email" 
+    name="email" 
+    placeholder="example@email.com"
+    required
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label for="password">رمز عبور</label>
+
+<input 
+    type="password" 
+    id="password" 
+    name="password" 
+    placeholder="رمز عبور خود را وارد کنید"
+    required
+>
+
+</div>
+
+
+<button type="submit" class="btn-submit" id="submitBtn">
+ورود
+</button>
+
+
+</form>
+
+
+<div class="auth-links">
+
+حساب کاربری ندارید؟ 
+<a href="register.html">ثبت‌نام کنید</a>
+
+</div>
+
+
+</div>
+
+
+</main>
+
+
+
+
+<script type="module">
+
+import { supabase } from './js/supabase.js';
+
+const loginForm = document.getElementById('loginForm');
+const messageEl = document.getElementById('message');
+const submitBtn = document.getElementById('submitBtn');
+
+function showMessage(text, type) {
+    messageEl.textContent = text;
+    messageEl.className = `message ${type}`;
+}
+
+loginForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const email = document.getElementById('email').value.trim().toLowerCase();
+    const password = document.getElementById('password').value;
+    
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'در حال ورود...';
+    showMessage('', '');
+    
+    try {
+        const { data, error } = await supabase.auth.signInWithPassword({
+            email: email,
+            password: password
+        });
+        
+        if (error) throw error;
+        
+        showMessage(
+            'ورود با موفقیت انجام شد. در حال انتقال...',
+            'success'
+        );
+        
+        setTimeout(() => {
+            window.location.href = 'dashboard.html';
+        }, 1500);
+        
+    } catch (err) {
+        let errorMsg = 'خطا در ورود. لطفاً اطلاعات را بررسی کنید.';
+        
+        if (err.message.includes('Invalid login credentials')) {
+            errorMsg = 'ایمیل یا رمز عبور اشتباه است.';
+        } else if (err.message.includes('Email not confirmed')) {
+            errorMsg = 'ایمیل شما هنوز تأیید نشده است. لطفاً ایمیل خود را بررسی کنید.';
+        }
+        
+        showMessage(errorMsg, 'error');
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'ورود';
+    }
+});
+
+</script>
+
+
+</body>
+
+</html>

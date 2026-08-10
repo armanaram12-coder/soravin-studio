@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>ثبت‌نام | استودیو سوراوین</title>
+
+<meta name="description" content="ثبت‌نام در استودیو سوراوین - دسترسی به پنل کاربری و خدمات">
+
+<link rel="stylesheet" href="css/auth.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+</head>
+
+
+<body>
+
+
+<header class="auth-header">
+
+<a href="index.html" class="logo">
+
+SORAVIN
+
+<span>
+STUDIO
+</span>
+
+</a>
+
+
+<nav>
+
+<a href="login.html">
+ورود
+</a>
+
+</nav>
+
+
+</header>
+
+
+
+
+<main class="auth-container">
+
+
+<div class="auth-box">
+
+
+<h1>
+ثبت‌نام
+</h1>
+
+
+<p class="subtitle">
+برای ساخت حساب کاربری، اطلاعات زیر را وارد کنید
+</p>
+
+
+<div id="message" class="message"></div>
+
+
+<form id="registerForm">
+
+
+<div class="form-group">
+
+<label for="fullName">نام کامل</label>
+
+<input 
+    type="text" 
+    id="fullName" 
+    name="fullName" 
+    placeholder="مثال: علی محمدی"
+    required
+    minlength="2"
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label for="email">ایمیل</label>
+
+<input 
+    type="email" 
+    id="email" 
+    name="email" 
+    placeholder="example@email.com"
+    required
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label for="password">رمز عبور</label>
+
+<input 
+    type="password" 
+    id="password" 
+    name="password" 
+    placeholder="حداقل ۶ کاراکتر"
+    required
+    minlength="6"
+>
+
+</div>
+
+
+<button type="submit" class="btn-submit" id="submitBtn">
+ثبت‌نام
+</button>
+
+
+</form>
+
+
+<div class="auth-links">
+
+قبلاً ثبت‌نام کرده‌اید؟ 
+<a href="login.html">وارد شوید</a>
+
+</div>
+
+
+</div>
+
+
+</main>
+
+
+
+
+<script type="module">
+
+import { supabase } from './js/supabase.js';
+
+const registerForm = document.getElementById('registerForm');
+const messageEl = document.getElementById('message');
+const submitBtn = document.getElementById('submitBtn');
+
+function showMessage(text, type) {
+    messageEl.textContent = text;
+    messageEl.className = `message ${type}`;
+}
+
+registerForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const fullName = document.getElementById('fullName').value.trim();
+    const email = document.getElementById('email').value.trim().toLowerCase();
+    const password = document.getElementById('password').value;
+    
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'در حال ثبت‌نام...';
+    showMessage('', '');
+    
+    try {
+        const { data, error } = await supabase.auth.signUp({
+            email: email,
+            password: password,
+            options: {
+                data: {
+                    full_name: fullName
+                }
+            }
+        });
+        
+        if (error) throw error;
+        
+        showMessage(
+            'ثبت‌نام با موفقیت انجام شد! لطفاً ایمیل خود را بررسی کنید.',
+            'success'
+        );
+        
+        registerForm.reset();
+        
+        setTimeout(() => {
+            window.location.href = 'login.html';
+        }, 3000);
+        
+    } catch (err) {
+        let errorMsg = 'خطا در ثبت‌نام. لطفاً دوباره تلاش کنید.';
+        
+        if (err.message.includes('Weak password')) {
+            errorMsg = 'رمز عبور باید حداقل ۶ کاراکتر باشد.';
+        } else if (err.message.includes('User already registered')) {
+            errorMsg = 'این ایمیل قبلاً ثبت شده است.';
+        } else if (err.message.includes('Invalid email')) {
+            errorMsg = 'ایمیل وارد شده معتبر نیست.';
+        }
+        
+        showMessage(errorMsg, 'error');
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'ثبت‌نام';
+    }
+});
+
+</script>
+
+
+</body>
+
+</html>

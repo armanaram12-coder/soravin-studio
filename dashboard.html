@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>پنل کاربری | استودیو سوراوین</title>
+
+<meta name="description" content="پنل کاربری استودیو سوراوین - مدیریت پروژه‌ها و خدمات">
+
+<link rel="stylesheet" href="css/auth.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+</head>
+
+
+<body>
+
+
+<header class="auth-header">
+
+<a href="index.html" class="logo">
+
+SORAVIN
+
+<span>
+STUDIO
+</span>
+
+</a>
+
+
+<nav>
+
+<a href="index.html">
+خانه
+</a>
+
+</nav>
+
+
+</header>
+
+
+
+
+<main class="dashboard-container">
+
+
+<div id="loading" class="loading">
+در حال بارگذاری...
+</div>
+
+
+<div id="dashboardContent" style="display: none;">
+
+
+<div class="dashboard-header">
+
+
+<div class="user-info">
+
+<div class="user-avatar" id="userAvatar">
+</div>
+
+<div class="user-details">
+<h2 id="userName"></h2>
+<p id="userEmail"></p>
+</div>
+
+</div>
+
+
+<button class="btn-logout" id="logoutBtn">
+خروج
+</button>
+
+
+</div>
+
+
+<div class="dashboard-grid">
+
+
+<div class="dashboard-card">
+
+<div class="card-icon">📁</div>
+
+<h3>پروژه‌های من</h3>
+
+<p>مدیریت و پیگیری پروژه‌های فعال شما</p>
+
+<span class="coming-soon-badge">به‌زودی</span>
+
+</div>
+
+
+<div class="dashboard-card">
+
+<div class="card-icon">✨</div>
+
+<h3>درخواست پروژه</h3>
+
+<p>ثبت درخواست جدید برای طراحی و تولید</p>
+
+<span class="coming-soon-badge">به‌زودی</span>
+
+</div>
+
+
+<div class="dashboard-card">
+
+<div class="card-icon">📥</div>
+
+<h3>فایل‌های تحویل</h3>
+
+<p>دانلود فایل‌های نهایی پروژه‌های تکمیل شده</p>
+
+<span class="coming-soon-badge">به‌زودی</span>
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+</main>
+
+
+
+
+<script type="module">
+
+import { supabase, checkAuth, logout } from './js/supabase.js';
+
+const loadingEl = document.getElementById('loading');
+const dashboardContent = document.getElementById('dashboardContent');
+const userAvatar = document.getElementById('userAvatar');
+const userName = document.getElementById('userName');
+const userEmail = document.getElementById('userEmail');
+const logoutBtn = document.getElementById('logoutBtn');
+
+async function loadDashboard() {
+    try {
+        const user = await checkAuth();
+        
+        if (!user) {
+            return;
+        }
+        
+        const fullName = user.user_metadata?.full_name || 'کاربر گرامی';
+        const email = user.email;
+        const firstLetter = fullName.charAt(0).toUpperCase();
+        
+        userAvatar.textContent = firstLetter;
+        userName.textContent = fullName;
+        userEmail.textContent = email;
+        
+        loadingEl.style.display = 'none';
+        dashboardContent.style.display = 'block';
+        
+    } catch (err) {
+        console.error('Error loading dashboard:', err);
+        loadingEl.textContent = 'خطا در بارگذاری اطلاعات';
+    }
+}
+
+logoutBtn.addEventListener('click', async () => {
+    await logout();
+});
+
+loadDashboard();
+
+</script>
+
+
+</body>
+
+</html>

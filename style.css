@@ -3327,22 +3327,23 @@ TRUST BAR
 DROPDOWN NAVIGATION
 ========================= */
 .dropdown{position:relative;display:inline-block}
-.dropbtn{display:flex;align-items:center;gap:6px;cursor:pointer;background:none;border:none;color:inherit;font-family:inherit;font-size:inherit;padding:8px 0}
+.dropbtn{display:flex;align-items:center;gap:6px;cursor:pointer;background:none;border:none;color:#e8e6e3;font-family:inherit;font-size:inherit;padding:8px 0}
+.dropbtn:hover{color:#d4af37}
 .dropbtn svg{transition:transform .3s ease}
 .dropdown:hover .dropbtn svg{transform:rotate(180deg)}
-.dropdown-content{display:none;position:absolute;top:100%;right:0;background:#0a0a0a;border:1px solid rgba(212,175,55,.3);border-radius:8px;min-width:200px;z-index:1000;box-shadow:0 8px 24px rgba(0,0,0,.4);opacity:0;transform:translateY(-10px);transition:opacity .3s ease,transform .3s ease}
-.dropdown-content a{display:block;padding:12px 16px;color:#b8b8b8;text-decoration:none;border-bottom:1px solid rgba(255,255,255,.05)}
+.dropdown-content{display:none;position:absolute;top:100%;right:0;background:#0a0a0a;border:1px solid rgba(212,175,55,.3);border-radius:12px;min-width:190px;z-index:1000;box-shadow:0 8px 24px rgba(0,0,0,.4);opacity:0;transform:translateY(-10px);transition:opacity .3s ease,transform .3s ease;padding:6px}
+.dropdown-content a{display:block;padding:8px 12px;color:#e8e6e3;text-decoration:none;font-size:13px;border-bottom:none}
 .dropdown-content a:last-child{border-bottom:none}
 .dropdown-content a:hover{background:rgba(212,175,55,.1);color:#d4af37}
 .dropdown:hover .dropdown-content{display:block;opacity:1;transform:translateY(0)}
 
 /* Mobile Accordion */
 .accordion-item{border-bottom:1px solid rgba(255,255,255,.1)}
-.accordion-btn{width:100%;text-align:right;background:none;border:none;color:#b8b8b8;padding:14px 0;font-size:15px;cursor:pointer;display:flex;justify-content:space-between;align-items:center}
+.accordion-btn{width:100%;text-align:right;background:none;border:none;color:#e8e6e3;padding:14px 0;font-size:15px;cursor:pointer;display:flex;justify-content:space-between;align-items:center}
 .accordion-btn::after{content:'+';font-size:18px;color:#d4af37}
 .accordion-btn.active::after{content:'-'}
 .accordion-content{display:none;padding-right:16px}
-.accordion-content a{display:block;padding:10px 0;color:#888;text-decoration:none;font-size:14px}
+.accordion-content a{display:block;padding:10px 0;color:#e8e6e3;text-decoration:none;font-size:14px}
 .accordion-content a:hover{color:#d4af37}
 @media (max-width:768px){
 .dropdown{display:block;width:100%}

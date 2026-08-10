@@ -28,7 +28,7 @@
 SORAVIN
 
 <span>
-STUDIO
+AI
 </span>
 
 </a>
@@ -70,6 +70,7 @@ STUDIO
 <div class="user-details">
 <h2 id="userName"></h2>
 <p id="userEmail"></p>
+<p id="userPhone" style="color: #888; font-size: 14px;"></p>
 </div>
 
 </div>
@@ -145,6 +146,7 @@ const dashboardContent = document.getElementById('dashboardContent');
 const userAvatar = document.getElementById('userAvatar');
 const userName = document.getElementById('userName');
 const userEmail = document.getElementById('userEmail');
+const userPhone = document.getElementById('userPhone');
 const logoutBtn = document.getElementById('logoutBtn');
 
 async function loadDashboard() {
@@ -157,11 +159,13 @@ async function loadDashboard() {
         
         const fullName = user.user_metadata?.full_name || 'کاربر گرامی';
         const email = user.email;
+        const phone = user.user_metadata?.phone || '—';
         const firstLetter = fullName.charAt(0).toUpperCase();
         
         userAvatar.textContent = firstLetter;
         userName.textContent = fullName;
         userEmail.textContent = email;
+        userPhone.textContent = phone;
         
         loadingEl.style.display = 'none';
         dashboardContent.style.display = 'block';

@@ -28,7 +28,7 @@
 SORAVIN
 
 <span>
-STUDIO
+AI
 </span>
 
 </a>
@@ -82,6 +82,23 @@ STUDIO
     required
     minlength="2"
 >
+
+</div>
+
+
+<div class="form-group">
+
+<label for="phone">شماره موبایل <span style="color: red;">*</span></label>
+
+<input 
+    type="tel" 
+    id="phone" 
+    name="phone" 
+    placeholder="09123456789"
+    pattern="^09\d{9}$"
+    required
+>
+<span id="phoneError" style="color: red; font-size: 12px; display: none;">شماره موبایل معتبر نیست (مثال: 09123456789)</span>
 
 </div>
 
@@ -148,18 +165,40 @@ import { supabase } from './js/supabase.js';
 const registerForm = document.getElementById('registerForm');
 const messageEl = document.getElementById('message');
 const submitBtn = document.getElementById('submitBtn');
+const phoneInput = document.getElementById('phone');
+const phoneError = document.getElementById('phoneError');
 
 function showMessage(text, type) {
     messageEl.textContent = text;
     messageEl.className = `message ${type}`;
 }
 
+function validatePhone(phone) {
+    const pattern = /^09\d{9}$/;
+    return pattern.test(phone);
+}
+
+phoneInput.addEventListener('blur', () => {
+    if (phoneInput.value && !validatePhone(phoneInput.value)) {
+        phoneError.style.display = 'block';
+    } else {
+        phoneError.style.display = 'none';
+    }
+});
+
 registerForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     
     const fullName = document.getElementById('fullName').value.trim();
+    const phone = document.getElementById('phone').value.trim();
     const email = document.getElementById('email').value.trim().toLowerCase();
     const password = document.getElementById('password').value;
+    
+    if (!validatePhone(phone)) {
+        phoneError.style.display = 'block';
+        phoneInput.focus();
+        return;
+    }
     
     submitBtn.disabled = true;
     submitBtn.textContent = 'در حال ثبت‌نام...';
@@ -171,7 +210,8 @@ registerForm.addEventListener('submit', async (e) => {
             password: password,
             options: {
                 data: {
-                    full_name: fullName
+                    full_name: fullName,
+                    phone: phone
                 }
             }
         });

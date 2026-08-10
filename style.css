@@ -69,10 +69,10 @@ header{
 
 .logo span {
     display: block;
-    font-size: 10px;
-    color: white;
+    font-size: 11px;
+    color: var(--gold-light);
     text-align: center;
-    letter-spacing: 8px;
+    letter-spacing: 7px;
     margin-top: 2px;
 }
 
@@ -3312,12 +3312,13 @@ TRUST BAR
   border-top: 1px solid rgba(201, 164, 75, 0.3);
   border-bottom: 1px solid rgba(201, 164, 75, 0.3);
   padding: 24px 0;
+  width: 100%;
+  max-width: 1200px;
+  margin-inline: auto;
+  margin-top: 28px;
 }
 
 .trust-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 24px;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 24px;

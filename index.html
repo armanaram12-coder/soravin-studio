@@ -133,7 +133,7 @@ AI • 3D • Motion • Branding
 <div class="hero-buttons">
 
 
-<a href="#" class="btn gold">
+<a href="register.html" id="smart-cta-btn" class="btn gold">
 
 شروع پروژه
 
@@ -155,6 +155,28 @@ AI • 3D • Motion • Branding
 </div>
 
 
+
+<!-- نوار اعتماد (Trust Bar) -->
+<section class="trust-bar">
+  <div class="trust-container">
+    <div class="trust-item">
+      <span class="trust-number" data-value="120">+۱۲۰</span>
+      <span class="trust-label">پروژه تکمیل‌شده</span>
+    </div>
+    <div class="trust-item">
+      <span class="trust-number" data-value="80">+۸۰</span>
+      <span class="trust-label">مشتری راضی</span>
+    </div>
+    <div class="trust-item">
+      <span class="trust-number" data-value="5">۵</span>
+      <span class="trust-label">سال تجربه</span>
+    </div>
+    <div class="trust-item">
+      <span class="trust-number" data-value="4">۴</span>
+      <span class="trust-label">حوزه تخصص</span>
+    </div>
+  </div>
+</section>
 
 </section>
 
@@ -622,6 +644,15 @@ if(mobileToggle && mobileMenu) {
 
 
 
+
+
+
+<script type="module">
+import { initSmartCTA } from './js/supabase.js';
+
+// Initialize smart CTA button
+initSmartCTA();
+</script>
 
 <script>
 // Footer dynamic year

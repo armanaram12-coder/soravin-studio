@@ -3303,3 +3303,69 @@ background:#C9A44B;
 color:#000;
 
 }
+
+/* =========================
+TRUST BAR
+========================= */
+.trust-bar {
+  background: #0a0a0a;
+  border-top: 1px solid rgba(201, 164, 75, 0.3);
+  border-bottom: 1px solid rgba(201, 164, 75, 0.3);
+  padding: 24px 0;
+}
+
+.trust-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  text-align: center;
+}
+
+.trust-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.trust-number {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #C9A44B;
+  line-height: 1.2;
+}
+
+.trust-label {
+  font-size: 0.9rem;
+  color: #888;
+  font-weight: 400;
+}
+
+@media (max-width: 768px) {
+  .trust-container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    padding: 0 16px;
+  }
+  
+  .trust-number {
+    font-size: 2rem;
+  }
+  
+  .trust-label {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .trust-bar {
+    padding: 16px 0;
+  }
+  
+  .trust-number {
+    font-size: 1.5rem;
+  }
+}

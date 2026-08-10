@@ -39,14 +39,41 @@ Ai
 </a>
 
 
-<a href="#services">
+<div class="dropdown">
+<a href="#services" class="dropbtn">
 خدمات
+<svg class="arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <polyline points="6 9 12 15 18 9"></polyline>
+</svg>
 </a>
+<div class="dropdown-content">
+<a href="#logo-design">پکیج طراحی لوگو</a>
+<a href="#teaser">تیزر تبلیغاتی</a>
+<a href="#brand-book">بوک برند</a>
+<a href="#3d-design">طراحی سه‌بعدی</a>
+</div>
+</div>
 
 
 <a href="#portfolio">
 نمونه کارها
 </a>
+
+
+<div class="dropdown">
+<a href="#" class="dropbtn">
+ابزار هوش مصنوعی
+<svg class="arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <polyline points="6 9 12 15 18 9"></polyline>
+</svg>
+</a>
+<div class="dropdown-content">
+<a href="ai-tools.html#name-gen">ایده‌ساز نام برند</a>
+<a href="ai-tools.html#slogan-gen">شعارساز</a>
+<a href="ai-tools.html#palette-gen">پالت رنگ برند</a>
+<a href="ai-tools.html#hashtag-gen">هشتگ‌ساز</a>
+</div>
+</div>
 
 
 <a href="ai-learning.html">
@@ -82,8 +109,29 @@ Ai
 <div class="mobile-menu" id="mobileMenu">
 <nav>
 <a href="#home">خانه</a>
-<a href="#services">خدمات</a>
+
+<div class="accordion-item">
+<button class="accordion-btn">خدمات</button>
+<div class="accordion-content">
+<a href="#logo-design">پکیج طراحی لوگو</a>
+<a href="#teaser">تیزر تبلیغاتی</a>
+<a href="#brand-book">بوک برند</a>
+<a href="#3d-design">طراحی سه‌بعدی</a>
+</div>
+</div>
+
 <a href="#portfolio">نمونه کارها</a>
+
+<div class="accordion-item">
+<button class="accordion-btn">ابزار هوش مصنوعی</button>
+<div class="accordion-content">
+<a href="ai-tools.html#name-gen">ایده‌ساز نام برند</a>
+<a href="ai-tools.html#slogan-gen">شعارساز</a>
+<a href="ai-tools.html#palette-gen">پالت رنگ برند</a>
+<a href="ai-tools.html#hashtag-gen">هشتگ‌ساز</a>
+</div>
+</div>
+
 <a href="ai-learning.html">دانشنامه AI</a>
 <a href="tech-news.html">اخبار</a>
 <a href="login.html" id="mobileAuthLink">ورود / ثبت‌نام</a>
@@ -201,7 +249,7 @@ AI • 3D • Motion • Branding
 
 
 
-<div class="service-card">
+<div class="service-card" id="logo-design">
 
 
 <span>
@@ -231,7 +279,7 @@ AI
 
 
 
-<div class="service-card">
+<div class="service-card" id="teaser">
 
 
 <span>
@@ -261,7 +309,7 @@ M
 
 
 
-<div class="service-card">
+<div class="service-card" id="brand-book">
 
 
 <span>
@@ -291,7 +339,7 @@ B
 
 
 
-<div class="service-card">
+<div class="service-card" id="3d-design">
 
 
 <span>
@@ -605,6 +653,17 @@ if(mobileToggle && mobileMenu) {
     mobileLinks.forEach(link => {
         link.addEventListener('click', () => {
             mobileMenu.classList.remove('active');
+        });
+    });
+    
+    // Accordion functionality for mobile submenus
+    const accordionBtns = mobileMenu.querySelectorAll('.accordion-btn');
+    accordionBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            btn.classList.toggle('active');
+            const content = btn.nextElementSibling;
+            content.classList.toggle('show');
         });
     });
 }

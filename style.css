@@ -566,6 +566,46 @@ header{
 
 }
 
+/* ---------- Nav Auth Link ---------- */
+
+.btn-outline-small{
+    
+    display:inline-flex;
+    
+    align-items:center;
+    
+    justify-content:center;
+    
+    height:42px;
+    
+    padding:0 22px;
+    
+    border-radius:60px;
+    
+    text-decoration:none;
+    
+    font-size:13px;
+    
+    font-weight:600;
+    
+    transition:.35s;
+    
+    border:1px solid rgba(201,164,75,.55);
+    
+    color:#fff;
+    
+    background:rgba(255,255,255,.02);
+    
+}
+
+.btn-outline-small:hover{
+    
+    background:rgba(201,164,75,.08);
+    
+    transform:translateY(-3px);
+    
+}
+
 /* ---------- Scroll Down ---------- */
 
 .scroll-down{

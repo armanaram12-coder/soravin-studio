@@ -59,8 +59,8 @@ STUDIO
 </a>
 
 
-<a href="#">
-English
+<a href="#" id="authLink" class="btn-outline-small">
+ورود / ثبت‌نام
 </a>
 
 
@@ -886,3 +886,32 @@ video.currentTime = video.duration;
 </body>
 
 </html>
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+const supabaseUrl = 'https://foukuigwrnezzcygtwcu.supabase.co';
+const supabaseKey = 'sb_publishable_jCYsfZd2kNfEBJcsMOTjuA_sgMcXwEr';
+const supabase = createClient(supabaseUrl, supabaseKey);
+
+const authLink = document.getElementById('authLink');
+
+async function updateAuthLink() {
+  const { data: { session } } = await supabase.auth.getSession();
+  
+  if (session) {
+    const user = session.user;
+    const userName = user.user_metadata?.full_name || user.email.split('@')[0];
+    authLink.textContent = `سلام، ${userName}`;
+    authLink.href = 'dashboard.html';
+  } else {
+    authLink.textContent = 'ورود / ثبت‌نام';
+    authLink.href = '#';
+    authLink.onclick = (e) => {
+      e.preventDefault();
+      window.location.href = 'login.html';
+    };
+  }
+}
+
+updateAuthLink();
+</script>

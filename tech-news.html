@@ -24,33 +24,66 @@
 
 <body>
 
+<header>
 
-
-<header class="tech-header">
-
+<div class="header-inner">
 
 <div class="logo">
 
 SORAVIN
 
 <span>
-TECH
+Ai
 </span>
 
 </div>
 
-
-
-<nav>
-
+<nav id="mainNav" class="main-nav">
 
 <a href="index.html">
 خانه
 </a>
 
 
+<div class="dropdown">
+<a href="#services" class="dropbtn">
+خدمات
+<svg class="arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <polyline points="6 9 12 15 18 9"></polyline>
+</svg>
+</a>
+<div class="dropdown-content">
+<a href="index.html#logo-design">پکیج طراحی لوگو</a>
+<a href="index.html#teaser">تیزر تبلیغاتی</a>
+<a href="index.html#brand-book">بوک برند</a>
+<a href="index.html#3d-design">طراحی سه‌بعدی</a>
+</div>
+</div>
+
+
+<a href="#portfolio">
+نمونه کارها
+</a>
+
+
+<div class="dropdown">
+<a href="#" class="dropbtn">
+ابزار هوش مصنوعی
+<svg class="arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <polyline points="6 9 12 15 18 9"></polyline>
+</svg>
+</a>
+<div class="dropdown-content">
+<a href="ai-tools.html#name-gen">ایده‌ساز نام برند</a>
+<a href="ai-tools.html#slogan-gen">شعارساز</a>
+<a href="ai-tools.html#palette-gen">پالت رنگ برند</a>
+<a href="ai-tools.html#hashtag-gen">هشتگ‌ساز</a>
+</div>
+</div>
+
+
 <a href="ai-learning.html">
-آموزش AI
+دانشنامه AI
 </a>
 
 
@@ -59,17 +92,57 @@ TECH
 </a>
 
 
-<a href="portfolio.html">
-نمونه کارها
+<div class="header-actions">
+<a href="login.html" id="authLink" class="btn-outline-small">
+ورود / ثبت‌نام
 </a>
-
+</div>
 
 </nav>
 
+<button class="mobile-toggle" id="mobileToggle" aria-label="منو">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <line x1="3" y1="6" x2="21" y2="6"></line>
+    <line x1="3" y1="12" x2="21" y2="12"></line>
+    <line x1="3" y1="18" x2="21" y2="18"></line>
+</svg>
+</button>
+
+</div>
 
 </header>
 
+<div class="mobile-menu" id="mobileMenu">
+<nav>
+<a href="index.html">خانه</a>
 
+<div class="accordion-item">
+<button class="accordion-btn">خدمات</button>
+<div class="accordion-content">
+<a href="index.html#logo-design">پکیج طراحی لوگو</a>
+<a href="index.html#teaser">تیزر تبلیغاتی</a>
+<a href="index.html#brand-book">بوک برند</a>
+<a href="index.html#3d-design">طراحی سه‌بعدی</a>
+</div>
+</div>
+
+<a href="#portfolio">نمونه کارها</a>
+
+<div class="accordion-item">
+<button class="accordion-btn">ابزار هوش مصنوعی</button>
+<div class="accordion-content">
+<a href="ai-tools.html#name-gen">ایده‌ساز نام برند</a>
+<a href="ai-tools.html#slogan-gen">شعارساز</a>
+<a href="ai-tools.html#palette-gen">پالت رنگ برند</a>
+<a href="ai-tools.html#hashtag-gen">هشتگ‌ساز</a>
+</div>
+</div>
+
+<a href="ai-learning.html">دانشنامه AI</a>
+<a href="tech-news.html">اخبار</a>
+<a href="login.html" id="mobileAuthLink">ورود / ثبت‌نام</a>
+</nav>
+</div>
 
 
 
@@ -95,10 +168,7 @@ TECH
 
 
 
-
-
 <main class="news-container">
-
 
 
 
@@ -144,9 +214,6 @@ TECH
 
 
 
-
-
-
 <!-- اخبار اصلی -->
 <!-- خبرها از auto-news.json توسط news.js ساخته می شوند -->
 
@@ -159,6 +226,7 @@ TECH
 
 
 
+<button id="loadMoreBtn" class="btn gold" style="display:none; margin: 30px auto; text-align:center;">نمایش اخبار بیشتر</button>
 
 
 
@@ -189,9 +257,6 @@ TECH
 
 
 </section>
-
-
-
 
 
 
@@ -246,9 +311,6 @@ TECH
 
 
 
-
-
-
 <section class="news-system">
 
 
@@ -257,6 +319,7 @@ TECH
 سیستم هوشمند اخبار Soravin
 
 </h2>
+
 
 
 
@@ -315,14 +378,11 @@ Soravin Tech
 
 
 
-
 <a href="ai-learning.html" class="back-floating-btn">
 
 ← بازگشت به آموزش AI
 
 </a>
-
-
 
 
 
@@ -338,10 +398,6 @@ Soravin Tech
 
 
 </div>
-
-
-
-
 
 
 
@@ -368,8 +424,6 @@ SORAVIN STUDIO
 
 
 </div>
-
-
 
 
 
@@ -406,8 +460,6 @@ SORAVIN STUDIO
 
 
 
-
-
 <p>
 
 © 2026 Soravin Studio
@@ -416,10 +468,7 @@ SORAVIN STUDIO
 
 
 
-
 </footer>
-
-
 
 
 

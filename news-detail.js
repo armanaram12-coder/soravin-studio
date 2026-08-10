@@ -1,403 +1,75 @@
-// =====================================
-// SORAVIN NEWS DETAIL SYSTEM
-// VERSION 10 COMPATIBLE
-// FULL ARTICLE VIEW
-// =====================================
+// ===============================
+// SORAVIN NEWS DETAIL PAGE
+// ===============================
 
+const urlParams = new URLSearchParams(window.location.search);
+const newsId = urlParams.get('id');
 
-document.addEventListener(
-"DOMContentLoaded",
-function(){
+let newsData = [];
 
-
-
-const detailBox =
-document.getElementById("newsDetail");
-
-
-
-if(!detailBox){
-
-console.log(
-"newsDetail not found"
-);
-
-return;
-
-}
-
-
-
-
-const params =
-new URLSearchParams(
-window.location.search
-);
-
-
-
-const newsId =
-params.get("id");
-
-
-
-
-
-
-function cleanText(text=""){
-
-
-return text
-
-.replace(/<script[\s\S]*?<\/script>/gi,"")
-
-.replace(/<style[\s\S]*?<\/style>/gi,"")
-
-.replace(/<[^>]+>/g,"")
-
-.replace(/&lt;/gi,"<")
-
-.replace(/&gt;/gi,">")
-
-.replace(/&amp;/gi,"&")
-
-.replace(/&quot;/gi,'"')
-
-.replace(/&#39;/gi,"'")
-
-.replace(/\s+/g," ")
-
-.trim();
-
-
-}
-
-
-
-
-
-
-
+// Load news archive
 fetch("data/auto-news.json")
-
-.then(response=>{
-
-
-if(!response.ok){
-
-throw new Error(
-"JSON not found"
-);
-
-}
-
-
-return response.json();
-
-
+.then(response => response.json())
+.then(data => {
+    newsData = data;
+    if (newsId) {
+        const news = newsData.find(n => n.id == newsId || String(n.id) === newsId);
+        if (news) {
+            renderNewsDetail(news);
+        } else {
+            showNotFound();
+        }
+    }
 })
-
-.then(data=>{
-
-
-
-const news =
-
-data.find(
-
-item =>
-
-String(item.id)
-
-===
-
-String(newsId)
-
-);
-
-
-
-
-
-
-if(!news){
-
-
-detailBox.innerHTML = `
-
-
-<div class="news-detail-card">
-
-
-<h2>
-خبر پیدا نشد
-</h2>
-
-
-<p>
-شناسه خبر: ${newsId}
-</p>
-
-
-</div>
-
-
-`;
-
-return;
-
-
-}
-
-
-
-
-
-
-const fullArticle =
-
-
-cleanText(
-
-news.content_fa ||
-
-news.description ||
-
-news.summary_fa ||
-
-"متن خبر موجود نیست"
-
-);
-
-
-
-
-
-
-
-detailBox.innerHTML = `
-
-
-
-<article class="news-detail-card">
-
-
-
-
-
-<div class="news-detail-image">
-
-
-<img
-
-src="${
-
-news.image ||
-
-"assets/image/ai-news.jpg"
-
-}"
-
-alt="${news.title}"
-
->
-
-
-</div>
-
-
-
-
-
-
-
-<div class="news-detail-content">
-
-
-
-
-
-<div class="category">
-
-${
-
-news.tag ||
-
-news.category ||
-
-"Technology"
-
-}
-
-</div>
-
-
-
-
-
-
-
-<h1>
-
-${news.title}
-
-</h1>
-
-
-
-
-
-
-
-<div class="news-detail-meta">
-
-
-${
-
-news.source ||
-
-"Soravin Tech"
-
-}
-
-
-|
-
-${
-
-news.date
-
-?
-
-new Date(news.date)
-
-.toLocaleDateString("fa-IR")
-
-:
-
-""
-
-}
-
-
-</div>
-
-
-
-
-
-
-
-
-<div class="news-full-text">
-
-
-${
-
-fullArticle
-
-.split("\n")
-
-.map(text=>`
-
-<p>${text}</p>
-
-`)
-
-.join("")
-
-}
-
-
-
-</div>
-
-
-
-
-
-
-
-<a
-
-class="source-link"
-
-href="${news.link}"
-
-target="_blank"
-
-rel="noopener noreferrer"
-
->
-
-مشاهده منبع اصلی خبر
-
-</a>
-
-
-
-
-
-
-
-</div>
-
-
-
-
-
-
-</article>
-
-
-
-`;
-
-
-
-
-
-
-})
-
-
-
-.catch(error=>{
-
-
-console.log(
-"News detail error:",
-error
-);
-
-
-
-
-detailBox.innerHTML = `
-
-
-<div class="news-detail-card">
-
-
-<h2>
-خطا در بارگذاری خبر
-</h2>
-
-
-<p>
-${error.message}
-</p>
-
-
-</div>
-
-
-`;
-
-
-
+.catch(error => {
+    console.log("Error loading news:", error);
+    showNotFound();
 });
 
+function renderNewsDetail(news) {
+    const container = document.getElementById('newsDetail');
+    if (!container) return;
+    
+    const title = news.title_fa || news.title;
+    const summary = news.summary_fa || news.summary_en || news.description;
+    const date = news.date ? new Date(news.date).toLocaleDateString('fa-IR') : '';
+    const category = news.category || 'technology';
+    const source = news.source || 'Soravin Tech';
+    
+    container.innerHTML = `
+        <div class="news-detail-image">
+            <img src="${news.image || 'assets/image/ai-news.jpg'}" alt="${title}">
+        </div>
+        <div class="news-detail-content">
+            <div class="news-detail-header">
+                <span class="news-detail-category ${category.toLowerCase()}">${category.toUpperCase()}</span>
+                <span class="news-detail-date">${date}</span>
+            </div>
+            <h1 class="news-detail-title">${title}</h1>
+            <div class="news-detail-meta">
+                <span class="news-detail-source">${source}</span>
+            </div>
+            <div class="news-detail-summary">
+                ${summary || '<p style="color:#6b7280">خلاصه‌ای ثبت نشده</p>'}
+            </div>
+            <a href="${news.link}" target="_blank" rel="noopener noreferrer" class="btn gold news-source-btn">
+                مطالعه کامل در منبع اصلی
+            </a>
+        </div>
+    `;
+    
+    document.title = `${title} | Soravin Tech`;
+}
 
-
-});
+function showNotFound() {
+    const container = document.getElementById('newsDetail');
+    if (!container) return;
+    
+    container.innerHTML = `
+        <div class="news-not-found">
+            <h2>خبر یافت نشد</h2>
+            <p>متأسفانه خبری با این شناسه پیدا نشد.</p>
+            <a href="tech-news.html" class="btn gold">بازگشت به اخبار</a>
+        </div>
+    `;
+}

@@ -963,6 +963,162 @@ header{
 
 }
 
+/* =========================
+PORTFOLIO SECTION
+========================= */
+
+.portfolio{
+
+    padding:120px 8%;
+
+    background:#070707;
+
+}
+
+.section-title{
+
+    text-align:center;
+
+    margin-bottom:70px;
+
+}
+
+.section-title h2{
+
+    font-size:42px;
+
+    color:var(--gold-light);
+
+    margin-bottom:15px;
+
+}
+
+.section-title p{
+
+    color:#9b9b9b;
+
+    font-size:17px;
+
+    max-width:700px;
+
+    margin:auto;
+
+    line-height:2;
+
+}
+
+.portfolio-container{
+
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:28px;
+
+}
+
+.portfolio-card{
+
+    background:linear-gradient(
+        180deg,
+        rgba(255,255,255,.05),
+        rgba(255,255,255,.015)
+    );
+
+    border:1px solid rgba(201,164,75,.18);
+
+    border-radius:24px;
+
+    overflow:hidden;
+
+    transition:.35s;
+
+    position:relative;
+
+    text-decoration:none;
+
+    display:block;
+
+}
+
+.portfolio-card:hover{
+
+    transform:translateY(-12px);
+
+    border-color:var(--gold);
+
+    box-shadow:0 18px 50px rgba(201,164,75,.15);
+
+}
+
+.portfolio-card img{
+
+    width:100%;
+
+    aspect-ratio:4/3;
+
+    object-fit:cover;
+
+    display:block;
+
+}
+
+.portfolio-info{
+
+    padding:30px;
+
+}
+
+.portfolio-info h3{
+
+    font-size:20px;
+
+    color:white;
+
+    margin-bottom:12px;
+
+    line-height:1.6;
+
+}
+
+.portfolio-info p{
+
+    color:#bdbdbd;
+
+    line-height:2;
+
+    font-size:14px;
+
+    margin:0;
+
+}
+
+/* =========================
+FOOTER
+========================= */
+
+footer{
+
+    background:#050505;
+
+    padding:24px;
+
+    text-align:center;
+
+    border-top:1px solid rgba(201,164,75,.1);
+
+}
+
+footer p{
+
+    color:#666;
+
+    font-size:13px;
+
+    margin:0;
+
+}
+
 /* ==================================================
    WHY SORAVIN
 ==================================================*/
@@ -2983,7 +3139,8 @@ width:100%;
 .news-grid,
 .free-tools-grid,
 .feature-boxes,
-.ai-tools-grid{
+.ai-tools-grid,
+.portfolio-container{
 
 grid-template-columns:1fr;
 

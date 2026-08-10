@@ -3304,68 +3304,21 @@ color:#000;
 
 }
 
+
 /* =========================
 TRUST BAR
 ========================= */
-.trust-bar {
-  position: static !important;
-  background: #0a0a0a;
-  border-top: 1px solid rgba(201, 164, 75, 0.3);
-  border-bottom: 1px solid rgba(201, 164, 75, 0.3);
-  padding: 24px 0;
-  width: min(1100px, 92%);
-  margin: 28px auto 0;
+.trust-bar{
+  width:min(1100px,92%);
+  margin:28px auto 0;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+  text-align:center;
+  padding:18px 0;
+  border-top:1px solid rgba(212,175,55,.25);
+  border-bottom:1px solid rgba(212,175,55,.25);
 }
-
-.trust-container {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 24px;
-  text-align: center;
-}
-
-.trust-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-}
-
-.trust-number {
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: #C9A44B;
-  line-height: 1.2;
-}
-
-.trust-label {
-  font-size: 0.9rem;
-  color: #888;
-  font-weight: 400;
-}
-
-@media (max-width: 768px) {
-  .trust-container {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
-    padding: 0 16px;
-  }
-  
-  .trust-number {
-    font-size: 2rem;
-  }
-  
-  .trust-label {
-    font-size: 0.8rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .trust-bar {
-    padding: 16px 0;
-  }
-  
-  .trust-number {
-    font-size: 1.5rem;
-  }
-}
+.trust-num{display:block;font-size:28px;font-weight:800;color:#d4af37}
+.trust-label{display:block;font-size:12px;color:#9aa0a6;margin-top:6px}
+@media (max-width:768px){.trust-bar{grid-template-columns:repeat(2,1fr)}}

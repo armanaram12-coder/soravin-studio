@@ -12,6 +12,10 @@ const AUTO_NEWS_PATH = path.join(__dirname, '../data/auto-news.json');
 
 // RSS Sources
 const RSS_FEEDS = [
+    // Iranian sources (Persian)
+    { name: 'Zoomit', url: 'https://www.zoomit.ir/feed/', lang: 'fa' },
+    { name: 'Digiato', url: 'https://digiato.com/feed', lang: 'fa' },
+    // Foreign sources (English)
     { name: 'TechCrunch', url: 'https://techcrunch.com/feed/', lang: 'en' },
     { name: 'The Verge', url: 'https://www.theverge.com/rss/index.xml', lang: 'en' }
 ];

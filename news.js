@@ -1,7 +1,7 @@
 // ===============================
 // SORAVIN NEWS SYSTEM
-// AUTO NEWS DISPLAY VERSION 3
-// COMPACT CARDS + LOAD MORE + ARCHIVE
+// AUTO NEWS DISPLAY VERSION 4
+// IRANIAN SOURCES + 7-2-1 CARD ORDER
 // ===============================
 
 let newsData = [];
@@ -20,9 +20,37 @@ fetch("data/auto-news.json")
     return response.json();
 })
 .then(data => {
-    newsData = data.sort((a, b) => new Date(b.date) - new Date(a.date));
+    // Separate Iranian and foreign news
+    const iranianNews = data.filter(item => item.lang === 'fa' || (item.source && ['Zoomit', 'Digiato'].includes(item.source)));
+    const foreignNews = data.filter(item => item.lang === 'en' || (item.source && ['TechCrunch', 'The Verge'].includes(item.source)));
+    
+    // Sort each by date descending
+    iranianNews.sort((a, b) => new Date(b.date) - new Date(a.date));
+    foreignNews.sort((a, b) => new Date(b.date) - new Date(a.date));
+    
+    // Create ordered array: 7 Iranian + 2 Foreign + 1 Special Iranian
+    let orderedNews = [];
+    
+    // First 7: Latest Iranian news
+    orderedNews = orderedNews.concat(iranianNews.slice(0, 7));
+    
+    // Next 2: Latest foreign news
+    orderedNews = orderedNews.concat(foreignNews.slice(0, 2));
+    
+    // Card 10: Special Iranian news (featured or next available)
+    const specialIranian = iranianNews.find(item => item.featured === true) || iranianNews[7];
+    if(specialIranian){
+        orderedNews.push({...specialIranian, featured: true});
+    }
+    
+    // Add remaining news for archive
+    const remainingIranian = iranianNews.slice(8);
+    const remainingForeign = foreignNews.slice(2);
+    orderedNews = orderedNews.concat(remainingIranian, remainingForeign);
+    
+    newsData = orderedNews;
     displayedCount = 0;
-    createNewsCards(newsData.slice(0, ITEMS_PER_PAGE));
+    createNewsCards(newsData.slice(0, 10));
     updateLoadMoreButton();
 })
 .catch(error => {

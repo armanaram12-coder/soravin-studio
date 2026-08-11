@@ -22,7 +22,7 @@
 </head>
 
 
-<body>
+<body class="tech-news-page">
 
 <header>
 
@@ -48,31 +48,22 @@ Ai
 <div class="dropdown">
 <a href="#services" class="dropbtn">
 خدمات
-<svg class="arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-    <polyline points="6 9 12 15 18 9"></polyline>
-</svg>
 </a>
+
 <div class="dropdown-content">
-<a href="index.html#logo-design">پکیج طراحی لوگو</a>
-<a href="index.html#teaser">تیزر تبلیغاتی</a>
-<a href="index.html#brand-book">بوک برند</a>
-<a href="index.html#3d-design">طراحی سه‌بعدی</a>
+<a href="project-logo.html">پکیج طراحی لوگو</a>
+<a href="project-motion.html">تیزر تبلیغاتی</a>
+<a href="project-brand.html">بوک برند</a>
+<a href="project-motion.html">طراحی سه‌بعدی</a>
 </div>
 </div>
-
-
-<a href="#portfolio">
-نمونه کارها
-</a>
 
 
 <div class="dropdown">
-<a href="#" class="dropbtn">
+<a href="#ai-tools" class="dropbtn">
 ابزار هوش مصنوعی
-<svg class="arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-    <polyline points="6 9 12 15 18 9"></polyline>
-</svg>
 </a>
+
 <div class="dropdown-content">
 <a href="ai-tools.html#name-gen">ایده‌ساز نام برند</a>
 <a href="ai-tools.html#slogan-gen">شعارساز</a>
@@ -82,308 +73,85 @@ Ai
 </div>
 
 
-<a href="ai-learning.html">
-دانشنامه AI
-</a>
-
-
 <a href="tech-news.html">
-اخبار
+اخبار تکنولوژی
 </a>
 
 
-<div class="header-actions">
-<a href="login.html" id="authLink" class="btn-outline-small">
-ورود / ثبت‌نام
+<a href="free-ai-tools.html">
+معرفی ابزارهای رایگان
 </a>
-</div>
+
+
+<a href="ai-learning.html">
+آموزش هوش مصنوعی
+</a>
 
 </nav>
 
-<button class="mobile-toggle" id="mobileToggle" aria-label="منو">
-<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-    <line x1="3" y1="6" x2="21" y2="6"></line>
-    <line x1="3" y1="12" x2="21" y2="12"></line>
-    <line x1="3" y1="18" x2="21" y2="18"></line>
-</svg>
+
+<div class="auth-buttons">
+
+<a href="login.html" class="btn-login">
+ورود
+</a>
+
+<a href="register.html" class="btn-register">
+ثبت‌نام
+</a>
+
+</div>
+
+
+<button class="mobile-menu-btn" aria-label="منو">
+☰
 </button>
 
 </div>
 
 </header>
 
-<div class="mobile-menu" id="mobileMenu">
-<nav>
-<a href="index.html">خانه</a>
 
-<div class="accordion-item">
-<button class="accordion-btn">خدمات</button>
-<div class="accordion-content">
-<a href="index.html#logo-design">پکیج طراحی لوگو</a>
-<a href="index.html#teaser">تیزر تبلیغاتی</a>
-<a href="index.html#brand-book">بوک برند</a>
-<a href="index.html#3d-design">طراحی سه‌بعدی</a>
-</div>
-</div>
+<section class="news-section tech-news-section">
 
-<a href="#portfolio">نمونه کارها</a>
+<div class="news-head">
 
-<div class="accordion-item">
-<button class="accordion-btn">ابزار هوش مصنوعی</button>
-<div class="accordion-content">
-<a href="ai-tools.html#name-gen">ایده‌ساز نام برند</a>
-<a href="ai-tools.html#slogan-gen">شعارساز</a>
-<a href="ai-tools.html#palette-gen">پالت رنگ برند</a>
-<a href="ai-tools.html#hashtag-gen">هشتگ‌ساز</a>
-</div>
+<h1>آخرین اخبار هوش مصنوعی و تکنولوژی</h1>
+
+<p>پوشش لحظه‌ای پیشرفت‌های هوش مصنوعی، کامپیوتر، موبایل و فناوری‌های آینده</p>
+
+
+<div class="news-filters">
+<button class="filter-btn active" data-filter="all">همه</button>
+<button class="filter-btn" data-filter="ai">هوش مصنوعی</button>
+<button class="filter-btn" data-filter="computer">کامپیوتر</button>
+<button class="filter-btn" data-filter="mobile">موبایل</button>
 </div>
 
-<a href="ai-learning.html">دانشنامه AI</a>
-<a href="tech-news.html">اخبار</a>
-<a href="login.html" id="mobileAuthLink">ورود / ثبت‌نام</a>
-</nav>
 </div>
 
 
-
-<section class="news-hero">
-
-
-<h1>
-
-آخرین اخبار هوش مصنوعی و تکنولوژی
-
-</h1>
-
-
-<p>
-
-جدیدترین اخبار AI، کامپیوتر، سخت افزار، موبایل و فناوری آینده
-
-</p>
-
+<div class="news-grid" id="newsGrid"></div>
 
 </section>
 
 
+<section class="news-archive-section">
 
+<h2>آرشیو اخبار</h2>
 
-<main class="news-container">
+<div class="archive-list" id="archiveList"></div>
 
-
-
-
-<div class="news-filter">
-
-
-<button class="active" data-category="all">
-
-همه اخبار
-
-</button>
-
-
-
-<button data-category="ai">
-
-هوش مصنوعی
-
-</button>
-
-
-
-<button data-category="pc">
-
-کامپیوتر
-
-</button>
-
-
-
-<button data-category="mobile">
-
-موبایل
-
-</button>
-
-
-
-</div>
-
-
-
-
-
-<!-- اخبار اصلی -->
-<!-- خبرها از auto-news.json توسط news.js ساخته می شوند -->
-
-
-<section class="news-grid" id="newsGrid">
-
+<button class="load-more-btn" id="loadMoreBtn">نمایش اخبار بیشتر</button>
 
 </section>
 
 
-
-
-<button id="loadMoreBtn" class="btn gold" style="display:none; margin: 30px auto; text-align:center;">نمایش اخبار بیشتر</button>
-
-
-
-<section class="featured-news">
-
-
-<h2>
-
-اخبار ویژه تکنولوژی
-
-</h2>
-
-
-<p>
-
-تحلیل و بررسی مهم‌ترین اتفاقات دنیای هوش مصنوعی، کامپیوتر و موبایل
-
-</p>
-
-
-
-
-<div class="featured-grid" id="featuredGrid">
-
-
-</div>
-
-
-
-</section>
-
-
-
-
-
-<section class="news-analysis">
-
-
-<h2>
-
-تحلیل‌های تخصصی Soravin
-
-</h2>
-
-
-
-<p>
-
-در سوراوین فقط خبر منتشر نمی‌شود؛ تاثیر واقعی فناوری‌ها بررسی و تحلیل می‌شود.
-
-</p>
-
-
-
-<div class="analysis-box">
-
-
-<h3>
-
-چرا تحلیل فناوری اهمیت دارد؟
-
-</h3>
-
-
-
-<p>
-
-سرعت تغییرات در دنیای تکنولوژی بسیار زیاد است.
-هدف این بخش بررسی تاثیر هوش مصنوعی، سخت‌افزار و فناوری‌های جدید بر آینده دیجیتال است.
-
-</p>
-
-
-
-</div>
-
-
-
-</section>
-
-
-
-
-
-<section class="news-system">
-
-
-<h2>
-
-سیستم هوشمند اخبار Soravin
-
-</h2>
-
-
-
-
-<div class="news-flow">
-
-
-<div>
-
-منابع خبری
-
-<span>
-
-AI / Tech RSS
-
-</span>
-
-</div>
-
-
-
-<div>
-
-پردازش هوشمند
-
-<span>
-
-News Engine
-
-</span>
-
-</div>
-
-
-
-
-<div>
-
-انتشار
-
-<span>
-
-Soravin Tech
-
-</span>
-
-</div>
-
-
-
-</div>
-
-
-
-</section>
-
-
-
-
-<a href="ai-learning.html" class="back-floating-btn">
+<a href="ai-learning.html" class="back-floating-btn" style="background:#071a30; border:1px solid rgba(0,168,255,.4); color:#eaf4ff; box-shadow:0 0 10px rgba(0,168,255,.25);">
 
 ← بازگشت به آموزش AI
 
 </a>
-
 
 
 
@@ -411,7 +179,7 @@ Soravin Tech
 
 <h3>
 
-SORAVIN STUDIO
+SORAVIN NEWS
 
 </h3>
 
@@ -438,31 +206,19 @@ SORAVIN STUDIO
 </a>
 
 
-
 <a href="ai-learning.html">
 
-آموزش AI
+دانشنامه AI
 
 </a>
-
-
-
-<a href="portfolio.html">
-
-نمونه کارها
-
-</a>
-
-
 
 </div>
 
 
 
-
 <p>
 
-© 2026 Soravin Studio
+© <span id="copyright-year"></span> استودیو سوراوین — کلیه حقوق محفوظ است. طراحی و توسعه: آرمان آرام
 
 </p>
 
@@ -472,6 +228,9 @@ SORAVIN STUDIO
 
 
 
+<script>
+document.getElementById("copyright-year").textContent = new Date().getFullYear();
+</script>
 <script src="news.js"></script>
 
 

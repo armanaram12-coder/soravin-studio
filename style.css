@@ -3761,3 +3761,31 @@ NEWS DETAIL PAGE
     font-size: 14px;
     margin: 0 0 24px;
 }
+
+/* Tech News Page - Light Blue Theme */
+body.tech-news-page {
+  background-color: #dfeeff !important;
+}
+
+body.tech-news-page .tech-news-section,
+body.tech-news-page .news-head h1,
+body.tech-news-page .news-head p,
+body.tech-news-page .section-title {
+  color: #0a1a2f !important;
+}
+
+body.tech-news-page .back-floating-btn {
+  background: #071a30 !important;
+  border: 1px solid rgba(0, 168, 255, 0.4) !important;
+  color: #eaf4ff !important;
+  box-shadow: 0 0 10px rgba(0, 168, 255, 0.25) !important;
+}
+
+body.tech-news-page .tech-footer h3 {
+  color: #d4af37 !important;
+}
+
+body.tech-news-page .tech-footer p,
+body.tech-news-page .tech-footer a {
+  color: #0a1a2f !important;
+}

@@ -167,3 +167,71 @@ filterButtons.forEach(button => {
         });
     });
 });
+
+// ===============================
+// ARCHIVE SECTION - Load from news-archive.json
+// ===============================
+
+let archiveData = [];
+let displayedArchiveCount = 0;
+const ARCHIVE_ITEMS_PER_PAGE = 30;
+
+fetch("data/news-archive.json")
+.then(response => {
+    if(!response.ok){
+        throw new Error("news-archive.json not found");
+    }
+    return response.json();
+})
+.then(data => {
+    archiveData = data.sort((a, b) => new Date(b.date) - new Date(a.date));
+    displayedArchiveCount = 0;
+    renderArchiveItems(archiveData.slice(0, ARCHIVE_ITEMS_PER_PAGE));
+    updateArchiveLoadMoreButton();
+})
+.catch(error => {
+    console.log("Archive loading error:", error);
+});
+
+function renderArchiveItems(data){
+    const archiveList = document.getElementById("archiveList");
+    if(!archiveList){
+        return;
+    }
+    
+    data.forEach(news => {
+        const item = document.createElement("div");
+        item.className = "archive-item";
+        item.innerHTML = `
+            <img src="${news.image || 'assets/image/ai-news.jpg'}" alt="${news.title}">
+            <h4>${news.title_fa || news.title}</h4>
+            <span class="archive-date">${news.date ? new Date(news.date).toLocaleDateString("fa-IR") : ""}</span>
+        `;
+        item.style.cursor = "pointer";
+        item.addEventListener("click", () => {
+            window.location.href = `news-detail.html?id=${news.id}`;
+        });
+        archiveList.appendChild(item);
+        displayedArchiveCount++;
+    });
+    
+    updateArchiveLoadMoreButton();
+}
+
+function updateArchiveLoadMoreButton(){
+    const loadMoreBtn = document.getElementById("loadMoreBtn");
+    if(loadMoreBtn){
+        if(displayedArchiveCount >= archiveData.length){
+            loadMoreBtn.style.display = "none";
+        } else {
+            loadMoreBtn.style.display = "block";
+        }
+    }
+}
+
+document.getElementById("loadMoreBtn")?.addEventListener("click", () => {
+    const start = displayedArchiveCount;
+    const end = Math.min(start + ARCHIVE_ITEMS_PER_PAGE, archiveData.length);
+    const moreArchive = archiveData.slice(start, end);
+    renderArchiveItems(moreArchive);
+});

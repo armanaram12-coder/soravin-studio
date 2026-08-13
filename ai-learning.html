@@ -1,1125 +1,121 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
-
 <head>
-
 <meta charset="UTF-8">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-
-<title>
-دانشنامه هوش مصنوعی | Soravin AI
-</title>
-
-
-<meta name="description" content="
-دانشنامه هوش مصنوعی، معرفی ابزارهای AI، ChatGPT، Gemini، Claude، ساخت تصویر و ویدیو با هوش مصنوعی در Soravin Studio
-">
-
-
+<title>دانشنامه هوش مصنوعی | Soravin AI</title>
+<meta name="description" content="دانشنامه هوش مصنوعی، معرفی ابزارهای AI، ChatGPT، Gemini، Claude، ساخت تصویر و ویدیو با هوش مصنوعی در Soravin Studio">
 <link rel="stylesheet" href="style.css">
-
-
+<style>
+body{margin:0;padding-top:70px;background-color:#17102b;color:#cfc6e8;font-family:Tahoma,Arial,sans-serif;direction:rtl}
+.header{position:fixed;top:0;width:100%;background-color:#1a1a1a;padding:15px 40px;display:flex;justify-content:space-between;align-items:center;z-index:1000;border-bottom:1px solid #333;box-sizing:border-box}
+.logo{color:white;font-size:24px;font-weight:bold}
+.logo span{color:#b39dff}
+.main-nav{display:flex;gap:25px;align-items:center}
+.main-nav a{color:white;text-decoration:none;font-size:14px;transition:color 0.3s}
+.main-nav a:hover{color:#b39dff}
+.dropdown{position:relative;display:inline-block}
+.dropbtn{color:white;text-decoration:none;font-size:14px;cursor:pointer}
+.dropdown-content{display:none;position:absolute;background-color:#2a2a2a;min-width:180px;box-shadow:0 8px 16px rgba(0,0,0,0.3);z-index:1001;border-radius:8px;overflow:hidden}
+.dropdown-content a{color:white;padding:12px 16px;text-decoration:none;display:block;font-size:13px}
+.dropdown-content a:hover{background-color:#3a3a3a;color:#b39dff}
+.dropdown:hover .dropdown-content{display:block}
+.auth-buttons{display:flex;gap:10px}
+.btn-outline-small{padding:8px 16px;border-radius:20px;text-decoration:none;font-size:13px;background-color:transparent;border:1px solid #ddd;color:white;transition:all 0.3s}
+.btn-outline-small:hover{background-color:#b39dff;border-color:#b39dff;color:#17102b}
+.mobile-menu-btn{display:none;background:none;border:none;color:white;font-size:24px;cursor:pointer}
+.ai-hero{text-align:center;padding:60px 20px}
+.ai-hero h1{color:#f1edff;font-size:2.5rem;margin:0 0 15px 0}
+.ai-hero p{color:#cfc6e8;font-size:1.2rem;max-width:700px;margin:0 auto}
+.section-title{text-align:center;margin:50px 0 30px}
+.section-title h2{color:#f1edff;font-size:2rem;margin:0 0 10px 0}
+.section-title p{color:#cfc6e8;font-size:1rem;margin:0}
+.article-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:25px;max-width:1200px;margin:0 auto;padding:20px}
+.article-card{background:#221737;border:1px solid rgba(179,157,255,0.35);border-radius:10px;overflow:hidden;transition:transform 0.3s ease,box-shadow 0.3s ease}
+.article-card:hover{transform:translateY(-5px);box-shadow:0 10px 30px rgba(179,157,255,0.15)}
+.article-image{width:100%;height:168.75px;object-fit:cover;background:linear-gradient(135deg,#3a2a5f,#2c1d47);display:flex;align-items:center;justify-content:center;color:#b39dff;font-size:14px;font-weight:bold}
+.article-card h3{color:#f1edff;font-size:15px;margin:15px 15px 10px}
+.article-card p{color:#cfc6e8;font-size:13px;margin:0 15px 15px;line-height:1.6}
+.read-btn{display:inline-block;margin:0 15px 15px;padding:8px 16px;background:transparent;color:#b39dff;border:1px solid #b39dff;border-radius:20px;text-decoration:none;font-size:13px;transition:all 0.3s}
+.read-btn:hover{background:rgba(179,157,255,0.15)}
+.ai-categories{max-width:1000px;margin:60px auto;padding:0 20px}
+.service-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:25px}
+.service-card{background:#221737;border:1px solid rgba(179,157,255,0.35);border-radius:10px;padding:25px;position:relative;text-align:center}
+.service-card span{position:absolute;top:-15px;right:20px;background:#b39dff;color:#17102b;width:35px;height:35px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:13px}
+.service-card h3{color:#f1edff;font-size:16px;margin:15px 0 10px}
+.service-card p{color:#cfc6e8;font-size:13px;line-height:1.6;margin:0}
+.ai-tools-preview{max-width:900px;margin:60px auto;padding:0 20px}
+.ai-tools-preview h2{color:#f1edff;font-size:2rem;text-align:center;margin:0 0 30px}
+.tools-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.tool-card{background:#221737;border:1px solid rgba(179,157,255,0.35);border-radius:10px;padding:25px;text-align:center;text-decoration:none;transition:all 0.3s ease}
+.tool-card:hover{box-shadow:0 0 25px rgba(179,157,255,0.3);transform:translateY(-5px)}
+.tool-card h3{color:#f1edff;font-size:18px;margin:0 0 8px}
+.tool-card span{color:#cfc6e8;font-size:13px}
+.ai-about{max-width:800px;margin:60px auto;padding:0 20px;text-align:center}
+.ai-about h2{color:#f1edff;font-size:2rem;margin:0 0 25px}
+.ai-about p{color:#cfc6e8;font-size:15px;line-height:1.8;margin:0}
+.back-floating-btn{position:fixed;bottom:20px;left:20px;padding:10px 18px;background:#b39dff;color:#17102b;border-radius:20px;text-decoration:none;font-size:13px;font-weight:bold;z-index:1000;transition:all 0.3s}
+.back-floating-btn:hover{transform:scale(1.05);box-shadow:0 0 15px rgba(179,157,255,0.5)}
+.tech-footer{background:#1a1a1a;border-top:1px solid #333;padding:30px 20px;text-align:center;margin-top:60px}
+.tech-footer h3{color:#b39dff;font-size:18px;margin:0 0 10px}
+.tech-footer p{color:#cfc6e8;font-size:13px;margin:5px 0}
+.footer-links{display:flex;justify-content:center;gap:24px;margin:20px 0}
+.footer-links a{color:#cfc6e8;text-decoration:none;font-size:13px;transition:color 0.3s}
+.footer-links a:hover{color:#b39dff}
+@media(max-width:768px){.header{padding:15px 20px}.main-nav{display:none}.mobile-menu-btn{display:block}.tools-grid{grid-template-columns:1fr}}
+</style>
 </head>
-
-
-
 <body>
-
-
-
-<header>
-
-
-<div class="logo">
-
-SORAVIN
-
-<span>
-AI
-</span>
-
-</div>
-
-
-
-
-
-<nav>
-
-
-<a href="index.html">
-
-خانه
-
-</a>
-
-
-
-<a href="index.html#services">
-
-خدمات
-
-</a>
-
-
-
-
-<a href="index.html#portfolio">
-
-نمونه کارها
-
-</a>
-
-
-
-
-<a href="ai-learning.html">
-
-دانشنامه AI
-
-</a>
-
-
-
-
-<a href="tech-news.html">
-
-اخبار
-
-</a>
-
-
-
+<header class="header">
+<div class="logo">SORAVIN <span>Ai</span></div>
+<nav class="main-nav">
+<a href="index.html">خانه</a>
+<div class="dropdown"><a href="#services" class="dropbtn">خدمات</a><div class="dropdown-content"><a href="project-logo.html">پکیج طراحی لوگو</a><a href="project-motion.html">تیزر تبلیغاتی</a><a href="project-brand.html">بوک برند</a><a href="project-motion.html">طراحی سه‌بعدی</a></div></div>
+<div class="dropdown"><a href="#ai-tools" class="dropbtn">ابزار هوش مصنوعی</a><div class="dropdown-content"><a href="ai-tools.html#name-gen">ایده‌ساز نام برند</a><a href="ai-tools.html#slogan-gen">شعارساز</a><a href="ai-tools.html#palette-gen">پالت رنگ برند</a><a href="ai-tools.html#hashtag-gen">هشتگ‌ساز</a></div></div>
+<a href="tech-news.html">اخبار تکنولوژی</a>
+<a href="free-ai-tools.html">معرفی ابزارهای رایگان</a>
+<a href="ai-learning.html">دانشنامه هوش مصنوعی</a>
 </nav>
-
-
-
+<div class="auth-buttons"><a href="login.html" class="btn-outline-small">ورود / ثبت‌نام</a></div>
+<button class="mobile-menu-btn" aria-label="منو">☰</button>
 </header>
 
-
-
-
-
-
-
-
-<section class="ai-hero">
-
-
-<h1>
-
-دانشنامه هوش مصنوعی
-
-</h1>
-
-
-
-<p>
-
-آموزش‌ها، ابزارها و مقالات کاربردی دنیای AI
-
-</p>
-
-
-
-</section>
-
-
-
-
-
-
-
+<section class="ai-hero"><h1>دانشنامه هوش مصنوعی</h1><p>آموزش‌ها، ابزارها و مقالات کاربردی دنیای AI</p></section>
 
 <section class="articles">
-
-
-
-<div class="section-title">
-
-
-<h2>
-
-آخرین آموزش‌های AI
-
-</h2>
-
-
-
-<p>
-
-یادگیری هوش مصنوعی از پایه تا سطح حرفه‌ای
-
-</p>
-
-
-
-</div>
-
-
-
-
-
-
-
-
+<div class="section-title"><h2>آخرین آموزش‌های AI</h2><p>یادگیری هوش مصنوعی از پایه تا سطح حرفه‌ای</p></div>
 <div class="article-grid">
-
-
-
-
-<article class="article-card">
-
-
-<div class="article-image">
-
-AI
-
+<article class="article-card"><div class="article-image">AI</div><h3>هوش مصنوعی چیست؟</h3><p>آشنایی کامل با مفهوم AI، تاریخچه، کاربردها و تاثیر آن بر آینده فناوری.</p><a href="ai-what-is.html" class="read-btn">مطالعه مقاله →</a></article>
+<article class="article-card"><div class="article-image">CHATGPT</div><h3>ChatGPT چیست؟</h3><p>معرفی ChatGPT، نحوه کار، کاربردهای حرفه‌ای و روش استفاده بهتر از آن.</p><a href="chatgpt.html" class="read-btn">مطالعه مقاله →</a></article>
+<article class="article-card"><div class="article-image">TOOLS</div><h3>بهترین ابزارهای هوش مصنوعی</h3><p>معرفی ابزارهای کاربردی AI برای تولید محتوا، طراحی، برنامه‌نویسی و کسب‌وکار.</p><a href="free-ai-tools.html" class="read-btn">مطالعه مقاله →</a></article>
+<article class="article-card"><div class="article-image">IMAGE AI</div><h3>ابزارهای ساخت تصویر با هوش مصنوعی</h3><p>معرفی ابزارهای تولید تصویر مانند Midjourney، DALL·E و Stable Diffusion.</p><a href="ai-image-tools.html" class="read-btn">مطالعه مقاله →</a></article>
+<article class="article-card"><div class="article-image">VIDEO AI</div><h3>ساخت ویدیو با هوش مصنوعی</h3><p>بررسی ابزارهای تولید ویدیو با AI، ساخت تیزر تبلیغاتی، انیمیشن و محتوای سینمایی.</p><a href="ai-video-tools.html" class="read-btn">مطالعه مقاله →</a></article>
+<article class="article-card"><div class="article-image">PROMPT</div><h3>مهندسی پرامپت چیست؟</h3><p>آموزش ساخت Prompt حرفه‌ای برای گرفتن بهترین نتیجه از ChatGPT، Gemini و ابزارهای هوش مصنوعی.</p><a href="prompt-engineering.html" class="read-btn">مطالعه مقاله →</a></article>
+<article class="article-card"><div class="article-image">MODELS</div><h3>مدل‌های هوش مصنوعی چگونه کار می‌کنند؟</h3><p>آشنایی با LLM، شبکه‌های عصبی، Deep Learning، Transformer و فناوری پشت مدل‌های هوشمند.</p><a href="ai-models-explained.html" class="read-btn">مطالعه مقاله →</a></article>
+<article class="article-card"><div class="article-image">GENERATIVE AI</div><h3>هوش مصنوعی مولد چیست؟</h3><p>بررسی تولید متن، تصویر، ویدیو، صدا، موسیقی و کد توسط هوش مصنوعی مولد.</p><a href="generative-ai.html" class="read-btn">مطالعه مقاله →</a></article>
+<article class="article-card"><div class="article-image">AI AGENT</div><h3>AI Agent چیست؟</h3><p>آشنایی با نسل جدید عامل‌های هوشمند، اتوماسیون کارها و دستیارهای خودکار.</p><a href="ai-agents.html" class="read-btn">مطالعه مقاله →</a></article>
+<article class="article-card"><div class="article-image">AI DESIGN</div><h3>هوش مصنوعی در طراحی و خلاقیت</h3><p>کاربرد AI در طراحی لوگو، برندینگ، گرافیک، تبلیغات، UI و موشن دیزاین.</p><a href="ai-design.html" class="read-btn">مطالعه مقاله →</a></article>
+<article class="article-card"><div class="article-image">AI CODE</div><h3>هوش مصنوعی در برنامه‌نویسی</h3><p>معرفی ابزارهای AI برای کدنویسی، توسعه نرم‌افزار، رفع خطا و افزایش سرعت تولید.</p><a href="ai-programming.html" class="read-btn">مطالعه مقاله →</a></article>
+<article class="article-card"><div class="article-image">BUSINESS AI</div><h3>هوش مصنوعی در کسب‌وکار</h3><p>استفاده از AI در بازاریابی، فروش، تحلیل داده، مدیریت و اتوماسیون سازمان‌ها.</p><a href="ai-business.html" class="read-btn">مطالعه مقاله →</a></article>
 </div>
-
-
-
-<h3>
-
-هوش مصنوعی چیست؟
-
-</h3>
-
-
-
-<p>
-
-آشنایی کامل با مفهوم AI، تاریخچه، کاربردها و تاثیر آن بر آینده فناوری.
-
-</p>
-
-
-
-<a href="ai-what-is.html">
-
-مطالعه مقاله →
-
-</a>
-
-
-</article>
-
-
-
-
-
-
-<article class="article-card">
-
-
-<div class="article-image">
-
-CHATGPT
-
-</div>
-
-
-
-<h3>
-
-ChatGPT چیست؟
-
-</h3>
-
-
-
-<p>
-
-معرفی ChatGPT، نحوه کار، کاربردهای حرفه‌ای و روش استفاده بهتر از آن.
-
-</p>
-
-
-
-<a href="chatgpt.html">
-
-مطالعه مقاله →
-
-</a>
-
-
-</article>
-
-
-
-
-
-
-<article class="article-card">
-
-
-<div class="article-image">
-
-TOOLS
-
-</div>
-
-
-
-<h3>
-
-بهترین ابزارهای هوش مصنوعی
-
-</h3>
-
-
-
-<p>
-
-معرفی ابزارهای کاربردی AI برای تولید محتوا، طراحی، برنامه‌نویسی و کسب‌وکار.
-
-</p>
-
-
-
-<a href="free-ai-tools.html">
-
-مطالعه مقاله →
-
-</a>
-
-
-</article>
-<article class="article-card">
-
-
-<div class="article-image">
-
-IMAGE AI
-
-</div>
-
-
-
-<h3>
-
-ابزارهای ساخت تصویر با هوش مصنوعی
-
-</h3>
-
-
-
-<p>
-
-معرفی ابزارهای تولید تصویر مانند Midjourney، DALL·E و Stable Diffusion و کاربرد آن‌ها در طراحی و تبلیغات.
-
-</p>
-
-
-
-<a href="ai-image-tools.html">
-
-مطالعه مقاله →
-
-</a>
-
-
-</article>
-
-
-
-
-
-
-
-
-
-<article class="article-card">
-
-
-<div class="article-image">
-
-VIDEO AI
-
-</div>
-
-
-
-<h3>
-
-ساخت ویدیو با هوش مصنوعی
-
-</h3>
-
-
-
-<p>
-
-بررسی ابزارهای تولید ویدیو با AI، ساخت تیزر تبلیغاتی، انیمیشن و محتوای سینمایی.
-
-</p>
-
-
-
-<a href="ai-video-tools.html">
-
-مطالعه مقاله →
-
-</a>
-
-
-</article>
-
-
-
-
-
-
-
-
-
-<article class="article-card">
-
-
-<div class="article-image">
-
-PROMPT
-
-</div>
-
-
-
-<h3>
-
-مهندسی پرامپت چیست؟
-
-</h3>
-
-
-
-<p>
-
-آموزش ساخت Prompt حرفه‌ای برای گرفتن بهترین نتیجه از ChatGPT، Gemini و ابزارهای هوش مصنوعی.
-
-</p>
-
-
-
-<a href="prompt-engineering.html">
-
-مطالعه مقاله →
-
-</a>
-
-
-</article>
-
-
-
-
-
-
-
-
-
-<article class="article-card">
-
-
-<div class="article-image">
-
-MODELS
-
-</div>
-
-
-
-<h3>
-
-مدل‌های هوش مصنوعی چگونه کار می‌کنند؟
-
-</h3>
-
-
-
-<p>
-
-آشنایی با LLM، شبکه‌های عصبی، Deep Learning، Transformer و فناوری پشت مدل‌های هوشمند.
-
-</p>
-
-
-
-<a href="ai-models-explained.html">
-
-مطالعه مقاله →
-
-</a>
-
-
-</article>
-
-
-
-
-
-
-
-
-
-<article class="article-card">
-
-
-<div class="article-image">
-
-GENERATIVE AI
-
-</div>
-
-
-
-<h3>
-
-هوش مصنوعی مولد چیست؟
-
-</h3>
-
-
-
-<p>
-
-بررسی تولید متن، تصویر، ویدیو، صدا، موسیقی و کد توسط هوش مصنوعی مولد.
-
-</p>
-
-
-
-<a href="generative-ai.html">
-
-مطالعه مقاله →
-
-</a>
-
-
-</article>
-
-
-
-
-
-
-
-
-
-<article class="article-card">
-
-
-<div class="article-image">
-
-AI AGENT
-
-</div>
-
-
-
-<h3>
-
-AI Agent چیست؟
-
-</h3>
-
-
-
-<p>
-
-آشنایی با نسل جدید عامل‌های هوشمند، اتوماسیون کارها و دستیارهای خودکار.
-
-</p>
-
-
-
-<a href="ai-agents.html">
-
-مطالعه مقاله →
-
-</a>
-
-
-</article>
-
-
-
-
-
-
-
-
-
-<article class="article-card">
-
-
-<div class="article-image">
-
-AI DESIGN
-
-</div>
-
-
-
-<h3>
-
-هوش مصنوعی در طراحی و خلاقیت
-
-</h3>
-
-
-
-<p>
-
-کاربرد AI در طراحی لوگو، برندینگ، گرافیک، تبلیغات، UI و موشن دیزاین.
-
-</p>
-
-
-
-<a href="ai-design.html">
-
-مطالعه مقاله →
-
-</a>
-
-
-</article>
-
-
-
-
-
-
-
-
-
-<article class="article-card">
-
-
-<div class="article-image">
-
-AI CODE
-
-</div>
-
-
-
-<h3>
-
-هوش مصنوعی در برنامه‌نویسی
-
-</h3>
-
-
-
-<p>
-
-معرفی ابزارهای AI برای کدنویسی، توسعه نرم‌افزار، رفع خطا و افزایش سرعت تولید.
-
-</p>
-
-
-
-<a href="ai-programming.html">
-
-مطالعه مقاله →
-
-</a>
-
-
-</article>
-
-
-
-
-
-
-
-
-
-<article class="article-card">
-
-
-<div class="article-image">
-
-BUSINESS AI
-
-</div>
-
-
-
-<h3>
-
-هوش مصنوعی در کسب‌وکار
-
-</h3>
-
-
-
-<p>
-
-استفاده از AI در بازاریابی، فروش، تحلیل داده، مدیریت و اتوماسیون سازمان‌ها.
-
-</p>
-
-
-
-<a href="ai-business.html">
-
-مطالعه مقاله →
-
-</a>
-
-
-</article>
-
-
-
-
-
-</div>
-
-
 </section>
 
 <section class="ai-categories">
-
-
-<div class="section-title">
-
-
-<h2>
-
-دسته‌بندی آموزش‌ها
-
-</h2>
-
-
-
-<p>
-
-مسیر یادگیری هوش مصنوعی از پایه تا حرفه‌ای
-
-</p>
-
-
-
-</div>
-
-
-
-
-
-
-
+<div class="section-title"><h2>دسته‌بندی آموزش‌ها</h2><p>مسیر یادگیری هوش مصنوعی از پایه تا حرفه‌ای</p></div>
 <div class="service-grid">
-
-
-
-
-
-
-<div class="service-card">
-
-
-<span>
-
-01
-
-</span>
-
-
-
-<h3>
-
-مبانی هوش مصنوعی
-
-</h3>
-
-
-
-<p>
-
-آشنایی با مفاهیم پایه AI، یادگیری ماشین، شبکه‌های عصبی و آینده فناوری.
-
-</p>
-
-
+<div class="service-card"><span>01</span><h3>مبانی هوش مصنوعی</h3><p>آشنایی با مفاهیم پایه AI، یادگیری ماشین، شبکه‌های عصبی و آینده فناوری.</p></div>
+<div class="service-card"><span>02</span><h3>ابزارهای AI</h3><p>معرفی بهترین ابزارهای هوش مصنوعی برای تولید محتوا، طراحی و کسب‌وکار.</p></div>
+<div class="service-card"><span>03</span><h3>تولید محتوا با AI</h3><p>ساخت متن، تصویر، ویدیو، صدا و محتوای دیجیتال با ابزارهای هوشمند.</p></div>
+<div class="service-card"><span>04</span><h3>AI برای طراحان</h3><p>کاربرد هوش مصنوعی در لوگو، برندینگ، گرافیک، تبلیغات و موشن دیزاین.</p></div>
 </div>
-
-
-
-
-
-
-
-
-<div class="service-card">
-
-
-<span>
-
-02
-
-</span>
-
-
-
-<h3>
-
-ابزارهای AI
-
-</h3>
-
-
-
-<p>
-
-معرفی بهترین ابزارهای هوش مصنوعی برای تولید محتوا، طراحی و کسب‌وکار.
-
-</p>
-
-
-</div>
-
-
-
-
-
-
-
-
-<div class="service-card">
-
-
-<span>
-
-03
-
-</span>
-
-
-
-<h3>
-
-تولید محتوا با AI
-
-</h3>
-
-
-
-<p>
-
-ساخت متن، تصویر، ویدیو، صدا و محتوای دیجیتال با ابزارهای هوشمند.
-
-</p>
-
-
-</div>
-
-
-
-
-
-
-
-
-<div class="service-card">
-
-
-<span>
-
-04
-
-</span>
-
-
-
-<h3>
-
-AI برای طراحان
-
-</h3>
-
-
-
-<p>
-
-کاربرد هوش مصنوعی در لوگو، برندینگ، گرافیک، تبلیغات و موشن دیزاین.
-
-</p>
-
-
-</div>
-
-
-
-
-
-
-</div>
-
-
-
 </section>
 
+<section class="ai-about"><h2>هوش مصنوعی و آینده دیجیتال</h2><p>هوش مصنوعی یکی از مهم‌ترین فناوری‌های عصر جدید است که نحوه کار، طراحی، تولید محتوا و کسب‌وکارها را تغییر داده است.<br><br>در دانشنامه Soravin تلاش می‌کنیم جدیدترین ابزارها، آموزش‌ها و کاربردهای واقعی هوش مصنوعی را به زبان ساده بررسی کنیم.<br><br>هدف این بخش کمک به طراحان، تولیدکنندگان محتوا، صاحبان کسب‌وکار و علاقه‌مندان فناوری برای استفاده حرفه‌ای از AI است.</p></section>
 
+<section class="ai-tools-preview"><h2>ابزارهای محبوب هوش مصنوعی</h2><div class="tools-grid"><a href="https://chat.openai.com" target="_blank" class="tool-card"><h3>ChatGPT</h3><span>تولید متن و دستیار هوشمند</span></a><a href="https://www.midjourney.com" target="_blank" class="tool-card"><h3>Midjourney</h3><span>تولید تصویر حرفه‌ای</span></a><a href="https://runwayml.com" target="_blank" class="tool-card"><h3>Runway AI</h3><span>ساخت ویدیو با هوش مصنوعی</span></a><a href="https://claude.ai" target="_blank" class="tool-card"><h3>Claude</h3><span>تحلیل و پردازش متن</span></a></div></section>
 
+<a href="index.html" class="back-floating-btn">← بازگشت به صفحه اصلی</a>
 
-
-
-
-
-
-<section class="ai-about">
-
-
-<h2>
-
-هوش مصنوعی و آینده دیجیتال
-
-</h2>
-
-
-
-
-<p>
-
-هوش مصنوعی یکی از مهم‌ترین فناوری‌های عصر جدید است که نحوه کار، طراحی، تولید محتوا و کسب‌وکارها را تغییر داده است.
-
-<br><br>
-
-در دانشنامه Soravin تلاش می‌کنیم جدیدترین ابزارها، آموزش‌ها و کاربردهای واقعی هوش مصنوعی را به زبان ساده بررسی کنیم.
-
-<br><br>
-
-هدف این بخش کمک به طراحان، تولیدکنندگان محتوا، صاحبان کسب‌وکار و علاقه‌مندان فناوری برای استفاده حرفه‌ای از AI است.
-
-</p>
-
-
-
-
-</section>
-
-
-
-
-
-
-
-
-
-<section class="ai-tools-preview">
-
-
-<h2>
-
-ابزارهای محبوب هوش مصنوعی
-
-</h2>
-
-
-
-<div class="news-flow">
-
-
-
-<div>
-
-ChatGPT
-
-<span>
-
-تولید متن و دستیار هوشمند
-
-</span>
-
-</div>
-
-
-
-
-
-<div>
-
-Midjourney
-
-<span>
-
-تولید تصویر حرفه‌ای
-
-</span>
-
-</div>
-
-
-
-
-
-<div>
-
-Runway AI
-
-<span>
-
-ساخت ویدیو با هوش مصنوعی
-
-</span>
-
-</div>
-
-
-
-
-
-<div>
-
-Claude
-
-<span>
-
-تحلیل و پردازش متن
-
-</span>
-
-</div>
-
-
-
-
-
-</div>
-
-
-
-</section>
-
-<!-- دکمه شناور بازگشت -->
-
-<a href="index.html" class="back-floating-btn">
-
-← بازگشت به صفحه اصلی
-
-</a>
-
-
-
-
-
-
-
-<!-- دکمه پایین صفحه -->
-
-<div class="article-back">
-
-
-<a href="index.html" class="back-btn">
-
-بازگشت به صفحه اصلی
-
-</a>
-
-
-</div>
-
-
-
-
-
-
-
-
-
-<footer>
-
-
-<div>
-
-
-<h3>
-
-SORAVIN STUDIO
-
-</h3>
-
-
-
-
-<p>
-
-دانشنامه هوش مصنوعی، ابزارهای AI و فناوری‌های آینده
-
-</p>
-
-
-
-</div>
-
-
-
-
-
-
-
-<div class="footer-links">
-
-
-<a href="index.html">
-
-خانه
-
-</a>
-
-
-
-
-<a href="tech-news.html">
-
-اخبار تکنولوژی
-
-</a>
-
-
-
-
-<a href="portfolio.html">
-
-نمونه کارها
-
-</a>
-
-
-
-
-</div>
-
-
-
-
-
-
-
-<p>
-
-© 2026 Soravin Studio
-
-</p>
-
-
-
-</footer>
-
-
-
-
-
-
-
-
+<footer class="tech-footer"><div><h3>SORAVIN STUDIO</h3><p>دانشنامه هوش مصنوعی، ابزارهای AI و فناوری‌های آینده</p></div><div class="footer-links"><a href="index.html">خانه</a><a href="tech-news.html">اخبار تکنولوژی</a><a href="portfolio.html">نمونه کارها</a></div><p>© 2026 Soravin Ai — طراحی و توسعه: آرمان آرام</p></footer>
 </body>
-
-
 </html>

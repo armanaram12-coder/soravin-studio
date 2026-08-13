@@ -3385,7 +3385,7 @@ NEWS PAGE - TECH-NEWS.HTML
     justify-content: center;
 }
 .news-filter button{
-    background: rgba(0,168,255,.1);
+    background: #0a1220;
     border: 1px solid rgba(0,168,255,.3);
     color: #eaf4ff;
     padding: 8px 16px;
@@ -3397,8 +3397,9 @@ NEWS PAGE - TECH-NEWS.HTML
 .news-filter button.active,
 .news-filter button:hover{
     background: rgba(0,168,255,.25);
-    border-color: #0ea5e9;
-    color: #0ea5e9;
+    border-color: #00a8ff;
+    color: #00a8ff;
+    box-shadow: 0 0 10px rgba(0,168,255,.4);
 }
 
 /* Compact News Card */
@@ -3763,14 +3764,14 @@ NEWS DETAIL PAGE
 
 /* Tech News Page - Light Blue Theme */
 body.tech-news-page {
-  background-color: #dfeeff !important;
+  background-color: #0a1220 !important;
 }
 
 body.tech-news-page .tech-news-section,
 body.tech-news-page .news-head h1,
 body.tech-news-page .news-head p,
 body.tech-news-page .section-title {
-  color: #0a1a2f !important;
+  color: #ffffff !important;
 }
 
 body.tech-news-page .back-floating-btn {
@@ -3796,16 +3797,16 @@ body.tech-news-page .tech-footer h3 {
 
 body.tech-news-page .tech-footer p,
 body.tech-news-page .tech-footer a {
-  color: #0a1a2f !important;
+  color: #e8eef7 !important;
 }
 
 /* Tech News Archive Section */
 .news-archive-section {
     padding: 60px 8%;
-    background: #071a30;
+    background: #0a1220;
 }
 .news-archive-section h2 {
-    color: #eaf4ff;
+    color: #ffffff;
     font-size: 28px;
     margin-bottom: 30px;
     text-align: center;
@@ -3827,7 +3828,7 @@ body.tech-news-page .tech-footer a {
     display: flex;
     align-items: center;
     gap: 14px;
-    background: #071a30;
+    background: #0a1220;
     border: 1px solid rgba(0,168,255,.4);
     border-radius: 12px;
     padding: 12px 16px;
@@ -3848,7 +3849,7 @@ body.tech-news-page .tech-footer a {
     flex-shrink: 0;
 }
 .archive-item h4 {
-    color: #eaf4ff;
+    color: #ffffff;
     font-size: 14px;
     margin: 0;
     white-space: nowrap;
@@ -3876,4 +3877,33 @@ body.tech-news-page .tech-footer a {
 .load-more-btn:hover {
     background: #0095e6;
     transform: translateY(-2px);
+}
+
+/* =========================
+TECH NEWS - CATEGORY ROWS
+========================= */
+.category-row {
+    margin-bottom: 40px;
+}
+.row-title {
+    color: #ffffff;
+    font-size: 20px;
+    margin: 0 0 16px;
+    padding-right: 12px;
+    border-right: 3px solid #00a8ff;
+}
+.row-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+@media (max-width: 1024px){
+    .row-grid{
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+@media (max-width: 768px){
+    .row-grid{
+        grid-template-columns: 1fr;
+    }
 }

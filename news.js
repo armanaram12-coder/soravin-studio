@@ -1,6 +1,6 @@
 // ===============================
 // SORAVIN NEWS SYSTEM
-// TECH-NEWS.HTML VERSION - 4 ROWS x 3 CARDS
+// TECH-NEWS.HTML VERSION - SINGLE 12-CARD GRID
 // CATEGORY-BASED LAYOUT WITH FILTERING
 // ===============================
 
@@ -26,8 +26,8 @@ fetch("data/auto-news.json")
     
     newsData = data;
     
-    // Render all 4 category rows
-    renderCategoryRows(newsData);
+    // Render single 12-card grid (3 from each category)
+    renderUnifiedGrid(newsData);
 })
 .catch(error => {
     console.log("News loading error:", error);
@@ -42,7 +42,7 @@ function getCategoryLabel(cat){
         'ai': 'هوش مصنوعی',
         'computer': 'کامپیوتر',
         'mobile': 'موبایل',
-        'future': 'فناوری آینده'
+        'future': 'فناوری'
     };
     return labels[cat] || cat;
 }
@@ -60,29 +60,30 @@ function normalizeCategory(news){
 }
 
 // ===============================
-// RENDER 4 CATEGORY ROWS
+// RENDER UNIFIED 12-CARD GRID
 // ===============================
 
-function renderCategoryRows(allNews){
+function renderUnifiedGrid(allNews){
     const newsGrid = document.getElementById("newsGrid");
     if(!newsGrid) return;
     
     newsGrid.innerHTML = "";
     
-    // Define 4 categories in order
+    // Define 4 categories
     const categories = ['ai', 'computer', 'mobile', 'future'];
     
-    // Track used news IDs to avoid duplicates when filling
+    // Track used news IDs to avoid duplicates
     const usedIds = new Set();
+    const selectedNews = [];
     
+    // Get 3 news from each category
     categories.forEach(cat => {
-        // Get news for this category (sorted by date already)
         let catNews = allNews.filter(n => normalizeCategory(n) === cat);
         
-        // Mark these as used
+        // Mark as used
         catNews.forEach(n => usedIds.add(n.id));
         
-        // If less than 3, fill from general pool (excluding already used)
+        // If less than 3, fill from general pool
         if(catNews.length < 3){
             const otherNews = allNews.filter(n => !usedIds.has(n.id));
             const needed = 3 - catNews.length;
@@ -93,29 +94,13 @@ function renderCategoryRows(allNews){
         
         // Take only first 3
         catNews = catNews.slice(0, 3);
-        
-        // Create row section
-        const rowSection = document.createElement('div');
-        rowSection.className = 'category-row';
-        rowSection.dataset.category = cat;
-        
-        // Row title
-        const rowTitle = document.createElement('h3');
-        rowTitle.className = 'row-title';
-        rowTitle.textContent = getCategoryLabel(cat);
-        rowSection.appendChild(rowTitle);
-        
-        // Row grid
-        const rowGrid = document.createElement('div');
-        rowGrid.className = 'row-grid';
-        
-        catNews.forEach(news => {
-            const card = createCard(news);
-            rowGrid.appendChild(card);
-        });
-        
-        rowSection.appendChild(rowGrid);
-        newsGrid.appendChild(rowSection);
+        selectedNews.push(...catNews);
+    });
+    
+    // Create cards for all 12 items
+    selectedNews.forEach(news => {
+        const card = createCard(news);
+        newsGrid.appendChild(card);
     });
 }
 
@@ -127,13 +112,16 @@ function createCard(news){
     const card = document.createElement("div");
     card.className = "news-card";
     card.dataset.category = normalizeCategory(news);
+    
+    // Get Persian category label
+    const catLabel = getCategoryLabel(normalizeCategory(news));
 
     card.innerHTML = `
     <div class="news-card-image">
         <img src="${news.image || 'assets/image/ai-news.jpg'}" alt="${news.title}">
     </div>
     <div class="news-card-content">
-        <div class="news-card-category ${card.dataset.category}">${news.tag || news.category || "Technology"}</div>
+        <div class="news-card-category ${card.dataset.category}">${catLabel}</div>
         <h3 class="news-card-title">${news.title_fa || news.title}</h3>
         <div class="news-card-meta">
             <span>${news.source || "Soravin Tech"}</span>
@@ -159,14 +147,14 @@ filterButtons.forEach(button => {
         filterButtons.forEach(btn => btn.classList.remove("active"));
         button.classList.add("active");
 
-        const rows = document.querySelectorAll(".category-row");
+        const cards = document.querySelectorAll(".news-card");
         
-        rows.forEach(row => {
-            const rowCat = row.dataset.category;
-            if(filter === 'all' || rowCat === filter){
-                row.style.display = 'block';
+        cards.forEach(card => {
+            const cardCat = card.dataset.category;
+            if(filter === 'all' || cardCat === filter){
+                card.style.display = 'flex';
             } else {
-                row.style.display = 'none';
+                card.style.display = 'none';
             }
         });
     });

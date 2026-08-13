@@ -3478,22 +3478,24 @@ NEWS PAGE - TECH-NEWS.HTML
     background: rgba(0,168,255,.2);
 }
 
-/* News Grid - 3 columns desktop, 2 tablet, 1 mobile */
+/* News Grid - Unified 12-card grid: 6 columns desktop, 3 tablet, 2 mobile */
 #newsGrid{
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 20px;
 }
-@media (max-width: 1024px){
+@media (max-width: 1200px){
     #newsGrid{
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(3, 1fr);
     }
 }
 @media (max-width: 768px){
     #newsGrid{
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, 1fr);
     }
 }
+
+/* Remove old category-row styles since we use unified grid now */
 
 /* Featured News */
 .featured-news{
@@ -3880,27 +3882,6 @@ body.tech-news-page .tech-footer a {
 }
 
 /* =========================
-TECH NEWS - CATEGORY ROWS
-========================= */
-.category-row {
-    margin-bottom: 40px;
-}
-.row-title {
-    color: #ffffff;
-    font-size: 20px;
-    margin: 0 0 16px;
-    padding-right: 12px;
-    border-right: 3px solid #00a8ff;
-}
-.row-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-}
-@media (max-width: 1024px){
-    .row-grid{
-        grid-template-columns: repeat(2, 1fr);
-    }
 }
 @media (max-width: 768px){
     .row-grid{

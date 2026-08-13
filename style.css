@@ -3494,23 +3494,6 @@ NEWS PAGE - TECH-NEWS.HTML
         grid-template-columns: 1fr;
     }
 }
-
-/* Featured News */
-.featured-news{
-    margin-top: 60px;
-    padding-top: 40px;
-    border-top: 1px solid rgba(0,168,255,.3);
-}
-.featured-news h2{
-    color: #eaf4ff;
-    font-size: 24px;
-    margin: 0 0 12px;
-}
-.featured-news p{
-    color: #7f9bb8;
-    font-size: 14px;
-    margin: 0 0 24px;
-}
 .featured-grid{
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -3788,4 +3771,83 @@ body.tech-news-page .tech-footer h3 {
 body.tech-news-page .tech-footer p,
 body.tech-news-page .tech-footer a {
   color: #0a1a2f !important;
+}
+
+/* Tech News Archive Section */
+.news-archive-section {
+    padding: 60px 8%;
+    background: #071a30;
+}
+.news-archive-section h2 {
+    color: #eaf4ff;
+    font-size: 28px;
+    margin-bottom: 30px;
+    text-align: center;
+}
+.archive-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 30px;
+    width: min(1200px, 92%);
+    margin-inline: auto;
+}
+@media (max-width: 768px) {
+    .archive-list {
+        grid-template-columns: 1fr;
+    }
+}
+.archive-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: #071a30;
+    border: 1px solid rgba(0,168,255,.4);
+    border-radius: 12px;
+    padding: 12px 16px;
+    transition: .3s;
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden;
+}
+.archive-item:hover {
+    border-color: #00a8ff;
+    transform: translateX(-4px);
+}
+.archive-item img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 8px;
+    flex-shrink: 0;
+}
+.archive-item h4 {
+    color: #eaf4ff;
+    font-size: 14px;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 1;
+}
+.archive-item .archive-date {
+    color: #7f9bb8;
+    font-size: 12px;
+    flex-shrink: 0;
+}
+.load-more-btn {
+    display: block;
+    margin: 0 auto;
+    background: #00a8ff;
+    color: #fff;
+    border: none;
+    padding: 12px 32px;
+    border-radius: 30px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: .3s;
+}
+.load-more-btn:hover {
+    background: #0095e6;
+    transform: translateY(-2px);
 }

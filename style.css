@@ -2021,7 +2021,7 @@ MOBILE
 
 }
 
-@media(max-width:700px){
+@media(max-width:768px){
 
 .news-section{
 
@@ -3079,12 +3079,6 @@ grid-template-columns:repeat(2,1fr);
 
 }
 
-.news-grid{
-
-grid-template-columns:repeat(2,1fr);
-
-}
-
 .free-tools-grid{
 
 grid-template-columns:repeat(2,1fr);
@@ -3153,13 +3147,18 @@ width:100%;
 
 .service-grid,
 .article-grid,
-.news-grid,
 .free-tools-grid,
 .feature-boxes,
 .ai-tools-grid,
 .portfolio-container{
 
 grid-template-columns:1fr;
+
+}
+
+.news-grid{
+
+grid-template-columns:1fr !important;
 
 }
 
@@ -3779,6 +3778,16 @@ body.tech-news-page .back-floating-btn {
   border: 1px solid rgba(0, 168, 255, 0.4) !important;
   color: #eaf4ff !important;
   box-shadow: 0 0 10px rgba(0, 168, 255, 0.25) !important;
+  position: fixed !important;
+  bottom: 16px !important;
+  right: 16px !important;
+  left: auto !important;
+  width: auto !important;
+  max-width: none !important;
+  padding: 10px 18px !important;
+  font-size: 13px !important;
+  border-radius: 9999px !important;
+  display: inline-block !important;
 }
 
 body.tech-news-page .tech-footer h3 {
@@ -3802,9 +3811,11 @@ body.tech-news-page .tech-footer a {
     text-align: center;
 }
 .archive-list {
+    width: min(1200px, 92%);
+    margin-inline: auto;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
+    gap: 12px;
     margin-bottom: 30px;
 }
 @media (max-width: 768px) {
@@ -3821,6 +3832,9 @@ body.tech-news-page .tech-footer a {
     border-radius: 12px;
     padding: 12px 16px;
     transition: .3s;
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden;
 }
 .archive-item:hover {
     border-color: #00a8ff;

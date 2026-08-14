@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<title>
+مبانی هوش مصنوعی | آموزش AI از پایه تا حرفه‌ای | Soravin Studio
+</title>
+
+
+<meta name="description" content="آموزش کامل مبانی هوش مصنوعی از مفاهیم پایه تا مباحث پیشرفته - تاریخچه AI، انواع هوش مصنوعی، ماشین لرنینگ و Deep Learning">
+
+
+<link rel="stylesheet" href="style.css">
+
+<style>
+body{margin:0;padding-top:70px;background-color:#17102b;color:#cfc6e8;font-family:Tahoma,Arial,sans-serif;direction:rtl}
+.header{position:fixed;top:0;width:100%;background-color:#1a1a1a;padding:15px 40px;display:flex;justify-content:space-between;align-items:center;z-index:1000;border-bottom:1px solid #333;box-sizing:border-box}
+.logo{color:white;font-size:24px;font-weight:bold}
+.logo span{color:#b39dff}
+.main-nav{display:flex;gap:25px;align-items:center}
+.main-nav a{color:white;text-decoration:none;font-size:14px;transition:color 0.3s}
+.main-nav a:hover{color:#b39dff}
+.dropdown{position:relative;display:inline-block}
+.dropbtn{color:white;text-decoration:none;font-size:14px;cursor:pointer}
+.dropdown-content{display:none;position:absolute;background-color:#2a2a2a;min-width:180px;box-shadow:0 8px 16px rgba(0,0,0,0.3);z-index:1001;border-radius:8px;overflow:hidden}
+.dropdown-content a{color:white;padding:12px 16px;text-decoration:none;display:block;font-size:13px}
+.dropdown-content a:hover{background-color:#3a3a3a;color:#b39dff}
+.dropdown:hover .dropdown-content{display:block}
+.auth-buttons{display:flex;gap:10px}
+.btn-outline-small{padding:8px 16px;border-radius:20px;text-decoration:none;font-size:13px;background-color:transparent;border:1px solid #ddd;color:white;transition:all 0.3s}
+.btn-outline-small:hover{background-color:#b39dff;border-color:#b39dff;color:#17102b}
+.mobile-menu-btn{display:none;background:none;border:none;color:white;font-size:24px;cursor:pointer}
+.article-toc{background:#221737;border:1px solid rgba(179,157,255,0.35);padding:25px;border-radius:15px;margin-bottom:40px}
+.article-toc h2{color:#b39dff;margin-bottom:20px;font-size:18px}
+.article-toc ul{list-style:none;padding:0}
+.article-toc li{margin:12px 0}
+.article-toc a{color:#f1edff;text-decoration:none;transition:.3s}
+.article-toc a:hover{color:#b39dff}
+.back-floating-btn{position:fixed !important;bottom:16px !important;right:16px !important;left:auto !important;width:auto !important;max-width:none !important;padding:10px 18px !important;font-size:13px !important;border-radius:9999px !important;background:#b39dff;color:#17102b;text-decoration:none;font-weight:bold;z-index:1000;transition:all 0.3s;display:inline-block !important}
+.back-floating-btn:hover{transform:scale(1.05);box-shadow:0 0 15px rgba(179,157,255,0.5)}
+.tech-footer{background:#1a1a1a;border-top:1px solid #333;padding:30px 20px;text-align:center;margin-top:60px}
+.tech-footer h3{color:#b39dff;font-size:18px;margin:0 0 10px}
+.tech-footer p{color:#cfc6e8;font-size:13px;margin:5px 0}
+.footer-links{display:flex;justify-content:center;gap:24px;margin:20px 0}
+.footer-links a{color:#cfc6e8;text-decoration:none;font-size:13px;transition:color 0.3s}
+.footer-links a:hover{color:#b39dff}
+@media(max-width:768px){.header{padding:15px 20px}.main-nav{display:none}.mobile-menu-btn{display:block}}
+</style>
+</head>
+
+
+<body>
+
+
+<header class="header">
+<div class="logo">SORAVIN <span>Ai</span></div>
+<nav class="main-nav">
+<a href="index.html">خانه</a>
+<div class="dropdown"><a href="#services" class="dropbtn">خدمات</a><div class="dropdown-content"><a href="project-logo.html">پکیج طراحی لوگو</a><a href="project-motion.html">تیزر تبلیغاتی</a><a href="project-brand.html">بوک برند</a><a href="project-motion.html">طراحی سه‌بعدی</a></div></div>
+<div class="dropdown"><a href="#ai-tools" class="dropbtn">ابزار هوش مصنوعی</a><div class="dropdown-content"><a href="ai-tools.html#name-gen">ایده‌ساز نام برند</a><a href="ai-tools.html#slogan-gen">شعارساز</a><a href="ai-tools.html#palette-gen">پالت رنگ برند</a><a href="ai-tools.html#hashtag-gen">هشتگ‌ساز</a></div></div>
+<a href="tech-news.html">اخبار تکنولوژی</a>
+<a href="free-ai-tools.html">معرفی ابزارهای رایگان</a>
+<a href="ai-learning.html">دانشنامه هوش مصنوعی</a>
+</nav>
+<div class="auth-buttons"><a href="login.html" class="btn-outline-small">ورود / ثبت‌نام</a></div>
+<button class="mobile-menu-btn" aria-label="منو">☰</button>
+</header>
+
+
+
+
+<section class="article-hero">
+
+
+<h1>
+
+مبانی هوش مصنوعی
+
+</h1>
+
+
+<p>
+
+آشنایی با مفاهیم پایه AI، تاریخچه، انواع و کاربردهای اولیه هوش مصنوعی
+
+</p>
+
+
+</section>
+
+
+
+
+
+
+<main>
+
+
+<article class="article-content">
+
+
+
+
+<div class="article-toc">
+
+
+<h3>
+
+فهرست مطالب
+
+</h3>
+
+
+<ul>
+
+
+<li>
+<a href="#intro">
+مقدمه: هوش مصنوعی چیست؟
+</a>
+</li>
+
+
+<li>
+<a href="#basics">
+سطح مقدماتی - مفاهیم پایه
+</a>
+</li>
+
+
+<li>
+<a href="#intermediate">
+سطح میانی - یادگیری ماشین
+</a>
+</li>
+
+
+<li>
+<a href="#advanced">
+سطح پیشرفته - Deep Learning و Transformer
+</a>
+</li>
+
+
+<li>
+<a href="#conclusion">
+جمع‌بندی
+</a>
+</li>
+
+
+</ul>
+
+
+</div>
+
+
+
+
+
+<h2 id="intro">
+
+مقدمه: هوش مصنوعی چیست؟
+
+</h2>
+
+
+<p>
+
+هوش مصنوعی یا Artificial Intelligence (AI) به شبیه‌سازی هوش انسانی در ماشین‌ها اشاره دارد. این فناوری به کامپیوترها اجازه می‌دهد کارهایی را انجام دهند که معمولاً به هوش انسان نیاز دارند؛ مانند یادگیری، استدلال، حل مسئله و درک زبان.
+
+</p>
+
+
+<p>
+
+امروزه هوش مصنوعی در بسیاری از جنبه‌های زندگی روزمره ما حضور دارد؛ از دستیارهای صوتی مانند Siri و Alexa گرفته تا سیستم‌های پیشنهاددهنده Netflix و Spotify، خودروهای خودران و چت‌بات‌های هوشمند.
+
+</p>
+
+
+<p>
+
+در این مسیر یادگیری، شما را با مفاهیم پایه تا پیشرفته هوش مصنوعی آشنا می‌کنیم تا بتوانید درک عمیقی از این فناوری تحول‌آفرین پیدا کنید.
+
+</p>
+
+
+
+
+
+<h2 id="basics">
+
+سطح مقدماتی - مفاهیم پایه
+
+</h2>
+
+
+<h3>
+
+۱. تعریف ساده هوش مصنوعی
+
+</h3>
+
+
+<p>
+
+هوش مصنوعی شاخه‌ای از علوم کامپیوتر است که هدف آن ساخت ماشین‌هایی است که می‌توانند مانند انسان فکر کنند و عمل کنند. این ماشین‌ها قادر به یادگیری از تجربه، تطبیق با شرایط جدید و انجام وظایف پیچیده هستند.
+
+</p>
+
+
+<h3>
+
+۲. تاریخچه مختصر AI
+
+</h3>
+
+
+<p>
+
+تاریخچه هوش مصنوعی به دهه ۱۹۵۰ بازمی‌گردد:
+
+</p>
+
+<ul>
+<li>۱۹۵۰: آلن تورینگ تست تورینگ را معرفی کرد</li>
+<li>۱۹۵۶: اصطلاح "Artificial Intelligence" در کنفرانس Dartmouth ابداع شد</li>
+<li>۱۹۶۰-۱۹۷۰: اولین برنامه‌های هوش مصنوعی ساخته شدند</li>
+<li>۱۹۸۰-۱۹۹۰: ظهور شبکه‌های عصبی و یادگیری ماشین</li>
+<li>۲۰۱۰-اکنون: انقلاب Deep Learning و مدل‌های زبانی بزرگ</li>
+</ul>
+
+
+<h3>
+
+۳. انواع هوش مصنوعی
+
+</h3>
+
+
+<p>
+
+هوش مصنوعی به سه دسته اصلی تقسیم می‌شود:
+
+</p>
+
+<ul>
+<li><strong>ANI (هوش مصنوعی محدود):</strong> فقط در یک حوزه خاص مهارت دارد (مانند ChatGPT، سیستم‌های تشخیص چهره)</li>
+<li><strong>AGI (هوش مصنوعی عمومی):</strong> توانایی انجام هر کار فکری که انسان می‌تواند انجام دهد (هنوز محقق نشده)</li>
+<li><strong>ASI (هوش مصنوعی فوق‌العاده):</strong> هوشی فراتر از بهترین ذهن‌های انسانی (نظری)</li>
+</ul>
+
+
+<h3>
+
+۴. کاربردهای روزمره هوش مصنوعی
+
+</h3>
+
+
+<p>
+
+هوش مصنوعی در زندگی روزمره ما نفوذ کرده است:
+
+</p>
+
+<ul>
+<li>جستجوی گوگل و نتایج شخصی‌سازی شده</li>
+<li>پیشنهادات فیلم و موسیقی</li>
+<li>ترجمه خودکار متون</li>
+<li>تشخیص تصویر در شبکه‌های اجتماعی</li>
+<li>دستیارهای هوشمند موبایل</li>
+<li>سیستم‌های ناوبری و نقشه</li>
+</ul>
+
+
+<h3>
+
+۵. اصطلاحات پایه
+
+</h3>
+
+
+<p>
+
+برای درک بهتر هوش مصنوعی، باید با این اصطلاحات آشنا شوید:
+
+</p>
+
+<ul>
+<li><strong>الگوریتم:</strong> مجموعه‌ای از دستورالعمل‌ها برای حل یک مسئله</li>
+<li><strong>داده:</strong> اطلاعات خامی که برای آموزش مدل‌ها استفاده می‌شود</li>
+<li><strong>مدل:</strong> سیستمی که پس از آموزش، می‌تواند پیش‌بینی یا تصمیم‌گیری کند</li>
+<li><strong>آموزش:</strong> فرآیند یادگیری مدل از داده‌ها</li>
+</ul>
+
+
+<h3>
+
+۶. آشنایی با ماشین لرنینگ
+
+</h3>
+
+
+<p>
+
+یادگیری ماشین (Machine Learning) زیرشاخه‌ای از هوش مصنوعی است که به سیستم‌ها اجازه می‌دهد بدون برنامه‌نویسی صریح، از داده‌ها یاد بگیرند. به جای اینکه هر قانون را دستی کدنویسی کنیم، مدل از الگوهای موجود در داده‌ها یاد می‌گیرد.
+
+</p>
+
+
+
+
+
+<h2 id="intermediate">
+
+سطح میانی - یادگیری ماشین
+
+</h2>
+
+
+<h3>
+
+۱. یادگیری نظارت‌شده (Supervised Learning)
+
+</h3>
+
+
+<p>
+
+در این روش، مدل با داده‌های برچسب‌دار آموزش می‌بیند. یعنی برای هر ورودی، خروجی صحیح مشخص است. مثال‌ها:
+
+</p>
+
+<ul>
+<li>دسته‌بندی ایمیل‌ها به اسپم و غیر اسپم</li>
+<li>پیش‌بینی قیمت خانه بر اساس متراژ و موقعیت</li>
+<li>تشخیص تصاویر گربه و سگ</li>
+</ul>
+
+
+<h3>
+
+۲. یادگیری بدون نظارت (Unsupervised Learning)
+
+</h3>
+
+
+<p>
+
+در این روش، داده‌ها برچسب ندارند و مدل باید الگوها و ساختارهای پنهان را کشف کند. مثال‌ها:
+
+</p>
+
+<ul>
+<li>خوشه‌بندی مشتریان بر اساس رفتار خرید</li>
+<li>کاهش ابعاد داده‌ها</li>
+<li>تشخیص ناهنجاری در تراکنش‌های بانکی</li>
+</ul>
+
+
+<h3>
+
+۳. شبکه‌های عصبی چگونه کار می‌کنند؟
+
+</h3>
+
+
+<p>
+
+شبکه‌های عصبی از لایه‌های مختلفی از نورون‌های مصنوعی تشکیل شده‌اند که مشابه مغز انسان عمل می‌کنند:
+
+</p>
+
+<ul>
+<li><strong>لایه ورودی:</strong> داده‌ها را دریافت می‌کند</li>
+<li><strong>لایه‌های پنهان:</strong> پردازش و استخراج ویژگی‌ها را انجام می‌دهند</li>
+<li><strong>لایه خروجی:</strong> نتیجه نهایی را تولید می‌کند</li>
+</ul>
+
+
+<p>
+
+هر نورون ورودی‌ها را دریافت کرده، با وزن‌های خاصی ضرب می‌کند و از یک تابع فعال‌سازی عبور می‌دهد.
+
+</p>
+
+
+<h3>
+
+۴. مفاهیم Training، Validation و Test
+
+</h3>
+
+
+<p>
+
+برای آموزش و ارزیابی مدل‌ها، داده‌ها به سه بخش تقسیم می‌شوند:
+
+</p>
+
+<ul>
+<li><strong>Training Set:</strong> برای آموزش مدل استفاده می‌شود</li>
+<li><strong>Validation Set:</strong> برای تنظیم پارامترها و جلوگیری از Overfitting</li>
+<li><strong>Test Set:</strong> برای ارزیابی نهایی عملکرد مدل</li>
+</ul>
+
+
+<h3>
+
+۵. آشنایی با Deep Learning
+
+</h3>
+
+
+<p>
+
+یادگیری عمیق (Deep Learning) نوعی از یادگیری ماشین است که از شبکه‌های عصبی چندلایه استفاده می‌کند. این روش در موارد زیر بسیار موفق بوده است:
+
+</p>
+
+<ul>
+<li>پردازش تصویر و بینایی کامپیوتر</li>
+<li>پردازش زبان طبیعی</li>
+<li>تشخیص گفتار</li>
+<li>خودروهای خودران</li>
+</ul>
+
+
+
+
+
+<h2 id="advanced">
+
+سطح پیشرفته - Deep Learning و Transformer
+
+</h2>
+
+
+<h3>
+
+۱. معماری‌های Transformer و Attention
+
+</h3>
+
+
+<p>
+
+Transformer یک معماری انقلابی در یادگیری عمیق است که در سال ۲۰۱۷ معرفی شد. مکانیزم Attention به مدل اجازه می‌دهد روی بخش‌های مهم‌تر ورودی تمرکز کند.
+
+</p>
+
+
+<p>
+
+این معماری پایه مدل‌های زبانی بزرگ مانند GPT، BERT و Claude است.
+
+</p>
+
+
+<h3>
+
+۲. بهینه‌سازی مدل‌های بزرگ زبانی
+
+</h3>
+
+
+<p>
+
+مدل‌های زبانی بزرگ (LLM) مانند GPT-4 دارای میلیاردها پارامتر هستند. بهینه‌سازی این مدل‌ها شامل:
+
+</p>
+
+<ul>
+<li>کاهش اندازه مدل بدون افت عملکرد (Pruning)</li>
+<li>فشرده‌سازی وزن‌ها (Quantization)</li>
+<li>استفاده از دانش مدل بزرگ برای آموزش مدل کوچک (Distillation)</li>
+</ul>
+
+
+<h3>
+
+۳. Fine-tuning و Transfer Learning
+
+</h3>
+
+
+<p>
+
+<strong>Fine-tuning:</strong> آموزش بیشتر یک مدل از قبل آموزش‌دیده روی داده‌های خاص یک حوزه
+
+</p>
+
+
+<p>
+
+<strong>Transfer Learning:</strong> استفاده از دانش کسب‌شده در یک任务 برای بهبود عملکرد در task دیگر
+
+</p>
+
+
+<p>
+
+این روش‌ها باعث می‌شوند بتوانیم با داده‌های کمتر، مدل‌های قوی بسازیم.
+
+</p>
+
+
+<h3>
+
+۴. اخلاق و چالش‌های AI پیشرفته
+
+</h3>
+
+
+<p>
+
+با پیشرفت هوش مصنوعی، چالش‌های اخلاقی مهمی مطرح شده است:
+
+</p>
+
+<ul>
+<li>سوگیری در داده‌ها و تبعیض الگوریتمی</li>
+<li>حریم خصوصی و امنیت داده‌ها</li>
+<li>جابجایی شغلی ناشی از اتوماسیون</li>
+<li>استفاده نظامی از هوش مصنوعی</li>
+<li>مسئولیت تصمیم‌های AI</li>
+</ul>
+
+
+
+
+
+<h2 id="conclusion">
+
+جمع‌بندی
+
+</h2>
+
+
+<p>
+
+در این مسیر یادگیری، با مبانی هوش مصنوعی از مفاهیم پایه تا مباحث پیشرفته آشنا شدید. هوش مصنوعی یکی از مهم‌ترین فناوری‌های عصر حاضر است که تقریباً تمام صنایع را تحت تأثیر قرار داده است.
+
+</p>
+
+
+<p>
+
+برای ادامه یادگیری، پیشنهاد می‌کنیم:
+
+</p>
+
+<ul>
+<li>ابزارهای عملی هوش مصنوعی را امتحان کنید</li>
+<li>پروژه‌های کوچک شخصی شروع کنید</li>
+<li>در دوره‌های تخصصی شرکت کنید</li>
+<li>همیشه به‌روز باشید و اخبار حوزه AI را دنبال کنید</li>
+</ul>
+
+
+<p>
+
+هوش مصنوعی آینده را شکل می‌دهد و یادگیری آن سرمایه‌گذاری ارزشمندی برای آینده شغلی و شخصی شماست.
+
+</p>
+
+
+
+
+</article>
+
+
+</main>
+
+
+
+
+
+
+<a href="ai-learning.html" class="back-floating-btn">
+
+← بازگشت به آموزش AI
+
+</a>
+
+
+
+
+
+
+<footer class="tech-footer"><div><h3>SORAVIN STUDIO</h3><p>دانشنامه هوش مصنوعی، ابزارهای AI و فناوری‌های آینده</p></div><div class="footer-links"><a href="index.html">خانه</a><a href="tech-news.html">اخبار تکنولوژی</a><a href="portfolio.html">نمونه کارها</a></div><p>© 2026 Soravin Ai — طراحی و توسعه: آرمان آرام</p></footer>
+
+<a href="index.html" class="back-floating-btn" style="bottom:70px;">← بازگشت به صفحه اصلی</a>
+
+</body>
+</html>

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تولید محتوا با هوش مصنوعی | آموزش ساخت متن، تصویر و ویدیو | Soravin Studio</title>
+<meta name="description" content="آموزش کامل تولید محتوا با هوش مصنوعی - ساخت متن، تصویر، ویدیو، صدا و محتوای دیجیتال با ابزارهای هوشمند">
+<link rel="stylesheet" href="style.css">
+<style>
+body{margin:0;padding-top:70px;background-color:#17102b;color:#cfc6e8;font-family:Tahoma,Arial,sans-serif;direction:rtl}
+.header{position:fixed;top:0;width:100%;background-color:#1a1a1a;padding:15px 40px;display:flex;justify-content:space-between;align-items:center;z-index:1000;border-bottom:1px solid #333;box-sizing:border-box}
+.logo{color:white;font-size:24px;font-weight:bold}.logo span{color:#b39dff}
+.main-nav{display:flex;gap:25px;align-items:center}
+.main-nav a{color:white;text-decoration:none;font-size:14px;transition:color 0.3s}
+.main-nav a:hover{color:#b39dff}
+.dropdown{position:relative;display:inline-block}
+.dropbtn{color:white;text-decoration:none;font-size:14px;cursor:pointer}
+.dropdown-content{display:none;position:absolute;background-color:#2a2a2a;min-width:180px;box-shadow:0 8px 16px rgba(0,0,0,0.3);z-index:1001;border-radius:8px;overflow:hidden}
+.dropdown-content a{color:white;padding:12px 16px;text-decoration:none;display:block;font-size:13px}
+.dropdown-content a:hover{background-color:#3a3a3a;color:#b39dff}
+.dropdown:hover .dropdown-content{display:block}
+.auth-buttons{display:flex;gap:10px}
+.btn-outline-small{padding:8px 16px;border-radius:20px;text-decoration:none;font-size:13px;background-color:transparent;border:1px solid #ddd;color:white;transition:all 0.3s}
+.btn-outline-small:hover{background-color:#b39dff;border-color:#b39dff;color:#17102b}
+.mobile-menu-btn{display:none;background:none;border:none;color:white;font-size:24px;cursor:pointer}
+.article-toc{background:#221737;border:1px solid rgba(179,157,255,0.35);padding:25px;border-radius:15px;margin-bottom:40px}
+.article-toc h2{color:#b39dff;margin-bottom:20px;font-size:18px}
+.article-toc ul{list-style:none;padding:0}
+.article-toc li{margin:12px 0}
+.article-toc a{color:#f1edff;text-decoration:none;transition:.3s}
+.article-toc a:hover{color:#b39dff}
+.back-floating-btn{position:fixed !important;bottom:16px !important;right:16px !important;left:auto !important;width:auto !important;max-width:none !important;padding:10px 18px !important;font-size:13px !important;border-radius:9999px !important;background:#b39dff;color:#17102b;text-decoration:none;font-weight:bold;z-index:1000;transition:all 0.3s;display:inline-block !important}
+.back-floating-btn:hover{transform:scale(1.05);box-shadow:0 0 15px rgba(179,157,255,0.5)}
+.tech-footer{background:#1a1a1a;border-top:1px solid #333;padding:30px 20px;text-align:center;margin-top:60px}
+.tech-footer h3{color:#b39dff;font-size:18px;margin:0 0 10px}
+.tech-footer p{color:#cfc6e8;font-size:13px;margin:5px 0}
+.footer-links{display:flex;justify-content:center;gap:24px;margin:20px 0}
+.footer-links a{color:#cfc6e8;text-decoration:none;font-size:13px;transition:color 0.3s}
+.footer-links a:hover{color:#b39dff}
+@media(max-width:768px){.header{padding:15px 20px}.main-nav{display:none}.mobile-menu-btn{display:block}}
+</style>
+</head>
+<body>
+<header class="header">
+<div class="logo">SORAVIN <span>Ai</span></div>
+<nav class="main-nav">
+<a href="index.html">خانه</a>
+<div class="dropdown"><a href="#services" class="dropbtn">خدمات</a><div class="dropdown-content"><a href="project-logo.html">پکیج طراحی لوگو</a><a href="project-motion.html">تیزر تبلیغاتی</a><a href="project-brand.html">بوک برند</a><a href="project-motion.html">طراحی سه‌بعدی</a></div></div>
+<div class="dropdown"><a href="#ai-tools" class="dropbtn">ابزار هوش مصنوعی</a><div class="dropdown-content"><a href="ai-tools.html#name-gen">ایده‌ساز نام برند</a><a href="ai-tools.html#slogan-gen">شعارساز</a><a href="ai-tools.html#palette-gen">پالت رنگ برند</a><a href="ai-tools.html#hashtag-gen">هشتگ‌ساز</a></div></div>
+<a href="tech-news.html">اخبار تکنولوژی</a>
+<a href="free-ai-tools.html">معرفی ابزارهای رایگان</a>
+<a href="ai-learning.html">دانشنامه هوش مصنوعی</a>
+</nav>
+<div class="auth-buttons"><a href="login.html" class="btn-outline-small">ورود / ثبت‌نام</a></div>
+<button class="mobile-menu-btn" aria-label="منو">☰</button>
+</header>
+<section class="article-hero">
+<h1>تولید محتوا با هوش مصنوعی</h1>
+<p>ساخت متن، تصویر، ویدیو، صدا و محتوای دیجیتال با ابزارهای هوشمند</p>
+</section>
+<main>
+<article class="article-content">
+<div class="article-toc">
+<h3>فهرست مطالب</h3>
+<ul>
+<li><a href="#intro">مقدمه: انقلاب تولید محتوا با AI</a></li>
+<li><a href="#basics">سطح مقدماتی - شروع تولید محتوا</a></li>
+<li><a href="#intermediate">سطح میانی - تولید حرفه‌ای</a></li>
+<li><a href="#advanced">سطح پیشرفته - تکنیک‌های پیشرفته</a></li>
+<li><a href="#conclusion">جمع‌بندی</a></li>
+</ul>
+</div>
+<h2 id="intro">مقدمه: انقلاب تولید محتوا با AI</h2>
+<p>هوش مصنوعی دنیای تولید محتوا را متحول کرده است. امروزه می‌توانید با کمک ابزارهای AI، محتوای متنی، تصویری، ویدیویی و صوتی با کیفیت بالا و در زمان کوتاه تولید کنید.</p>
+<p>در این مسیر یادگیری، با بهترین روش‌ها و ابزارهای تولید محتوا با هوش مصنوعی آشنا می‌شوید.</p>
+<h2 id="basics">سطح مقدماتی - شروع تولید محتوا</h2>
+<h3>۱. تولید متن با ChatGPT و Gemini</h3>
+<p>ابزارهای چت‌بات می‌توانند انواع محتواهای متنی تولید کنند:</p>
+<ul>
+<li>مقالات وبلاگ و سایت</li>
+<li>پست‌های شبکه‌های اجتماعی</li>
+<li>متن‌های تبلیغاتی و کپی‌رایتینگ</li>
+<li>ایمیل‌های حرفه‌ای</li>
+<li>سناریو و فیلمنامه</li>
+</ul>
+<h3>۲. ساخت تصویر با Midjourney</h3>
+<p>Midjourney یکی از قدرتمندترین ابزارهای تبدیل متن به تصویر است:</p>
+<ul>
+<li>طراحی مفهومی و ایده‌پردازی</li>
+<li>ساخت تصاویر برای مقالات</li>
+<li>ایجاد artwork هنری</li>
+<li>طراحی کاراکتر و محیط</li>
+</ul>
+<h3>۳. تبدیل متن به صوت (TTS)</h3>
+<p>ابزارهای Text-to-Speech متن را به گفتار طبیعی تبدیل می‌کنند:</p>
+<ul>
+<li>ElevenLabs: کیفیت بسیار بالا</li>
+<li>Google TTS: رایگان و سریع</li>
+<li>Amazon Polly: مناسب برای اپلیکیشن‌ها</li>
+</ul>
+<h3>۴. ویرایش عکس با AI</h3>
+<p>ابزارهای هوشمند ویرایش عکس:</p>
+<ul>
+<li>Photoshop AI: حذف اشیاء، گسترش تصویر</li>
+<li>Canva AI: ویرایش سریع و آسان</li>
+<li>Remove.bg: حذف پس‌زمینه خودکار</li>
+</ul>
+<h3>۵. ساخت پست شبکه‌های اجتماعی</h3>
+<p>با AI می‌توانید به سرعت محتوای شبکه‌های اجتماعی تولید کنید:</p>
+<ul>
+<li>ایده‌یابی موضوعات ترند</li>
+<li>نوشتن کپشن جذاب</li>
+<li>طراحی گرافیک پست</li>
+<li>زمان‌بندی انتشار</li>
+</ul>
+<h3>۶. تولید ایده و سناریو</h3>
+<p>هوش مصنوعی در ایده‌پردازی عالی عمل می‌کند:</p>
+<ul>
+<li>طوفان فکری موضوعات</li>
+<li>توسعه ایده‌های اولیه</li>
+<li>ساخت outline محتوا</li>
+<li>نوشتن سناریو ویدیو</li>
+</ul>
+<h2 id="intermediate">سطح میانی - تولید حرفه‌ای</h2>
+<h3>۱. ساخت ویدیو با Runway و Pika</h3>
+<p>ابزارهای تولید ویدیو با AI:</p>
+<ul>
+<li>Runway Gen-2: تبدیل متن به ویدیو</li>
+<li>Pika Labs: انیمیشن‌سازی تصاویر</li>
+<li>HeyGen: ساخت ویدیو با آواتار</li>
+</ul>
+<h3>۲. تولید پادکست با ElevenLabs</h3>
+<p>ساخت محتوای صوتی حرفه‌ای:</p>
+<ul>
+<li>تبدیل مقاله به پادکست</li>
+<li>ساخت صداهای سفارشی</li>
+<li>افزودن موسیقی پس‌زمینه</li>
+<li>ویرایش خودکار صدا</li>
+</ul>
+<h3>۳. طراحی لوگو و برندینگ با AI</h3>
+<p>ابزارهای طراحی هویت بصری:</p>
+<ul>
+<li>Looka: ساخت لوگو خودکار</li>
+<li>Brandmark: طراحی کامل برند</li>
+<li>Adobe Firefly: طراحی خلاقانه</li>
+</ul>
+<h3>۴. Batch Production: تولید انبوه</h3>
+<p>تکنیک‌های تولید محتوای حجم بالا:</p>
+<ul>
+<li>استفاده از API برای اتوماسیون</li>
+<li>ساخت templateهای قابل استفاده مجدد</li>
+<li>پردازش دسته‌ای درخواست‌ها</li>
+</ul>
+<h2 id="advanced">سطح پیشرفته - تکنیک‌های پیشرفته</h2>
+<h3>۱. ساخت شخصیت‌های Consistent</h3>
+<p>برای پروژه‌های طولانی نیاز به شخصیت‌های ثابت دارید:</p>
+<ul>
+<li>استفاده از Seed در Midjourney</li>
+<li>ساخت LoRA برای Stable Diffusion</li>
+<li>ذخیره و استفاده مجدد از کاراکترها</li>
+</ul>
+<h3>۲. Video-to-Video و Style Transfer</h3>
+<p>تکنیک‌های پیشرفته ویدیویی:</p>
+<ul>
+<li>تغییر استایل ویدیوهای موجود</li>
+<li>تبدیل ویدیو به انیمیشن</li>
+<li>اعمال فیلترهای هنری</li>
+</ul>
+<h3>۳. Real-time Generation</h3>
+<p>تولید محتوای زنده:</p>
+<ul>
+<li>استریمینگ با AI</li>
+<li>تولید محتوای تعاملی</li>
+<li>پاسخ بلادرنگ به کاربران</li>
+</ul>
+<h3>۴. Commercial Use و کپی‌رایت</h3>
+<p>ملاحظات حقوقی و تجاری:</p>
+<ul>
+<li>قوانین کپی‌رایت محتوای AI</li>
+<li>مجوزهای استفاده تجاری</li>
+<li>رعایت حقوق مالکیت معنوی</li>
+</ul>
+<h2 id="conclusion">جمع‌بندی</h2>
+<p>تولید محتوا با هوش مصنوعی فرصت‌های بی‌شماری برای خالقان محتوا فراهم کرده است. از تولید متن ساده گرفته تا ساخت ویدیوهای پیچیده، ابزارهای AI می‌توانند بهره‌وری شما را چندین برابر کنند.</p>
+<p>نکات کلیدی برای موفقیت:</p>
+<ul>
+<li>ابزارهای مناسب حوزه خود را بشناسید</li>
+<li>Prompt Engineering یاد بگیرید</li>
+<li>خلاقیت انسانی را با AI ترکیب کنید</li>
+<li>همیشه محتوا را بازبینی و ویرایش کنید</li>
+<li>به اصول اخلاقی و کپی‌رایت توجه کنید</li>
+</ul>
+<p>آینده تولید محتوا با همکاری انسان و هوش مصنوعی شکل می‌گیرد.</p>
+</article>
+</main>
+<a href="ai-learning.html" class="back-floating-btn">← بازگشت به آموزش AI</a>
+<footer class="tech-footer"><div><h3>SORAVIN STUDIO</h3><p>دانشنامه هوش مصنوعی، ابزارهای AI و فناوری‌های آینده</p></div><div class="footer-links"><a href="index.html">خانه</a><a href="tech-news.html">اخبار تکنولوژی</a><a href="portfolio.html">نمونه کارها</a></div><p>© 2026 Soravin Ai — طراحی و توسعه: آرمان آرام</p></footer>
+<a href="index.html" class="back-floating-btn" style="bottom:70px;">← بازگشت به صفحه اصلی</a>
+</body>
+</html>

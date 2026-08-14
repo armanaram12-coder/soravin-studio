@@ -52,7 +52,8 @@ body{margin:0;padding-top:70px;background-color:#17102b;color:#cfc6e8;font-famil
 .service-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:25px}
 .service-card{background:#221737;border:1px solid rgba(179,157,255,0.35);border-radius:10px;padding:25px;position:relative;text-align:center;cursor:pointer;transition:all 0.3s ease}
 .service-card:hover{transform:translateY(-5px);box-shadow:0 10px 30px rgba(179,157,255,0.2)}
-.service-card span{position:absolute;top:-15px;right:20px;background:#b39dff;color:#17102b;width:35px;height:35px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:13px}
+.service-card{overflow:visible}
+.service-card span{position:absolute;top:10px;right:15px;background:#b39dff;color:#17102b;width:35px;height:35px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:13px;z-index:10}
 .service-card h3{color:#f1edff;font-size:16px;margin:15px 0 10px}
 .service-card p{color:#cfc6e8;font-size:13px;line-height:1.6;margin:0}
 .category-card .category-desc{font-size:12px;color:#b39dff;margin-bottom:10px}
@@ -125,132 +126,32 @@ body{margin:0;padding-top:70px;background-color:#17102b;color:#cfc6e8;font-famil
 <div class="service-grid">
 
 <!-- کارت ۱: مبانی هوش مصنوعی -->
-<div class="service-card category-card" onclick="window.location.href='ai-path-basics.html'" style="cursor:pointer" data-category="fundamentals">
+<a href="ai-path-basics.html" class="service-card category-card" style="text-decoration:none" data-category="fundamentals">
 <span>01</span>
 <h3>مبانی هوش مصنوعی</h3>
 <p class="category-desc">آشنایی با مفاهیم پایه AI، تاریخچه، انواع و کاربردهای اولیه</p>
-<div class="category-content">
-<h4>📚 سطح مقدماتی</h4>
-<ul>
-<li>هوش مصنوعی چیست؟ تعریف ساده و کاربردی</li>
-<li>تاریخچه مختصر AI از گذشته تا امروز</li>
-<li>انواع هوش مصنوعی: ANI، AGI، ASI</li>
-<li>کاربردهای روزمره هوش مصنوعی</li>
-<li>اصطلاحات پایه: الگوریتم، داده، مدل</li>
-<li>آشنایی با ماشین لرنینگ به زبان ساده</li>
-</ul>
-<h4>🎯 سطح میانی</h4>
-<ul>
-<li>یادگیری نظارت‌شده و بدون نظارت</li>
-<li>شبکه‌های عصبی چگونه کار می‌کنند؟</li>
-<li>مفاهیم Training، Validation، Test</li>
-<li>آشنایی با Deep Learning</li>
-</ul>
-<h4>🚀 سطح پیشرفته</h4>
-<ul>
-<li>معماری‌های Transformer و Attention</li>
-<li>بهینه‌سازی مدل‌های بزرگ زبانی</li>
-<li>Fine-tuning و Transfer Learning</li>
-<li>اخلاق و چالش‌های AI پیشرفته</li>
-</ul>
-</div>
-</div>
+</a>
 
 <!-- کارت ۲: ابزارهای AI -->
-<div class="service-card category-card" onclick="window.location.href='ai-path-tools.html'" style="cursor:pointer" data-category="tools">
+<a href="ai-path-tools.html" class="service-card category-card" style="text-decoration:none" data-category="tools">
 <span>02</span>
 <h3>ابزارهای هوش مصنوعی</h3>
 <p class="category-desc">معرفی بهترین ابزارهای AI برای تولید محتوا، طراحی و کسب‌وکار</p>
-<div class="category-content">
-<h4>📚 سطح مقدماتی</h4>
-<ul>
-<li>ChatGPT: شروع کار با دستیار هوشمند</li>
-<li>Midjourney و DALL·E برای تصویرسازی</li>
-<li>Google Gemini: رقیب ChatGPT</li>
-<li>Claude: تحلیل متون طولانی</li>
-<li>ابزارهای رایگان vs پولی</li>
-<li>نحوه ثبت‌نام و شروع استفاده</li>
-</ul>
-<h4>🎯 سطح میانی</h4>
-<ul>
-<li>Prompt Engineering مقدماتی</li>
-<li>Runway ML برای ویدیو</li>
-<li>Stable Diffusion و کنترل بیشتر</li>
-<li>اتوماسیون با Zapier + AI</li>
-</ul>
-<h4>🚀 سطح پیشرفته</h4>
-<ul>
-<li>APIهای OpenAI و Anthropic</li>
-<li>ساخت Agentهای سفارشی</li>
-<li>یکپارچه‌سازی AI در Workflow</li>
-<li>بهینه‌سازی هزینه و Performance</li>
-</ul>
-</div>
-</div>
+</a>
 
 <!-- کارت ۳: تولید محتوا با AI -->
-<div class="service-card category-card" onclick="window.location.href='ai-path-content.html'" style="cursor:pointer" data-category="content">
+<a href="ai-path-content.html" class="service-card category-card" style="text-decoration:none" data-category="content">
 <span>03</span>
 <h3>تولید محتوا با هوش مصنوعی</h3>
 <p class="category-desc">ساخت متن، تصویر، ویدیو، صدا و محتوای دیجیتال با ابزارهای هوشمند</p>
-<div class="category-content">
-<h4>📚 سطح مقدماتی</h4>
-<ul>
-<li>تولید متن با ChatGPT و Gemini</li>
-<li>ساخت تصویر با Midjourney</li>
-<li>تبدیل متن به صوت (TTS)</li>
-<li>ویرایش عکس با AI</li>
-<li>ساخت پست شبکه‌های اجتماعی</li>
-<li>تولید ایده و سناریو</li>
-</ul>
-<h4>🎯 سطح میانی</h4>
-<ul>
-<li>ساخت ویدیو با Runway و Pika</li>
-<li>تولید پادکست با ElevenLabs</li>
-<li>طراحی لوگو و برندینگ با AI</li>
-<li>Batch Production: تولید انبوه</li>
-</ul>
-<h4>🚀 سطح پیشرفته</h4>
-<ul>
-<li>ساخت شخصیت‌های Consistent</li>
-<li>Video-to-Video و Style Transfer</li>
-<li>Real-time Generation</li>
-<li>Commercial Use و کپی‌رایت</li>
-</ul>
-</div>
-</div>
+</a>
 
 <!-- کارت ۴: AI برای طراحان -->
-<div class="service-card category-card" onclick="window.location.href='ai-path-design.html'" style="cursor:pointer" data-category="designers">
+<a href="ai-path-design.html" class="service-card category-card" style="text-decoration:none" data-category="designers">
 <span>04</span>
 <h3>هوش مصنوعی برای طراحان</h3>
 <p class="category-desc">کاربرد AI در لوگو، برندینگ، گرافیک، تبلیغات و موشن دیزاین</p>
-<div class="category-content">
-<h4>📚 سطح مقدماتی</h4>
-<ul>
-<li>Adobe Firefly در Photoshop</li>
-<li>Canva AI برای طراحی سریع</li>
-<li>ساخت Moodboard با AI</li>
-<li>رنگ‌شناسی و پالت‌سازی خودکار</li>
-<li>تایپوگرافی هوشمند</li>
-<li>الهام‌بخشی با Generative Art</li>
-</ul>
-<h4>🎯 سطح میانی</h4>
-<ul>
-<li>Illustrator + AI Vector Tools</li>
-<li>3D Modeling با AI Assist</li>
-<li>Motion Design با After Effects AI</li>
-<li>Brand Identity Generation</li>
-</ul>
-<h4>🚀 سطح پیشرفته</h4>
-<ul>
-<li>Custom Model Training برای استایل شخصی</li>
-<li>Procedural Generation در طراحی</li>
-<li>AI-driven UX/UI Optimization</li>
-<li>Interactive & Immersive Experiences</li>
-</ul>
-</div>
-</div>
+</a>
 
 </div>
 </section>
@@ -314,14 +215,7 @@ body{margin:0;padding-top:70px;background-color:#17102b;color:#cfc6e8;font-famil
 <footer class="tech-footer"><div><h3>SORAVIN STUDIO</h3><p>دانشنامه هوش مصنوعی، ابزارهای AI و فناوری‌های آینده</p></div><div class="footer-links"><a href="index.html">خانه</a><a href="tech-news.html">اخبار تکنولوژی</a><a href="portfolio.html">نمونه کارها</a></div><p>© 2026 Soravin Ai — طراحی و توسعه: آرمان آرام</p></footer>
 
 <script>
-// Accordion functionality for category cards
-document.querySelectorAll('.category-card').forEach(card => {
-  card.addEventListener('click', function(e) {
-    e.stopPropagation();
-    // Toggle active class
-    this.classList.toggle('active');
-  });
-});
+// Remove accordion functionality - cards now link directly to pages
 </script>
 </body>
 </html>

@@ -6,15 +6,9 @@ on:
   schedule:
 
     # هر روز ساعت 06:00 UTC
-
     - cron: "0 6 * * *"
 
-
-
   workflow_dispatch:
-
-
-
 
 
 jobs:
@@ -38,7 +32,6 @@ jobs:
 
 
 
-
       - name: Setup Node.js
 
         uses: actions/setup-node@v4
@@ -46,6 +39,7 @@ jobs:
         with:
 
           node-version: 24
+
 
 
 
@@ -61,11 +55,13 @@ jobs:
 
 
 
-      - name: Update news JSON
+
+      - name: Update news JSON and Generate SEO Pages
 
         run: |
 
           node scripts/update-news.js
+
 
 
 
@@ -82,10 +78,10 @@ jobs:
           git config --global user.email "bot@soravin.com"
 
 
-          git add data/auto-news.json
+          git add data/auto-news.json news/ sitemap.xml robots.txt
 
 
-          git diff --cached --quiet || git commit -m "Auto update news"
+          git diff --cached --quiet || git commit -m "Auto update news and generate SEO pages"
 
 
           git push

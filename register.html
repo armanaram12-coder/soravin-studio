@@ -169,7 +169,7 @@ AI
 
 <script type="module">
 
-import { supabase } from './js/supabase.js';
+import { auth, db, createUserWithEmailAndPassword, doc, setDoc } from './js/firebase.js';
 
 const registerForm = document.getElementById('registerForm');
 const messageEl = document.getElementById('message');
@@ -214,21 +214,18 @@ registerForm.addEventListener('submit', async (e) => {
     showMessage('', '');
     
     try {
-        const { data, error } = await supabase.auth.signUp({
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+        
+        await setDoc(doc(db, "users", user.uid), {
+            fullName: fullName,
             email: email,
-            password: password,
-            options: {
-                data: {
-                    full_name: fullName,
-                    phone: phone
-                }
-            }
+            phone: phone,
+            memberSince: new Date().toISOString()
         });
         
-        if (error) throw error;
-        
         showMessage(
-            'ثبت‌نام با موفقیت انجام شد! لطفاً ایمیل خود را بررسی کنید.',
+            'ثبت‌نام با موفقیت انجام شد! در حال انتقال به صفحه ورود...',
             'success'
         );
         
@@ -236,16 +233,16 @@ registerForm.addEventListener('submit', async (e) => {
         
         setTimeout(() => {
             window.location.href = 'login.html';
-        }, 3000);
+        }, 2000);
         
     } catch (err) {
         let errorMsg = 'خطا در ثبت‌نام. لطفاً دوباره تلاش کنید.';
         
-        if (err.message.includes('Weak password')) {
+        if (err.code === 'auth/weak-password') {
             errorMsg = 'رمز عبور باید حداقل ۶ کاراکتر باشد.';
-        } else if (err.message.includes('User already registered')) {
+        } else if (err.code === 'auth/email-already-in-use') {
             errorMsg = 'این ایمیل قبلاً ثبت شده است.';
-        } else if (err.message.includes('Invalid email')) {
+        } else if (err.code === 'auth/invalid-email') {
             errorMsg = 'ایمیل وارد شده معتبر نیست.';
         }
         

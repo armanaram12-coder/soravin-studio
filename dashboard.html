@@ -893,7 +893,7 @@ AI
 
 <script type="module">
 
-import { supabase, checkAuth, logout } from './js/supabase.js';
+import { auth, db, signOut, onAuthStateChanged, doc, getDoc } from './js/firebase.js';
 
 // DOM Elements
 const welcomeAvatar = document.getElementById('welcomeAvatar');
@@ -1064,47 +1064,62 @@ document.querySelectorAll('.sidebar-nav a[data-section]').forEach(link => {
     });
 });
 
-async function loadDashboard() {
+async function loadUserProfile(user) {
     try {
-        currentUser = await checkAuth();
-        
-        if (!currentUser) {
-            return;
+        const userDoc = await getDoc(doc(db, "users", user.uid));
+        if (userDoc.exists()) {
+            return userDoc.data();
         }
-        
-        const fullName = currentUser.user_metadata?.full_name || 'کاربر گرامی';
-        const email = currentUser.email;
-        const createdAt = currentUser.created_at ? new Date(currentUser.created_at).toLocaleDateString('fa-IR') : '—';
-        const firstLetter = fullName.charAt(0).toUpperCase();
-        
-        // Update welcome bar
-        welcomeAvatar.textContent = firstLetter;
-        welcomeName.textContent = fullName;
-        welcomeEmail.textContent = email;
-        joinDateEl.textContent = `تاریخ عضویت: ${createdAt}`;
-        
-        // Update settings fields
-        document.getElementById('editFullName').value = fullName;
-        document.getElementById('editEmail').value = email;
-        document.getElementById('avatarPreview').textContent = firstLetter;
-        
-        // Update stats
-        document.getElementById('statPoints').textContent = '0';
-        document.getElementById('clubPoints').textContent = '0';
-        
-        // Load persisted data from localStorage (tickets, avatar, orders, etc.)
-        loadPersistedData();
-        
-        // Render lists with loaded data
-        renderTicketList();
-        renderProjectList();
-        
-        // Render header user menu
-        renderHeaderMenu(fullName);
-        
+        return null;
     } catch (err) {
-        console.error('Error loading dashboard:', err);
+        console.error('Error loading user profile:', err);
+        return null;
     }
+}
+
+async function loadDashboard() {
+    onAuthStateChanged(auth, async (user) => {
+        if (user) {
+            currentUser = user;
+            
+            // Load user profile from Firestore
+            const userProfile = await loadUserProfile(user);
+            
+            const fullName = userProfile?.fullName || user.displayName || 'کاربر گرامی';
+            const email = user.email;
+            const memberSince = userProfile?.memberSince ? new Date(userProfile.memberSince).toLocaleDateString('fa-IR') : '—';
+            const firstLetter = fullName.charAt(0).toUpperCase();
+            
+            // Update welcome bar
+            welcomeAvatar.textContent = firstLetter;
+            welcomeName.textContent = fullName;
+            welcomeEmail.textContent = email;
+            joinDateEl.textContent = `تاریخ عضویت: ${memberSince}`;
+            
+            // Update settings fields
+            document.getElementById('editFullName').value = fullName;
+            document.getElementById('editEmail').value = email;
+            document.getElementById('avatarPreview').textContent = firstLetter;
+            
+            // Update stats
+            document.getElementById('statPoints').textContent = '0';
+            document.getElementById('clubPoints').textContent = '0';
+            
+            // Load persisted data from localStorage (tickets, avatar, orders, etc.)
+            loadPersistedData();
+            
+            // Render lists with loaded data
+            renderTicketList();
+            renderProjectList();
+            
+            // Render header user menu
+            renderHeaderMenu(fullName);
+            
+        } else {
+            // User is signed out - redirect to login
+            window.location.href = 'login.html';
+        }
+    });
 }
 
 function renderHeaderMenu(userName) {
@@ -1192,14 +1207,24 @@ function renderHeaderMenu(userName) {
     
     headerLogout.addEventListener('click', async (e) => {
         e.preventDefault();
-        await logout();
+        await handleLogout();
     });
 }
 
 // Logout handlers
+async function handleLogout() {
+    try {
+        await signOut(auth);
+        localStorage.removeItem('currentUser');
+        window.location.href = 'index.html';
+    } catch (err) {
+        console.error('Error signing out:', err);
+    }
+}
+
 sidebarLogout.addEventListener('click', async (e) => {
     e.preventDefault();
-    await logout();
+    await handleLogout();
 });
 
 // Submit project handler

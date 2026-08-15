@@ -135,7 +135,7 @@ STUDIO
 
 <script type="module">
 
-import { supabase } from './js/supabase.js';
+import { auth, signInWithEmailAndPassword } from './js/firebase.js';
 
 const loginForm = document.getElementById('loginForm');
 const messageEl = document.getElementById('message');
@@ -164,12 +164,11 @@ loginForm.addEventListener('submit', async (e) => {
     showMessage('', '');
     
     try {
-        const { data, error } = await supabase.auth.signInWithPassword({
-            email: email,
-            password: password
-        });
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
         
-        if (error) throw error;
+        // Store uid in currentUser
+        localStorage.setItem('currentUser', user.uid);
         
         showMessage(
             'ورود با موفقیت انجام شد. در حال انتقال...',
@@ -183,10 +182,12 @@ loginForm.addEventListener('submit', async (e) => {
     } catch (err) {
         let errorMsg = 'خطا در ورود. لطفاً اطلاعات را بررسی کنید.';
         
-        if (err.message.includes('Invalid login credentials')) {
+        if (err.code === 'auth/invalid-credential') {
             errorMsg = 'ایمیل یا رمز عبور اشتباه است.';
-        } else if (err.message.includes('Email not confirmed')) {
-            errorMsg = 'ایمیل شما هنوز تأیید نشده است. لطفاً ایمیل خود را بررسی کنید.';
+        } else if (err.code === 'auth/user-not-found') {
+            errorMsg = 'کاربری با این ایمیل یافت نشد.';
+        } else if (err.code === 'auth/wrong-password') {
+            errorMsg = 'رمز عبور اشتباه است.';
         }
         
         showMessage(errorMsg, 'error');

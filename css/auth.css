@@ -211,6 +211,13 @@ body {
     display: block;
 }
 
+.message.info {
+    background: rgba(59, 130, 246, 0.1);
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    color: #93c5fd;
+    display: block;
+}
+
 /* =========================
    LINKS
 ========================= */
@@ -232,6 +239,21 @@ body {
 .auth-links a:hover {
     color: var(--gold);
     text-decoration: underline;
+}
+
+/* Auth greeting in header */
+.auth-greeting {
+    color: var(--gold-light) !important;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 30px;
+    background: rgba(201, 164, 75, 0.1);
+    transition: var(--transition);
+}
+
+.auth-greeting:hover {
+    background: rgba(201, 164, 75, 0.2);
+    color: var(--gold) !important;
 }
 
 /* =========================

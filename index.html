@@ -692,10 +692,13 @@ if(mobileToggle && mobileMenu) {
 
 
 <script type="module">
-import { initSmartCTA } from './js/supabase.js';
+import { initSmartCTA, updateHeaderAuth } from './js/supabase.js';
 
 // Initialize smart CTA button
 initSmartCTA();
+
+// Update header auth UI - show greeting when logged in
+updateHeaderAuth();
 </script>
 
 <script>

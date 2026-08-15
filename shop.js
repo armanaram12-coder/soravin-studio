@@ -6,6 +6,18 @@ document.addEventListener('DOMContentLoaded', function() {
     let cart = JSON.parse(localStorage.getItem('soravinCart')) || [];
     let wishlist = JSON.parse(localStorage.getItem('soravinWishlist')) || [];
     let flashSaleEnd = Date.now() + 6 * 60 * 60 * 1000;
+    let currentUser = null;
+
+    // Load current user
+    async function loadUser() {
+        try {
+            const response = await fetch('js/supabase.js');
+            const supabaseModule = await import('./js/supabase.js');
+            currentUser = await supabaseModule.getUserInfo();
+        } catch (error) {
+            console.error('Error loading user:', error);
+        }
+    }
 
     // DOM Elements
     const productsGrid = document.getElementById('productsGrid');
@@ -300,12 +312,24 @@ document.addEventListener('DOMContentLoaded', function() {
     cartClose?.addEventListener('click', closeCart);
     cartOverlay?.addEventListener('click', closeCart);
 
-    // Checkout
-    document.getElementById('btnCheckout')?.addEventListener('click', () => {
+    // Checkout - check auth first
+    document.getElementById('btnCheckout')?.addEventListener('click', async () => {
         if (cart.length === 0) {
             alert('سبد خرید خالی است');
             return;
         }
+        
+        // Check if user is logged in
+        const supabaseModule = await import('./js/supabase.js');
+        const loggedIn = await supabaseModule.isLoggedIn();
+        
+        if (!loggedIn) {
+            // Redirect to login with message
+            localStorage.setItem('checkoutRedirect', 'true');
+            window.location.href = 'login.html';
+            return;
+        }
+        
         closeCart();
         checkoutModal.classList.add('active');
     });
@@ -319,11 +343,16 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Order Submission
-    document.getElementById('checkoutForm')?.addEventListener('submit', (e) => {
+    document.getElementById('checkoutForm')?.addEventListener('submit', async (e) => {
         e.preventDefault();
 
+        // Get current user
+        const supabaseModule = await import('./js/supabase.js');
+        currentUser = await supabaseModule.getUserInfo();
+        
         const order = {
             id: Date.now(),
+            userId: currentUser ? currentUser.id : null,
             date: new Date().toISOString(),
             customer: {
                 name: document.getElementById('customerName').value,
@@ -332,7 +361,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 address: document.getElementById('customerAddress').value
             },
             items: [...cart],
-            total: cart.reduce((sum, item) => sum + ((item.price || 0) * item.quantity), 0)
+            total: cart.reduce((sum, item) => sum + ((item.price || 0) * item.quantity), 0),
+            status: 'pending'
         };
 
         const orders = JSON.parse(localStorage.getItem('soravinOrders')) || [];

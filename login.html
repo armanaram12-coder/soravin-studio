@@ -141,6 +141,13 @@ const loginForm = document.getElementById('loginForm');
 const messageEl = document.getElementById('message');
 const submitBtn = document.getElementById('submitBtn');
 
+// Check if redirecting from checkout
+const isCheckoutRedirect = localStorage.getItem('checkoutRedirect') === 'true';
+if (isCheckoutRedirect) {
+    showMessage('برای ثبت سفارش وارد شوید', 'info');
+    localStorage.removeItem('checkoutRedirect');
+}
+
 function showMessage(text, type) {
     messageEl.textContent = text;
     messageEl.className = `message ${type}`;

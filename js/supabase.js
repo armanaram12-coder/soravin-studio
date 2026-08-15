@@ -59,3 +59,62 @@ export async function initSmartCTA() {
         // Keep default href (register.html) on error
     }
 }
+
+// Update header auth UI - show user greeting when logged in
+export async function updateHeaderAuth() {
+    try {
+        const { data: { session } } = await supabase.auth.getSession();
+        const authLink = document.getElementById('authLink');
+        const mobileAuthLink = document.getElementById('mobileAuthLink');
+        
+        if (session) {
+            const fullName = session.user.user_metadata?.full_name || session.user.email.split('@')[0];
+            const greeting = `سلام ${fullName}`;
+            
+            if (authLink) {
+                authLink.textContent = greeting;
+                authLink.href = 'dashboard.html';
+                authLink.classList.remove('btn-outline-small');
+                authLink.classList.add('auth-greeting');
+            }
+            
+            if (mobileAuthLink) {
+                mobileAuthLink.textContent = greeting;
+                mobileAuthLink.href = 'dashboard.html';
+                mobileAuthLink.classList.add('auth-greeting');
+            }
+        }
+    } catch (error) {
+        console.error('Header auth update error:', error);
+    }
+}
+
+// Check if user is logged in (for checkout)
+export async function isLoggedIn() {
+    try {
+        const { data: { session } } = await supabase.auth.getSession();
+        return !!session;
+    } catch (error) {
+        console.error('Login check error:', error);
+        return false;
+    }
+}
+
+// Get current user info
+export async function getUserInfo() {
+    try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session) {
+            return {
+                id: session.user.id,
+                email: session.user.email,
+                fullName: session.user.user_metadata?.full_name || session.user.email.split('@')[0],
+                avatar: session.user.user_metadata?.avatar_url || null
+            };
+        }
+        return null;
+    } catch (error) {
+        console.error('Get user info error:', error);
+        return null;
+    }
+}

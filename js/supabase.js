@@ -36,10 +36,14 @@ export async function checkAuth() {
 
 export async function logout() {
     try {
+        // فقط کلید نشست فعلی را حذف کن - بقیه داده‌ها باقی می‌مانند
+        localStorage.removeItem('currentUser');
         await supabase.auth.signOut();
         window.location.href = 'index.html';
     } catch (error) {
         console.error('Logout error:', error);
+        // در صورت خطا هم فقط currentUser پاک شود
+        localStorage.removeItem('currentUser');
         window.location.href = 'index.html';
     }
 }

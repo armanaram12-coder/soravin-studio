@@ -618,7 +618,7 @@ AI
 
 
 <nav id="headerNav">
-<!-- Dynamic content based on auth state -->
+<!-- منوی اصلی سایت + منوی کاربر -->
 </nav>
 
 
@@ -908,6 +908,146 @@ let currentUser = null;
 let userProjects = [];
 let userTickets = [];
 
+// Helper: get email-safe key suffix
+function getEmailKey() {
+    if (!currentUser || !currentUser.email) return '';
+    return currentUser.email.replace(/[^a-zA-Z0-9]/g, '_');
+}
+
+// Load persisted data from localStorage (keyed by email)
+function loadPersistedData() {
+    const emailKey = getEmailKey();
+    if (!emailKey) return;
+    
+    // Load tickets
+    const ticketsData = localStorage.getItem(`soravin_tickets_${emailKey}`);
+    if (ticketsData) {
+        try {
+            userTickets = JSON.parse(ticketsData);
+        } catch (e) {
+            userTickets = [];
+        }
+    }
+    
+    // Load projects
+    const projectsData = localStorage.getItem(`soravin_projects_${emailKey}`);
+    if (projectsData) {
+        try {
+            userProjects = JSON.parse(projectsData);
+        } catch (e) {
+            userProjects = [];
+        }
+    }
+    
+    // Load avatar
+    const avatarData = localStorage.getItem(`soravin_avatar_${emailKey}`);
+    if (avatarData) {
+        try {
+            const avatarObj = JSON.parse(avatarData);
+            if (avatarObj.dataUrl) {
+                const avatarPreview = document.getElementById('avatarPreview');
+                const welcomeAvatar = document.getElementById('welcomeAvatar');
+                if (avatarPreview && welcomeAvatar) {
+                    avatarPreview.textContent = '';
+                    avatarPreview.style.backgroundImage = `url(${avatarObj.dataUrl})`;
+                    avatarPreview.style.backgroundSize = 'cover';
+                    avatarPreview.style.backgroundPosition = 'center';
+                    welcomeAvatar.style.backgroundImage = `url(${avatarObj.dataUrl})`;
+                    welcomeAvatar.style.backgroundSize = 'cover';
+                    welcomeAvatar.style.backgroundPosition = 'center';
+                    welcomeAvatar.textContent = '';
+                }
+            }
+        } catch (e) {}
+    }
+    
+    // Load orders
+    const ordersData = localStorage.getItem(`soravin_orders_${emailKey}`);
+    if (ordersData) {
+        try {
+            const orders = JSON.parse(ordersData);
+            renderOrdersList(orders);
+        } catch (e) {}
+    }
+    
+    // Load favorites
+    const favoritesData = localStorage.getItem(`soravin_favorites_${emailKey}`);
+    if (favoritesData) {
+        try {
+            const favorites = JSON.parse(favoritesData);
+            renderFavoritesList(favorites);
+        } catch (e) {}
+    }
+    
+    // Load comments
+    const commentsData = localStorage.getItem(`soravin_comments_${emailKey}`);
+    if (commentsData) {
+        try {
+            const comments = JSON.parse(commentsData);
+            renderCommentsList(comments);
+        } catch (e) {}
+    }
+    
+    // Load notifications
+    const notificationsData = localStorage.getItem(`soravin_notifications_${emailKey}`);
+    if (notificationsData) {
+        try {
+            const notifications = JSON.parse(notificationsData);
+            renderNotificationsList(notifications);
+        } catch (e) {}
+    }
+}
+
+// Save data to localStorage (keyed by email)
+function saveTickets() {
+    const emailKey = getEmailKey();
+    if (emailKey) {
+        localStorage.setItem(`soravin_tickets_${emailKey}`, JSON.stringify(userTickets));
+    }
+}
+
+function saveProjects() {
+    const emailKey = getEmailKey();
+    if (emailKey) {
+        localStorage.setItem(`soravin_projects_${emailKey}`, JSON.stringify(userProjects));
+    }
+}
+
+function saveAvatar(dataUrl) {
+    const emailKey = getEmailKey();
+    if (emailKey) {
+        localStorage.setItem(`soravin_avatar_${emailKey}`, JSON.stringify({ dataUrl }));
+    }
+}
+
+function saveOrders(orders) {
+    const emailKey = getEmailKey();
+    if (emailKey) {
+        localStorage.setItem(`soravin_orders_${emailKey}`, JSON.stringify(orders));
+    }
+}
+
+function saveFavorites(favorites) {
+    const emailKey = getEmailKey();
+    if (emailKey) {
+        localStorage.setItem(`soravin_favorites_${emailKey}`, JSON.stringify(favorites));
+    }
+}
+
+function saveComments(comments) {
+    const emailKey = getEmailKey();
+    if (emailKey) {
+        localStorage.setItem(`soravin_comments_${emailKey}`, JSON.stringify(comments));
+    }
+}
+
+function saveNotifications(notifications) {
+    const emailKey = getEmailKey();
+    if (emailKey) {
+        localStorage.setItem(`soravin_notifications_${emailKey}`, JSON.stringify(notifications));
+    }
+}
+
 // Navigation
 document.querySelectorAll('.sidebar-nav a[data-section]').forEach(link => {
     link.addEventListener('click', (e) => {
@@ -952,6 +1092,13 @@ async function loadDashboard() {
         document.getElementById('statPoints').textContent = '0';
         document.getElementById('clubPoints').textContent = '0';
         
+        // Load persisted data from localStorage (tickets, avatar, orders, etc.)
+        loadPersistedData();
+        
+        // Render lists with loaded data
+        renderTicketList();
+        renderProjectList();
+        
         // Render header user menu
         renderHeaderMenu(fullName);
         
@@ -963,7 +1110,24 @@ async function loadDashboard() {
 function renderHeaderMenu(userName) {
     const shortName = userName.split(' ')[0];
     headerNav.innerHTML = `
-        <div style="position: relative;">
+        <!-- منوی اصلی سایت -->
+        <a href="index.html" style="color: var(--text); text-decoration: none; font-size: 14px; transition: var(--transition);">خانه</a>
+        <div class="dropdown" style="position: relative; display: inline-block;">
+            <a href="#services" class="dropbtn" style="color: var(--text); text-decoration: none; font-size: 14px; display: flex; align-items: center; gap: 4px;">خدمات<span style="font-size: 10px;">▼</span></a>
+            <div class="dropdown-content" style="display: none; position: absolute; top: 100%; background: rgba(11, 11, 11, 0.98); border: 1px solid rgba(201, 164, 75, 0.2); border-radius: 12px; padding: 10px; min-width: 180px; z-index: 1000;">
+                <a href="index.html#logo-design" style="display: block; padding: 8px 12px; color: var(--text); text-decoration: none;">پکیج طراحی لوگو</a>
+                <a href="index.html#teaser" style="display: block; padding: 8px 12px; color: var(--text); text-decoration: none;">تیزر تبلیغاتی</a>
+                <a href="index.html#brand-book" style="display: block; padding: 8px 12px; color: var(--text); text-decoration: none;">بوک برند</a>
+                <a href="index.html#3d-design" style="display: block; padding: 8px 12px; color: var(--text); text-decoration: none;">طراحی سه‌بعدی</a>
+            </div>
+        </div>
+        <a href="shop.html" style="color: var(--text); text-decoration: none; font-size: 14px;">فروشگاه</a>
+        <a href="tech-news.html" style="color: var(--text); text-decoration: none; font-size: 14px;">اخبار فناوری</a>
+        <a href="ai-tools.html" style="color: var(--text); text-decoration: none; font-size: 14px;">ابزار هوش مصنوعی</a>
+        <a href="ai-learning.html" style="color: var(--text); text-decoration: none; font-size: 14px;">دانشنامه</a>
+        
+        <!-- منوی کاربر -->
+        <div style="position: relative; margin-right: auto;">
             <button id="userMenuBtn" style="background: rgba(201, 164, 75, 0.1); border: 1px solid rgba(201, 164, 75, 0.3); 
                 color: var(--gold-light); padding: 8px 16px; border-radius: 25px; cursor: pointer; 
                 font-family: 'Vazirmatn', sans-serif; font-size: 13px; display: flex; align-items: center; gap: 8px;
@@ -979,19 +1143,39 @@ function renderHeaderMenu(userName) {
                     text-decoration: none; border-radius: 8px; transition: var(--transition);">
                     🏠 پنل کاربری
                 </a>
-                <a href="#" onclick="document.querySelector('[data-section=\'orders\']').click(); return false;" 
+                <a href="#" onclick="document.querySelector('[data-section=\\'orders\\']').click(); return false;" 
                     style="display: block; padding: 10px 15px; color: var(--text); text-decoration: none; 
                     border-radius: 8px; transition: var(--transition);">
                     📦 سفارش‌های من
                 </a>
+                <a href="index.html" style="display: block; padding: 10px 15px; color: var(--text); 
+                    text-decoration: none; border-radius: 8px; transition: var(--transition);">
+                    🏡 صفحه اصلی
+                </a>
                 <div style="height: 1px; background: rgba(201, 164, 75, 0.15); margin: 5px 0;"></div>
                 <a href="#" id="headerLogout" style="display: block; padding: 10px 15px; color: #ef4444; 
                     text-decoration: none; border-radius: 8px; transition: var(--transition);">
-                    🚪 خروج
+                    🚪 خروج از حساب
                 </a>
             </div>
         </div>
     `;
+    
+    // Setup dropdown toggles for main nav
+    headerNav.querySelectorAll('.dropdown > .dropbtn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const dropdown = btn.nextElementSibling;
+            dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+        });
+    });
+    
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.dropdown')) {
+            headerNav.querySelectorAll('.dropdown-content').forEach(d => d.style.display = 'none');
+        }
+    });
     
     const menuBtn = document.getElementById('userMenuBtn');
     const dropdown = document.getElementById('userMenuDropdown');
@@ -1029,8 +1213,9 @@ document.getElementById('submitProject').addEventListener('click', async () => {
         return;
     }
     
-    // Mock save - in production would save to Supabase
+    // Save to localStorage (keyed by email)
     userProjects.push({ type, desc, budget, status: 'pending', date: new Date().toLocaleDateString('fa-IR') });
+    saveProjects();
     renderProjectList();
     
     // Clear form
@@ -1081,8 +1266,9 @@ document.getElementById('submitTicket').addEventListener('click', async () => {
         return;
     }
     
-    // Mock save
+    // Save to localStorage (keyed by email)
     userTickets.push({ subject, message, status: 'open', date: new Date().toLocaleDateString('fa-IR') });
+    saveTickets();
     renderTicketList();
     
     // Clear form

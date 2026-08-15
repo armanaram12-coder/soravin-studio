@@ -1,5 +1,7 @@
 // Shop Page JavaScript - Soravin Store
 
+import { auth, db, collection, addDoc, onAuthStateChanged } from './js/firebase.js';
+
 document.addEventListener('DOMContentLoaded', function() {
     // State
     let products = [];
@@ -7,6 +9,11 @@ document.addEventListener('DOMContentLoaded', function() {
     let wishlist = JSON.parse(localStorage.getItem('soravinWishlist')) || [];
     let flashSaleEnd = Date.now() + 6 * 60 * 60 * 1000;
     let currentUser = null;
+    
+    // Listen for auth changes
+    onAuthStateChanged(auth, (user) => {
+        currentUser = user;
+    });
 
     // Load current user
     async function loadUser() {
@@ -342,32 +349,31 @@ document.addEventListener('DOMContentLoaded', function() {
         if (e.target === checkoutModal) checkoutModal.classList.remove('active');
     });
 
-    // Order Submission
+    // Order Submission - save to Firestore
     document.getElementById('checkoutForm')?.addEventListener('submit', async (e) => {
         e.preventDefault();
 
-        // Get current user
-        const supabaseModule = await import('./js/supabase.js');
-        currentUser = await supabaseModule.getUserInfo();
-        
         const order = {
-            id: Date.now(),
-            userId: currentUser ? currentUser.id : null,
+            uid: currentUser ? currentUser.uid : 'anonymous',
+            email: currentUser ? currentUser.email : document.getElementById('customerEmail').value,
+            items: [...cart],
+            total: cart.reduce((sum, item) => sum + ((item.price || 0) * item.quantity), 0),
+            code: 'ORD-' + Date.now().toString().slice(-6),
+            status: 'pending',
             date: new Date().toISOString(),
             customer: {
                 name: document.getElementById('customerName').value,
                 phone: document.getElementById('customerPhone').value,
                 email: document.getElementById('customerEmail').value,
                 address: document.getElementById('customerAddress').value
-            },
-            items: [...cart],
-            total: cart.reduce((sum, item) => sum + ((item.price || 0) * item.quantity), 0),
-            status: 'pending'
+            }
         };
 
-        const orders = JSON.parse(localStorage.getItem('soravinOrders')) || [];
-        orders.push(order);
-        localStorage.setItem('soravinOrders', JSON.stringify(orders));
+        try {
+            await addDoc(collection(db, 'orders'), order);
+        } catch (error) {
+            console.error('Error saving order to Firestore:', error);
+        }
 
         cart = [];
         saveCart();

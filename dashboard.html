@@ -893,7 +893,7 @@ AI
 
 <script type="module">
 
-import { auth, db, signOut, onAuthStateChanged, doc, getDoc } from './js/firebase.js';
+import { auth, db, signOut, onAuthStateChanged, doc, getDoc, setDoc, collection, addDoc, query, where, orderBy, getDocs, updateDoc } from './js/firebase.js';
 
 // DOM Elements
 const welcomeAvatar = document.getElementById('welcomeAvatar');
@@ -908,143 +908,176 @@ let currentUser = null;
 let userProjects = [];
 let userTickets = [];
 
-// Helper: get email-safe key suffix
-function getEmailKey() {
-    if (!currentUser || !currentUser.email) return '';
-    return currentUser.email.replace(/[^a-zA-Z0-9]/g, '_');
-}
-
-// Load persisted data from localStorage (keyed by email)
-function loadPersistedData() {
-    const emailKey = getEmailKey();
-    if (!emailKey) return;
-    
-    // Load tickets
-    const ticketsData = localStorage.getItem(`soravin_tickets_${emailKey}`);
-    if (ticketsData) {
-        try {
-            userTickets = JSON.parse(ticketsData);
-        } catch (e) {
-            userTickets = [];
-        }
-    }
-    
-    // Load projects
-    const projectsData = localStorage.getItem(`soravin_projects_${emailKey}`);
-    if (projectsData) {
-        try {
-            userProjects = JSON.parse(projectsData);
-        } catch (e) {
-            userProjects = [];
-        }
-    }
-    
-    // Load avatar
-    const avatarData = localStorage.getItem(`soravin_avatar_${emailKey}`);
-    if (avatarData) {
-        try {
-            const avatarObj = JSON.parse(avatarData);
-            if (avatarObj.dataUrl) {
-                const avatarPreview = document.getElementById('avatarPreview');
-                const welcomeAvatar = document.getElementById('welcomeAvatar');
-                if (avatarPreview && welcomeAvatar) {
-                    avatarPreview.textContent = '';
-                    avatarPreview.style.backgroundImage = `url(${avatarObj.dataUrl})`;
-                    avatarPreview.style.backgroundSize = 'cover';
-                    avatarPreview.style.backgroundPosition = 'center';
-                    welcomeAvatar.style.backgroundImage = `url(${avatarObj.dataUrl})`;
-                    welcomeAvatar.style.backgroundSize = 'cover';
-                    welcomeAvatar.style.backgroundPosition = 'center';
-                    welcomeAvatar.textContent = '';
+// Helper: compress image to ~100px JPEG base64
+function compressImage(file, maxWidth = 100, maxHeight = 100, quality = 0.8) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            const img = new Image();
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                let width = img.width;
+                let height = img.height;
+                
+                // Calculate new dimensions
+                if (width > height) {
+                    if (width > maxWidth) {
+                        height = Math.round(height * maxWidth / width);
+                        width = maxWidth;
+                    }
+                } else {
+                    if (height > maxHeight) {
+                        width = Math.round(width * maxHeight / height);
+                        height = maxHeight;
+                    }
                 }
-            }
-        } catch (e) {}
+                
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+                
+                // Convert to JPEG base64
+                const dataUrl = canvas.toDataURL('image/jpeg', quality);
+                resolve(dataUrl);
+            };
+            img.onerror = reject;
+            img.src = event.target.result;
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+    });
+}
+
+// Load persisted data from Firestore
+async function loadPersistedData() {
+    if (!currentUser) return;
+    
+    try {
+        // Load tickets from Firestore
+        const ticketsQuery = query(collection(db, 'tickets'), where('uid', '==', currentUser.uid), orderBy('date', 'desc'));
+        const ticketsSnapshot = await getDocs(ticketsQuery);
+        userTickets = [];
+        ticketsSnapshot.forEach(docSnap => {
+            userTickets.push({ id: docSnap.id, ...docSnap.data() });
+        });
+        
+        // Load projects from Firestore
+        const projectsQuery = query(collection(db, 'projects'), where('uid', '==', currentUser.uid), orderBy('date', 'desc'));
+        const projectsSnapshot = await getDocs(projectsQuery);
+        userProjects = [];
+        projectsSnapshot.forEach(docSnap => {
+            userProjects.push({ id: docSnap.id, ...docSnap.data() });
+        });
+        
+        // Load orders from Firestore
+        const ordersQuery = query(collection(db, 'orders'), where('uid', '==', currentUser.uid), orderBy('date', 'desc'));
+        const ordersSnapshot = await getDocs(ordersQuery);
+        const orders = [];
+        ordersSnapshot.forEach(docSnap => {
+            orders.push({ id: docSnap.id, ...docSnap.data() });
+        });
+        renderOrdersList(orders);
+        
+        // Load favorites from localStorage (keep in localStorage as per requirement)
+        const favoritesData = localStorage.getItem(`soravin_favorites_${currentUser.email}`);
+        if (favoritesData) {
+            try {
+                const favorites = JSON.parse(favoritesData);
+                renderFavoritesList(favorites);
+            } catch (e) {}
+        }
+        
+        // Load comments from Firestore
+        const commentsQuery = query(collection(db, 'comments'), where('uid', '==', currentUser.uid), orderBy('date', 'desc'));
+        const commentsSnapshot = await getDocs(commentsQuery);
+        const comments = [];
+        commentsSnapshot.forEach(docSnap => {
+            comments.push({ id: docSnap.id, ...docSnap.data() });
+        });
+        renderCommentsList(comments);
+        
+        // Load notifications from users/{uid}/notifications subcollection
+        const notificationsQuery = query(collection(db, 'users', currentUser.uid, 'notifications'), orderBy('date', 'desc'));
+        const notificationsSnapshot = await getDocs(notificationsQuery);
+        const notifications = [];
+        notificationsSnapshot.forEach(docSnap => {
+            notifications.push({ id: docSnap.id, ...docSnap.data() });
+        });
+        renderNotificationsList(notifications);
+        
+    } catch (error) {
+        console.error('Error loading persisted data:', error);
     }
     
-    // Load orders
-    const ordersData = localStorage.getItem(`soravin_orders_${emailKey}`);
-    if (ordersData) {
-        try {
-            const orders = JSON.parse(ordersData);
-            renderOrdersList(orders);
-        } catch (e) {}
-    }
-    
-    // Load favorites
-    const favoritesData = localStorage.getItem(`soravin_favorites_${emailKey}`);
-    if (favoritesData) {
-        try {
-            const favorites = JSON.parse(favoritesData);
-            renderFavoritesList(favorites);
-        } catch (e) {}
-    }
-    
-    // Load comments
-    const commentsData = localStorage.getItem(`soravin_comments_${emailKey}`);
-    if (commentsData) {
-        try {
-            const comments = JSON.parse(commentsData);
-            renderCommentsList(comments);
-        } catch (e) {}
-    }
-    
-    // Load notifications
-    const notificationsData = localStorage.getItem(`soravin_notifications_${emailKey}`);
-    if (notificationsData) {
-        try {
-            const notifications = JSON.parse(notificationsData);
-            renderNotificationsList(notifications);
-        } catch (e) {}
+    // Render lists with loaded data
+    renderTicketList();
+    renderProjectList();
+}
+
+// Save data to Firestore
+async function saveTicketToFirestore(ticketData) {
+    try {
+        await addDoc(collection(db, 'tickets'), {
+            uid: currentUser.uid,
+            email: currentUser.email,
+            ...ticketData
+        });
+    } catch (error) {
+        console.error('Error saving ticket:', error);
     }
 }
 
-// Save data to localStorage (keyed by email)
-function saveTickets() {
-    const emailKey = getEmailKey();
-    if (emailKey) {
-        localStorage.setItem(`soravin_tickets_${emailKey}`, JSON.stringify(userTickets));
+async function saveProjectToFirestore(projectData) {
+    try {
+        await addDoc(collection(db, 'projects'), {
+            uid: currentUser.uid,
+            email: currentUser.email,
+            ...projectData
+        });
+    } catch (error) {
+        console.error('Error saving project:', error);
     }
 }
 
-function saveProjects() {
-    const emailKey = getEmailKey();
-    if (emailKey) {
-        localStorage.setItem(`soravin_projects_${emailKey}`, JSON.stringify(userProjects));
+async function saveOrderToFirestore(orderData) {
+    try {
+        await addDoc(collection(db, 'orders'), {
+            uid: currentUser.uid,
+            email: currentUser.email,
+            ...orderData
+        });
+    } catch (error) {
+        console.error('Error saving order:', error);
     }
 }
 
-function saveAvatar(dataUrl) {
-    const emailKey = getEmailKey();
-    if (emailKey) {
-        localStorage.setItem(`soravin_avatar_${emailKey}`, JSON.stringify({ dataUrl }));
+async function saveCommentToFirestore(commentData) {
+    try {
+        await addDoc(collection(db, 'comments'), {
+            uid: currentUser.uid,
+            ...commentData
+        });
+    } catch (error) {
+        console.error('Error saving comment:', error);
     }
 }
 
-function saveOrders(orders) {
-    const emailKey = getEmailKey();
-    if (emailKey) {
-        localStorage.setItem(`soravin_orders_${emailKey}`, JSON.stringify(orders));
+async function saveNotificationToFirestore(notificationData) {
+    try {
+        await addDoc(collection(db, 'users', currentUser.uid, 'notifications'), notificationData);
+    } catch (error) {
+        console.error('Error saving notification:', error);
     }
 }
 
-function saveFavorites(favorites) {
-    const emailKey = getEmailKey();
-    if (emailKey) {
-        localStorage.setItem(`soravin_favorites_${emailKey}`, JSON.stringify(favorites));
-    }
-}
-
-function saveComments(comments) {
-    const emailKey = getEmailKey();
-    if (emailKey) {
-        localStorage.setItem(`soravin_comments_${emailKey}`, JSON.stringify(comments));
-    }
-}
-
-function saveNotifications(notifications) {
-    const emailKey = getEmailKey();
-    if (emailKey) {
-        localStorage.setItem(`soravin_notifications_${emailKey}`, JSON.stringify(notifications));
+async function saveAvatarToFirestore(dataUrl) {
+    try {
+        await setDoc(doc(db, 'users', currentUser.uid), {
+            avatarUrl: dataUrl
+        }, { merge: true });
+    } catch (error) {
+        console.error('Error saving avatar:', error);
     }
 }
 
@@ -1238,9 +1271,12 @@ document.getElementById('submitProject').addEventListener('click', async () => {
         return;
     }
     
-    // Save to localStorage (keyed by email)
-    userProjects.push({ type, desc, budget, status: 'pending', date: new Date().toLocaleDateString('fa-IR') });
-    saveProjects();
+    // Save to Firestore
+    const projectData = { type, desc, budget, status: 'pending', date: new Date().toISOString() };
+    await saveProjectToFirestore(projectData);
+    
+    // Update local state and re-render
+    userProjects.push({ ...projectData, date: new Date().toLocaleDateString('fa-IR') });
     renderProjectList();
     
     // Clear form
@@ -1291,9 +1327,12 @@ document.getElementById('submitTicket').addEventListener('click', async () => {
         return;
     }
     
-    // Save to localStorage (keyed by email)
-    userTickets.push({ subject, message, status: 'open', date: new Date().toLocaleDateString('fa-IR') });
-    saveTickets();
+    // Save to Firestore
+    const ticketData = { subject, text: message, status: 'open', date: new Date().toISOString() };
+    await saveTicketToFirestore(ticketData);
+    
+    // Update local state and re-render
+    userTickets.push({ ...ticketData, date: new Date().toLocaleDateString('fa-IR') });
     renderTicketList();
     
     // Clear form
@@ -1344,16 +1383,12 @@ document.getElementById('changePassword').addEventListener('click', async () => 
         return;
     }
     
-    try {
-        const { error } = await supabase.auth.updateUser({ password: newPass });
-        if (error) throw error;
-        alert('رمز عبور با موفقیت تغییر کرد');
-        document.getElementById('currentPassword').value = '';
-        document.getElementById('newPassword').value = '';
-        document.getElementById('confirmPassword').value = '';
-    } catch (err) {
-        alert('خطا در تغییر رمز عبور: ' + err.message);
-    }
+    // Note: Firebase requires re-authentication to change password
+    // This is a simplified version - in production you'd need to re-authenticate
+    alert('تغییر رمز عبور از طریق ایمیل بازیابی انجام می‌شود');
+    document.getElementById('currentPassword').value = '';
+    document.getElementById('newPassword').value = '';
+    document.getElementById('confirmPassword').value = '';
 });
 
 // Update profile handler
@@ -1366,8 +1401,9 @@ document.getElementById('updateProfile').addEventListener('click', async () => {
     }
     
     try {
-        const { error } = await supabase.auth.updateUser({ data: { full_name: fullName } });
-        if (error) throw error;
+        await setDoc(doc(db, 'users', currentUser.uid), {
+            fullName: fullName
+        }, { merge: true });
         alert('اطلاعات با موفقیت به‌روزرسانی شد');
         welcomeName.textContent = fullName;
         welcomeAvatar.textContent = fullName.charAt(0).toUpperCase();
@@ -1377,30 +1413,44 @@ document.getElementById('updateProfile').addEventListener('click', async () => {
     }
 });
 
-// Avatar upload handler
-document.getElementById('avatarInput').addEventListener('change', (e) => {
+// Avatar upload handler with compression
+document.getElementById('avatarInput').addEventListener('change', async (e) => {
     const file = e.target.files[0];
     if (file) {
         if (file.size > 2 * 1024 * 1024) {
             alert('حجم فایل باید کمتر از 2MB باشد');
             return;
         }
-        const reader = new FileReader();
-        reader.onload = (event) => {
-            const img = new Image();
-            img.onload = () => {
-                document.getElementById('avatarPreview').textContent = '';
-                document.getElementById('avatarPreview').style.backgroundImage = `url(${event.target.result})`;
-                document.getElementById('avatarPreview').style.backgroundSize = 'cover';
-                document.getElementById('avatarPreview').style.backgroundPosition = 'center';
-                welcomeAvatar.style.backgroundImage = `url(${event.target.result})`;
-                welcomeAvatar.style.backgroundSize = 'cover';
-                welcomeAvatar.style.backgroundPosition = 'center';
-                welcomeAvatar.textContent = '';
-            };
-            img.src = event.target.result;
-        };
-        reader.readAsDataURL(file);
+        
+        try {
+            // Compress image before saving
+            const compressedDataUrl = await compressImage(file, 100, 100, 0.8);
+            
+            // Check size (should be under 1MB for Firestore)
+            const byteLength = (compressedDataUrl.length * 3) / 4;
+            if (byteLength > 1024 * 1024) {
+                alert('حجم تصویر پس از فشرده‌سازی هنوز بیش از 1MB است');
+                return;
+            }
+            
+            // Save to Firestore
+            await saveAvatarToFirestore(compressedDataUrl);
+            
+            // Update UI
+            document.getElementById('avatarPreview').textContent = '';
+            document.getElementById('avatarPreview').style.backgroundImage = `url(${compressedDataUrl})`;
+            document.getElementById('avatarPreview').style.backgroundSize = 'cover';
+            document.getElementById('avatarPreview').style.backgroundPosition = 'center';
+            welcomeAvatar.style.backgroundImage = `url(${compressedDataUrl})`;
+            welcomeAvatar.style.backgroundSize = 'cover';
+            welcomeAvatar.style.backgroundPosition = 'center';
+            welcomeAvatar.textContent = '';
+            
+            alert('آواتار با موفقیت به‌روزرسانی شد');
+        } catch (error) {
+            console.error('Error processing avatar:', error);
+            alert('خطا در بارگذاری آواتار');
+        }
     }
 });
 

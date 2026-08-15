@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let products = [];
     let cart = JSON.parse(localStorage.getItem('soravinCart')) || [];
     let wishlist = JSON.parse(localStorage.getItem('soravinWishlist')) || [];
-    let flashSaleEnd = Date.now() + 6 * 60 * 60 * 1000; // 6 hours from now
+    let flashSaleEnd = Date.now() + 6 * 60 * 60 * 1000;
 
     // DOM Elements
     const productsGrid = document.getElementById('productsGrid');
@@ -40,38 +40,21 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Format Price
     function formatPrice(price) {
+        if (price === null) return 'تماس بگیرید';
         return price.toLocaleString('fa-IR') + ' تومان';
-    }
-
-    // Generate Stars SVG
-    function generateStars(rating) {
-        const fullStars = Math.floor(rating);
-        const hasHalf = rating % 1 >= 0.5;
-        let stars = '';
-        
-        for (let i = 0; i < fullStars; i++) {
-            stars += '<svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>';
-        }
-        if (hasHalf && fullStars < 5) {
-            stars += '<svg viewBox="0 0 24 24" fill="currentColor"><defs><linearGradient id="halfGrad"><stop offset="50%" stop-color="currentColor"/><stop offset="50%" stop-color="transparent"/></linearGradient></defs><polygon fill="url(#halfGrad)" points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>';
-        }
-        while (stars.split('<svg').length - 1 < 5) {
-            stars += '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>';
-        }
-        return stars;
     }
 
     // Render Product Card
     function createProductCard(product) {
         const isInWishlist = wishlist.includes(product.id);
-        const badgeText = product.badge === 'sale' ? 'تخفیف' : product.badge === 'new' ? 'جدید' : 'ویژه';
-        
+        const isSoon = product.price === null;
+
         return `
             <div class="product-card" data-id="${product.id}" data-category="${product.category}">
                 <div class="product-image-wrapper">
                     <div class="product-image" style="background: ${product.image};"></div>
                     <div class="product-badges">
-                        ${product.badge ? `<span class="product-badge badge-${product.badge}">${badgeText}</span>` : ''}
+                        ${isSoon ? '<span class="product-badge badge-soon">به‌زودی</span>' : ''}
                     </div>
                     <button class="product-wishlist ${isInWishlist ? 'active' : ''}" onclick="toggleWishlist(${product.id})">
                         <svg viewBox="0 0 24 24" fill="${isInWishlist ? '#e74c3c' : 'none'}" stroke="${isInWishlist ? '#e74c3c' : 'currentColor'}" stroke-width="2">
@@ -81,23 +64,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
                 <div class="product-info">
                     <div class="product-category">${getCategoryName(product.category)}</div>
-                    <h3 class="product-title">${product.name}</h3>
-                    <div class="product-rating">
-                        <div class="stars">${generateStars(product.rating)}</div>
-                        <span class="rating-count">(${product.reviews.toLocaleString('fa-IR')})</span>
-                    </div>
+                    <h3 class="product-title">${product.title}</h3>
                     <div class="product-prices">
-                        <span class="product-price">${formatPrice(product.price)}</span>
-                        ${product.oldPrice ? `<span class="product-old-price">${formatPrice(product.oldPrice)}</span>` : ''}
+                        ${product.price !== null ? `<span class="product-price">${formatPrice(product.price)}</span>` : '<span class="product-price" style="color: var(--gray);">تماس بگیرید</span>'}
                     </div>
                     <div class="product-actions">
-                        <button class="btn-add-cart" onclick="addToCart(${product.id})">افزودن به سبد</button>
-                        <button class="btn-quick-view" onclick="openQuickView(${product.id})">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                                <circle cx="12" cy="12" r="3"></circle>
-                            </svg>
-                        </button>
+                        <button class="btn-add-cart" onclick="addToCart(${product.id})" ${isSoon ? 'disabled style="background: #666; cursor: not-allowed;"' : ''}>افزودن به سبد</button>
                     </div>
                 </div>
             </div>
@@ -129,7 +101,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Search
         if (searchTerm) {
-            filtered = filtered.filter(p => p.name.toLowerCase().includes(searchTerm));
+            filtered = filtered.filter(p => p.title.toLowerCase().includes(searchTerm));
         }
 
         // Category
@@ -140,13 +112,10 @@ document.addEventListener('DOMContentLoaded', function() {
         // Sort
         switch (sortValue) {
             case 'price-asc':
-                filtered.sort((a, b) => a.price - b.price);
+                filtered.sort((a, b) => (a.price || Infinity) - (b.price || Infinity));
                 break;
             case 'price-desc':
-                filtered.sort((a, b) => b.price - a.price);
-                break;
-            case 'rating':
-                filtered.sort((a, b) => b.rating - a.rating);
+                filtered.sort((a, b) => (b.price || 0) - (a.price || 0));
                 break;
             case 'newest':
                 filtered.sort((a, b) => b.id - a.id);
@@ -158,25 +127,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Setup Flash Sale
     function setupFlashSale() {
-        if (products.length > 0) {
-            const saleProducts = products.filter(p => p.oldPrice);
-            if (saleProducts.length > 0) {
-                const randomProduct = saleProducts[Math.floor(Math.random() * saleProducts.length)];
-                flashProduct.innerHTML = `
-                    <div class="flash-product-card">
-                        <div class="flash-product-image" style="background: ${randomProduct.image};"></div>
+        const saleProducts = products.filter(p => p.price !== null && p.price > 0);
+        if (saleProducts.length > 0) {
+            const randomProduct = saleProducts[Math.floor(Math.random() * saleProducts.length)];
+            flashProduct.innerHTML = `
+                <div class="flash-product-card">
+                    <div class="flash-product-image" style="background: ${randomProduct.image};"></div>
+                </div>
+                <div class="flash-product-info">
+                    <h4 class="flash-product-title">${randomProduct.title}</h4>
+                    <div class="flash-prices">
+                        <span class="flash-price">${formatPrice(randomProduct.price)}</span>
                     </div>
-                    <div class="flash-product-info">
-                        <h4 class="flash-product-title">${randomProduct.name}</h4>
-                        <div class="flash-prices">
-                            <span class="flash-price">${formatPrice(randomProduct.price)}</span>
-                            <span class="flash-old-price">${formatPrice(randomProduct.oldPrice)}</span>
-                        </div>
-                        <div class="flash-timer">تا پایان پیشنهاد شگفت‌انگیز:</div>
-                    </div>
-                `;
-                startCountdown();
-            }
+                    <div class="flash-timer">پیشنهاد ویژه</div>
+                </div>
+            `;
+            startCountdown();
         }
     }
 
@@ -185,77 +151,21 @@ document.addEventListener('DOMContentLoaded', function() {
         const updateCountdown = () => {
             const now = Date.now();
             const diff = Math.max(0, flashSaleEnd - now);
-            
+
             const hours = Math.floor(diff / (1000 * 60 * 60));
             const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-            
+
             document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
             document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
             document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
-            
+
             if (diff > 0) {
                 requestAnimationFrame(updateCountdown);
             }
         };
         updateCountdown();
     }
-
-    // Quick View
-    window.openQuickView = function(productId) {
-        const product = products.find(p => p.id === productId);
-        if (!product) return;
-
-        const specsHtml = Object.entries(product.specs)
-            .map(([key, value]) => `<div class="spec-item"><span class="spec-label">${key}:</span><span class="spec-value">${value}</span></div>`)
-            .join('');
-
-        const relatedProducts = products.filter(p => p.category === product.category && p.id !== product.id).slice(0, 3);
-        const relatedHtml = relatedProducts.map(p => `
-            <div class="product-card" style="font-size: 0.9rem;">
-                <div class="product-image-wrapper" style="height: 120px;">
-                    <div class="product-image" style="background: ${p.image};"></div>
-                </div>
-                <div class="product-info" style="padding: 12px;">
-                    <h4 style="color: var(--white); margin: 0 0 8px; font-size: 0.85rem;">${p.name}</h4>
-                    <div style="color: var(--gold-light); font-weight: 600;">${formatPrice(p.price)}</div>
-                </div>
-            </div>
-        `).join('');
-
-        quickViewBody.innerHTML = `
-            <div class="quick-view-image">
-                <div style="width: 100%; height: 350px; background: ${product.image}; border-radius: 12px;"></div>
-            </div>
-            <div class="quick-view-details">
-                <h2>${product.name}</h2>
-                <div class="product-rating" style="margin-bottom: 16px;">
-                    <div class="stars">${generateStars(product.rating)}</div>
-                    <span class="rating-count">(${product.reviews.toLocaleString('fa-IR')} نظر)</span>
-                </div>
-                <p class="quick-view-description">${product.description}</p>
-                <div class="quick-view-specs">
-                    ${specsHtml}
-                </div>
-                <div class="quick-view-price">${formatPrice(product.price)}${product.oldPrice ? ` <span style="font-size: 1rem; color: var(--gray); text-decoration: line-through; margin-right: 10px;">${formatPrice(product.oldPrice)}</span>` : ''}</div>
-                <div class="quick-view-actions">
-                    <button class="btn-add-cart" style="flex: 1; padding: 14px;" onclick="addToCart(${product.id}); closeQuickView()">افزودن به سبد خرید</button>
-                </div>
-                ${relatedProducts.length > 0 ? `
-                    <div class="related-products">
-                        <h3>محصولات مرتبط</h3>
-                        <div class="related-grid">${relatedHtml}</div>
-                    </div>
-                ` : ''}
-            </div>
-        `;
-
-        quickViewModal.classList.add('active');
-    };
-
-    window.closeQuickView = function() {
-        quickViewModal.classList.remove('active');
-    };
 
     // Cart Functions
     function saveCart() {
@@ -265,7 +175,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function updateCartUI() {
         const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-        const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        const totalPrice = cart.reduce((sum, item) => sum + ((item.price || 0) * item.quantity), 0);
 
         cartBadge.textContent = totalItems.toLocaleString('fa-IR');
         mobileCartCount.textContent = totalItems.toLocaleString('fa-IR');
@@ -278,7 +188,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <div class="cart-item">
                     <div class="cart-item-image" style="background: ${item.image};"></div>
                     <div class="cart-item-details">
-                        <h4 class="cart-item-title">${item.name}</h4>
+                        <h4 class="cart-item-title">${item.title}</h4>
                         <div class="cart-item-price">${formatPrice(item.price)}</div>
                         <div class="cart-item-quantity">
                             <button class="qty-btn" onclick="updateQuantity(${item.id}, -1)">−</button>
@@ -299,7 +209,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     window.addToCart = function(productId) {
         const product = products.find(p => p.id === productId);
-        if (!product) return;
+        if (!product || product.price === null) return;
 
         const existingItem = cart.find(item => item.id === productId);
         if (existingItem) {
@@ -309,8 +219,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         saveCart();
-        
-        // Show feedback
+
         const btn = event.target;
         const originalText = btn.textContent;
         btn.textContent = '✓ افزوده شد';
@@ -342,7 +251,7 @@ document.addEventListener('DOMContentLoaded', function() {
     window.toggleWishlist = function(productId) {
         const index = wishlist.indexOf(productId);
         const btn = event.currentTarget;
-        
+
         if (index === -1) {
             wishlist.push(productId);
             btn.classList.add('active');
@@ -354,13 +263,13 @@ document.addEventListener('DOMContentLoaded', function() {
             btn.querySelector('svg').setAttribute('fill', 'none');
             btn.querySelector('svg').setAttribute('stroke', 'currentColor');
         }
-        
+
         localStorage.setItem('soravinWishlist', JSON.stringify(wishlist));
     };
 
     // UI Event Listeners
     productSearch?.addEventListener('input', filterAndSort);
-    
+
     categoryChips?.addEventListener('click', (e) => {
         if (e.target.classList.contains('chip')) {
             categoryChips.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
@@ -370,12 +279,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     sortSelect?.addEventListener('change', filterAndSort);
-
-    // Modal Controls
-    document.getElementById('modalClose')?.addEventListener('click', closeQuickView);
-    quickViewModal?.addEventListener('click', (e) => {
-        if (e.target === quickViewModal) closeQuickView();
-    });
 
     // Cart Sidebar
     const cartIconBtn = document.getElementById('cartIconBtn');
@@ -418,7 +321,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Order Submission
     document.getElementById('checkoutForm')?.addEventListener('submit', (e) => {
         e.preventDefault();
-        
+
         const order = {
             id: Date.now(),
             date: new Date().toISOString(),
@@ -429,19 +332,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 address: document.getElementById('customerAddress').value
             },
             items: [...cart],
-            total: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0)
+            total: cart.reduce((sum, item) => sum + ((item.price || 0) * item.quantity), 0)
         };
 
-        // Save to localStorage
         const orders = JSON.parse(localStorage.getItem('soravinOrders')) || [];
         orders.push(order);
         localStorage.setItem('soravinOrders', JSON.stringify(orders));
 
-        // Clear cart
         cart = [];
         saveCart();
 
-        // Show success
         checkoutModal.classList.remove('active');
         successOverlay.classList.add('active');
     });
@@ -450,7 +350,6 @@ document.addEventListener('DOMContentLoaded', function() {
         successOverlay.classList.remove('active');
     });
 
-    // Discount Code (placeholder)
     document.getElementById('applyDiscount')?.addEventListener('click', () => {
         const code = document.getElementById('discountCode').value.trim();
         if (code) {

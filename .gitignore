@@ -1,53 +1,39 @@
 ```gitignore
-# Configuration and data files
-*.json
-*.css
-
-# Build artifacts and dependencies
-dist/
-build/
-node_modules/
-target/
-
-# Virtual environments
-venv/
-.venv/
+# Environment
 .env
 .env.local
+.env.*
 
-# IDE and editor files
-.vscode/
-.idea/
-*.swp
-*.swo
+# Dependencies
+node_modules/
+.venv/
+venv/
+__pycache__/
+.mypy_cache/
+.pytest_cache/
+
+# Build artifacts
+dist/
+build/
+target/
 
 # Logs and temporary files
 *.log
 *.tmp
-*.temp
+*.swp
 
-# OS generated files
+# Editor/IDE
+.vscode/
+.idea/
+
+# OS
 .DS_Store
 Thumbs.db
 
-# Python specific
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-.Python
-*.so
-
-# Coverage reports
+# Coverage
 coverage/
 htmlcov/
 .coverage
-
-# Test and cache directories
-.mypy_cache/
-.pytest_cache/
-.nyc_output/
-coverage/lcov.info
 
 # Compressed files
 *.zip

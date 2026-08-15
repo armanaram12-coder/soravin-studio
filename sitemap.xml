@@ -76,6 +76,26 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://soravin-studio.vercel.app/ai-path-basics.html</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://soravin-studio.vercel.app/ai-path-content.html</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://soravin-studio.vercel.app/ai-path-design.html</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://soravin-studio.vercel.app/ai-path-tools.html</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://soravin-studio.vercel.app/ai-programming.html</loc>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -146,37 +166,27 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://soravin-studio.vercel.app/news/این-صدای-زنگ-جدید-گوشیهای-سامسونگ-است.html</loc>
+    <loc>https://soravin-studio.vercel.app/news/سئو،-ارزانترین-نیروی-فروشی-که-۲۴-ساعته-کار-میکند.html</loc>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://soravin-studio.vercel.app/news/کیف-پول-سامسونگ-بیش-از-پیش-به-استقبال-استیبلکوینها-میرود.html</loc>
+    <loc>https://soravin-studio.vercel.app/news/بهشت-اینستاگرام،-کابوس-ساکنان؛-سفر-به-قلب-ساختمان-هیولا-در-ه.html</loc>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://soravin-studio.vercel.app/news/دوربین-جدید-اینستا-۳۶۰-با-بدنه-جمعوجور-و-قابلیت-فیلمبرداری-8.html</loc>
+    <loc>https://soravin-studio.vercel.app/news/گوشی-جدید-آیکو-با-نمایشگر-۱۴۴-هرتز-2k-عرضه-میشود.html</loc>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://soravin-studio.vercel.app/news/تلگرام-۱۳-ساله-شد.html</loc>
+    <loc>https://soravin-studio.vercel.app/news/راز-سانسور-سههزار-ساله؛-باستانشناسان-نام-سه-پادشاه-حذفشده-آش.html</loc>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://soravin-studio.vercel.app/news/پوکو-x8-با-باتری-غولپیکر-۹۰۰۰-میلیآمپرساعتی-در-راه-است.html</loc>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://soravin-studio.vercel.app/news/آپدیت-جدید-ویندوز-۱۱-سرعت-کامپیوترها-با-رم-۸-گیگابایتی-را-به.html</loc>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://soravin-studio.vercel.app/news/بدافزار-ترسناکی-که-بخشی-از-اینترنت-جهان-را-فلج-کرد.html</loc>
+    <loc>https://soravin-studio.vercel.app/news/یک-اشتباه-نرمافزاری-باعث-سرقت-۲۰۰-هزار-دلار-رمزارز-شد.html</loc>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -186,12 +196,22 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://soravin-studio.vercel.app/news/بودجه-عظیم-اپل-برای-حل-بزرگترین-نقطه-ضعف-سیری.html</loc>
+    <loc>https://soravin-studio.vercel.app/news/خودرو-مدرن-و-خوشقیمت-a05-برای-رقابت-با-جیلی-ex2-در-راه-است.html</loc>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://soravin-studio.vercel.app/news/جایزه-۱۹۰-هزار-دلاری-برای-یافتن-سارقان-بیتکوین.html</loc>
+    <loc>https://soravin-studio.vercel.app/news/مدل-جدید-چانگان-cs55-پلاس-هفته-آینده-رسما-عرضه-میشود.html</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://soravin-studio.vercel.app/news/آینهای-که-دروغ-میگوید؛-وقتی-فیزیک-و-هوش-مصنوعی-میتوانند-قوان.html</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://soravin-studio.vercel.app/news/گرفت-خورشید-در-روز،-نمایش-شهابها-در-شب؛-همزمانی-بیسابقه-دو-ر.html</loc>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>

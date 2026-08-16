@@ -895,6 +895,8 @@ AI
 
 import { auth, db, signOut, onAuthStateChanged, doc, getDoc, setDoc, collection, addDoc, query, where, orderBy, getDocs, updateDoc } from './js/firebase.js';
 
+document.addEventListener('DOMContentLoaded', () => {
+
 // DOM Elements
 const welcomeAvatar = document.getElementById('welcomeAvatar');
 const welcomeName = document.getElementById('welcomeName');

@@ -12,7 +12,7 @@ async function getUserData(uid) {
         }
         return null;
     } catch (error) {
-        console.error('Error getting user data:', error);
+        console.error('خطا در خواندن اطلاعات کاربر:', error);
         return null;
     }
 }
@@ -115,7 +115,7 @@ export async function logout() {
         await signOut(auth);
         window.location.href = 'index.html';
     } catch (error) {
-        console.error('Logout error:', error);
+        console.error('خطا در خروج:', error);
         localStorage.removeItem('currentUser');
         window.location.href = 'index.html';
     }

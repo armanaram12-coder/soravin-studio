@@ -18,11 +18,10 @@ document.addEventListener('DOMContentLoaded', function() {
     // Load current user
     async function loadUser() {
         try {
-            const response = await fetch('js/supabase.js');
             const supabaseModule = await import('./js/supabase.js');
             currentUser = await supabaseModule.getUserInfo();
         } catch (error) {
-            console.error('Error loading user:', error);
+            console.error('خطا در خواندن اطلاعات کاربر:', error);
         }
     }
 
@@ -52,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function() {
             renderProducts(products);
             setupFlashSale();
         } catch (error) {
-            console.error('Error loading products:', error);
+            console.error('خطا در بارگذاری محصولات:', error);
             productsGrid.innerHTML = '<p style="color: var(--text); text-align: center;">خطا در بارگذاری محصولات</p>';
         }
     }
@@ -326,15 +325,19 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
-        // Check if user is logged in
-        const supabaseModule = await import('./js/supabase.js');
-        const loggedIn = await supabaseModule.isLoggedIn();
-        
-        if (!loggedIn) {
-            // Redirect to login with message
-            localStorage.setItem('checkoutRedirect', 'true');
-            window.location.href = 'login.html';
-            return;
+        try {
+            // Check if user is logged in
+            const supabaseModule = await import('./js/supabase.js');
+            const loggedIn = await supabaseModule.isLoggedIn();
+            
+            if (!loggedIn) {
+                // Redirect to login with message
+                localStorage.setItem('checkoutRedirect', 'true');
+                window.location.href = 'login.html';
+                return;
+            }
+        } catch (error) {
+            console.error('خطا در بررسی وضعیت ورود:', error);
         }
         
         closeCart();
@@ -372,7 +375,7 @@ document.addEventListener('DOMContentLoaded', function() {
         try {
             await addDoc(collection(db, 'orders'), order);
         } catch (error) {
-            console.error('Error saving order to Firestore:', error);
+            console.error('خطا در ثبت سفارش:', error);
         }
 
         cart = [];

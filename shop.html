@@ -333,13 +333,13 @@ Ai
 <p id="footerText"></p>
 </footer>
 
-<script src="shop.js"></script>
+<script type="module" src="shop.js"></script>
 
 <script type="module">
 import { updateHeaderAuth, isLoggedIn } from './js/firebase-auth.js';
 
 // Update header auth UI - show greeting when logged in
-updateHeaderAuth();
+updateHeaderAuth().catch(err => console.error('خطا در بارگذاری وضعیت احراز هویت:', err));
 </script>
 
 <script>

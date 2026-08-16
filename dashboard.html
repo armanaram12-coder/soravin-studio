@@ -1141,7 +1141,7 @@ async function loadDashboard() {
             document.getElementById('statPoints').textContent = '0';
             document.getElementById('clubPoints').textContent = '0';
             
-            // Load persisted data from localStorage (tickets, avatar, orders, etc.)
+            // Load persisted data from Firestore with await
             await loadPersistedData();
             
             // Render lists with loaded data
@@ -1356,7 +1356,7 @@ function renderTicketList() {
         <li class="data-item">
             <div class="data-item-info">
                 <h4>${t.subject} - ${t.date}</h4>
-                <p>${t.text.substring(0, 50)}...</p>
+                <p>${t.text ? t.text.substring(0, 50) + '...' : ''}</p>
             </div>
             <span class="status-badge status-${t.status}">${getStatusText(t.status)}</span>
         </li>
@@ -1458,6 +1458,8 @@ document.getElementById('avatarInput').addEventListener('change', async (e) => {
 });
 
 loadDashboard();
+
+});
 
 </script>
 

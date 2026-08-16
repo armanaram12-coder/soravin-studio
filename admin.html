@@ -600,6 +600,7 @@ const adminLogoutBtn = document.getElementById('adminLogout');
 
 // Check auth and admin access
 onAuthStateChanged(auth, async (user) => {
+    console.log('Auth state changed, user:', user);
     if (!user) {
         // Not logged in - redirect to login
         window.location.href = 'login.html?redirect=admin.html';

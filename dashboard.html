@@ -896,6 +896,7 @@ AI
 import { auth, db, signOut, onAuthStateChanged, doc, getDoc, setDoc, collection, addDoc, query, where, orderBy, getDocs, updateDoc } from './js/firebase.js';
 
 document.addEventListener('DOMContentLoaded', () => {
+console.log('Dashboard loaded, current user:', currentUser);
 
 // DOM Elements
 const welcomeAvatar = document.getElementById('welcomeAvatar');
@@ -1114,6 +1115,7 @@ async function loadUserProfile(user) {
 
 async function loadDashboard() {
     onAuthStateChanged(auth, async (user) => {
+        console.log('Auth state changed, user:', user);
         if (user) {
             currentUser = user;
             

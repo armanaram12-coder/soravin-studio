@@ -587,7 +587,7 @@ SORAVIN <span>ADMIN</span>
 
 <script type="module">
 
-import { auth, db, signOut, onAuthStateChanged, collection, getDocs, query, orderBy, updateDoc, doc, deleteDoc } from './js/firebase.js';
+import { supabase } from './js/supabase.js';
 
 const ADMIN_EMAIL = 'arman.aram12@gmail.com';
 
@@ -599,15 +599,16 @@ const adminEmailEl = document.getElementById('adminEmail');
 const adminLogoutBtn = document.getElementById('adminLogout');
 
 // Check auth and admin access
-onAuthStateChanged(auth, async (user) => {
-    console.log('Auth state changed, user:', user);
-    if (!user) {
+async function checkAdminAuth() {
+    const { data: { session } } = await supabase.auth.getSession();
+    
+    if (!session?.user) {
         // Not logged in - redirect to login
         window.location.href = 'login.html?redirect=admin.html';
         return;
     }
     
-    if (user.email !== ADMIN_EMAIL) {
+    if (session.user.email !== ADMIN_EMAIL) {
         // Not admin - show access denied
         accessDeniedEl.style.display = 'flex';
         adminDashboardEl.style.display = 'none';
@@ -619,16 +620,27 @@ onAuthStateChanged(auth, async (user) => {
     accessDeniedEl.style.display = 'none';
     adminDashboardEl.style.display = 'flex';
     adminUserInfoEl.style.display = 'flex';
-    adminEmailEl.textContent = user.email;
+    adminEmailEl.textContent = session.user.email;
     
     // Load all data
     await loadAllData();
+}
+
+checkAdminAuth();
+
+// Listen for auth state changes
+supabase.auth.onAuthStateChange(async (event, session) => {
+    if (event === 'SIGNED_OUT') {
+        window.location.href = 'login.html';
+    } else if (session?.user && session.user.email === ADMIN_EMAIL) {
+        await loadAllData();
+    }
 });
 
 // Logout handler
 adminLogoutBtn.addEventListener('click', async () => {
     try {
-        await signOut(auth);
+        await supabase.auth.signOut();
         window.location.href = 'index.html';
     } catch (err) {
         console.error('Error signing out:', err);

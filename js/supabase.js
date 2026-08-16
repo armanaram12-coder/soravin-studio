@@ -3,10 +3,10 @@
 
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
-const SUPABASE_URL = 'https://foukuigwrnezzcygtwcu.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_jCYsfZd2kNfEBJcsMOTjuA_sgMcXwEr';
+const supabaseUrl = 'https://foukuigwrnezzcygtwcu.supabase.co';
+const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZvdWt1aWd3cm5lenpjeWd0d2N1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYzNTMzNjgsImV4cCI6MjEwMTkyOTM2OH0.JcBpJv2fuxfsyErAe2bCPy9IXicOtiTPkaQbr_ex_VQ';
 
-export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 // Helper functions for auth
 export async function getCurrentUser() {

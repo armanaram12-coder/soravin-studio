@@ -893,7 +893,7 @@ AI
 
 <script type="module">
 
-import { auth, db, signOut, onAuthStateChanged, doc, getDoc, setDoc, collection, addDoc, query, where, orderBy, getDocs, updateDoc } from './js/firebase.js';
+import { supabase } from './js/supabase.js';
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -951,35 +951,25 @@ function compressImage(file, maxWidth = 100, maxHeight = 100, quality = 0.8) {
     });
 }
 
-// Load persisted data from Firestore
+// Load persisted data from Supabase
 async function loadPersistedData() {
     if (!currentUser) return;
     
     try {
-        // Load tickets from Firestore
-        const ticketsQuery = query(collection(db, 'tickets'), where('uid', '==', currentUser.uid), orderBy('date', 'desc'));
-        const ticketsSnapshot = await getDocs(ticketsQuery);
-        userTickets = [];
-        ticketsSnapshot.forEach(docSnap => {
-            userTickets.push({ id: docSnap.id, ...docSnap.data() });
-        });
+        // Load tickets from Supabase
+        const { data: ticketsData } = await supabase.from('tickets')
+            .select('*').eq('uid', currentUser.id).order('date', { ascending: false });
+        userTickets = ticketsData || [];
         
-        // Load projects from Firestore
-        const projectsQuery = query(collection(db, 'projects'), where('uid', '==', currentUser.uid), orderBy('date', 'desc'));
-        const projectsSnapshot = await getDocs(projectsQuery);
-        userProjects = [];
-        projectsSnapshot.forEach(docSnap => {
-            userProjects.push({ id: docSnap.id, ...docSnap.data() });
-        });
+        // Load projects from Supabase
+        const { data: projectsData } = await supabase.from('projects')
+            .select('*').eq('uid', currentUser.id).order('date', { ascending: false });
+        userProjects = projectsData || [];
         
-        // Load orders from Firestore
-        const ordersQuery = query(collection(db, 'orders'), where('uid', '==', currentUser.uid), orderBy('date', 'desc'));
-        const ordersSnapshot = await getDocs(ordersQuery);
-        const orders = [];
-        ordersSnapshot.forEach(docSnap => {
-            orders.push({ id: docSnap.id, ...docSnap.data() });
-        });
-        renderOrdersList(orders);
+        // Load orders from Supabase
+        const { data: ordersData } = await supabase.from('orders')
+            .select('*').eq('uid', currentUser.id).order('date', { ascending: false });
+        renderOrdersList(ordersData || []);
         
         // Load favorites from localStorage (keep in localStorage as per requirement)
         const favoritesData = localStorage.getItem(`soravin_favorites_${currentUser.email}`);
@@ -990,23 +980,15 @@ async function loadPersistedData() {
             } catch (e) {}
         }
         
-        // Load comments from Firestore
-        const commentsQuery = query(collection(db, 'comments'), where('uid', '==', currentUser.uid), orderBy('date', 'desc'));
-        const commentsSnapshot = await getDocs(commentsQuery);
-        const comments = [];
-        commentsSnapshot.forEach(docSnap => {
-            comments.push({ id: docSnap.id, ...docSnap.data() });
-        });
-        renderCommentsList(comments);
+        // Load comments from Supabase
+        const { data: commentsData } = await supabase.from('comments')
+            .select('*').eq('uid', currentUser.id).order('date', { ascending: false });
+        renderCommentsList(commentsData || []);
         
-        // Load notifications from users/{uid}/notifications subcollection
-        const notificationsQuery = query(collection(db, 'users', currentUser.uid, 'notifications'), orderBy('date', 'desc'));
-        const notificationsSnapshot = await getDocs(notificationsQuery);
-        const notifications = [];
-        notificationsSnapshot.forEach(docSnap => {
-            notifications.push({ id: docSnap.id, ...docSnap.data() });
-        });
-        renderNotificationsList(notifications);
+        // Load notifications from Supabase
+        const { data: notificationsData } = await supabase.from('notifications')
+            .select('*').eq('uid', currentUser.id).order('date', { ascending: false });
+        renderNotificationsList(notificationsData || []);
         
     } catch (error) {
         console.error('Error loading persisted data:', error);
@@ -1017,11 +999,11 @@ async function loadPersistedData() {
     renderProjectList();
 }
 
-// Save data to Firestore
-async function saveTicketToFirestore(ticketData) {
+// Save data to Supabase
+async function saveTicketToSupabase(ticketData) {
     try {
-        await addDoc(collection(db, 'tickets'), {
-            uid: currentUser.uid,
+        await supabase.from('tickets').insert({
+            uid: currentUser.id,
             email: currentUser.email,
             ...ticketData
         });
@@ -1030,10 +1012,10 @@ async function saveTicketToFirestore(ticketData) {
     }
 }
 
-async function saveProjectToFirestore(projectData) {
+async function saveProjectToSupabase(projectData) {
     try {
-        await addDoc(collection(db, 'projects'), {
-            uid: currentUser.uid,
+        await supabase.from('projects').insert({
+            uid: currentUser.id,
             email: currentUser.email,
             ...projectData
         });
@@ -1042,10 +1024,10 @@ async function saveProjectToFirestore(projectData) {
     }
 }
 
-async function saveOrderToFirestore(orderData) {
+async function saveOrderToSupabase(orderData) {
     try {
-        await addDoc(collection(db, 'orders'), {
-            uid: currentUser.uid,
+        await supabase.from('orders').insert({
+            uid: currentUser.id,
             email: currentUser.email,
             ...orderData
         });
@@ -1054,10 +1036,10 @@ async function saveOrderToFirestore(orderData) {
     }
 }
 
-async function saveCommentToFirestore(commentData) {
+async function saveCommentToSupabase(commentData) {
     try {
-        await addDoc(collection(db, 'comments'), {
-            uid: currentUser.uid,
+        await supabase.from('comments').insert({
+            uid: currentUser.id,
             ...commentData
         });
     } catch (error) {
@@ -1065,19 +1047,20 @@ async function saveCommentToFirestore(commentData) {
     }
 }
 
-async function saveNotificationToFirestore(notificationData) {
+async function saveNotificationToSupabase(notificationData) {
     try {
-        await addDoc(collection(db, 'users', currentUser.uid, 'notifications'), notificationData);
+        await supabase.from('notifications').insert({
+            uid: currentUser.id,
+            ...notificationData
+        });
     } catch (error) {
         console.error('Error saving notification:', error);
     }
 }
 
-async function saveAvatarToFirestore(dataUrl) {
+async function saveAvatarToSupabase(dataUrl) {
     try {
-        await setDoc(doc(db, 'users', currentUser.uid), {
-            avatarUrl: dataUrl
-        }, { merge: true });
+        await supabase.from('users').update({ avatar_url: dataUrl }).eq('id', currentUser.id);
     } catch (error) {
         console.error('Error saving avatar:', error);
     }
@@ -1101,9 +1084,10 @@ document.querySelectorAll('.sidebar-nav a[data-section]').forEach(link => {
 
 async function loadUserProfile(user) {
     try {
-        const userDoc = await getDoc(doc(db, "users", user.uid));
-        if (userDoc.exists()) {
-            return userDoc.data();
+        const { data: userData } = await supabase.from('users')
+            .select('full_name, email, member_since, avatar_url').eq('id', user.id).single();
+        if (userData) {
+            return userData;
         }
         return null;
     } catch (err) {
@@ -1113,49 +1097,63 @@ async function loadUserProfile(user) {
 }
 
 async function loadDashboard() {
-    onAuthStateChanged(auth, async (user) => {
-        console.log('Auth state changed, user:', user);
-        if (user) {
-            currentUser = user;
-            
-            // Load user profile from Firestore
-            const userProfile = await loadUserProfile(user);
-            
-            const fullName = userProfile?.fullName || user.displayName || 'کاربر گرامی';
-            const email = user.email;
-            const memberSince = userProfile?.memberSince ? new Date(userProfile.memberSince).toLocaleDateString('fa-IR') : '—';
-            const firstLetter = fullName.charAt(0).toUpperCase();
-            
-            // Update welcome bar
-            welcomeAvatar.textContent = firstLetter;
-            welcomeName.textContent = fullName;
-            welcomeEmail.textContent = email;
-            joinDateEl.textContent = `تاریخ عضویت: ${memberSince}`;
-            
-            // Update settings fields
-            document.getElementById('editFullName').value = fullName;
-            document.getElementById('editEmail').value = email;
-            document.getElementById('avatarPreview').textContent = firstLetter;
-            
-            // Update stats
-            document.getElementById('statPoints').textContent = '0';
-            document.getElementById('clubPoints').textContent = '0';
-            
-            // Load persisted data from Firestore with await
-            await loadPersistedData();
-            
-            // Render lists with loaded data
-            renderTicketList();
-            renderProjectList();
-            
-            // Render header user menu
-            renderHeaderMenu(fullName);
-            
-        } else {
-            // User is signed out - redirect to login
+    // Check initial session
+    const { data: { session } } = await supabase.auth.getSession();
+    
+    if (session?.user) {
+        handleUserSignedIn(session.user);
+    } else {
+        // No session - redirect to login
+        window.location.href = 'login.html';
+    }
+    
+    // Listen for auth state changes
+    supabase.auth.onAuthStateChange(async (event, session) => {
+        console.log('Auth state changed, event:', event, 'user:', session?.user);
+        
+        if (event === 'SIGNED_OUT') {
             window.location.href = 'login.html';
+        } else if (session?.user) {
+            handleUserSignedIn(session.user);
         }
     });
+}
+
+async function handleUserSignedIn(user) {
+    currentUser = user;
+    
+    // Load user profile from Supabase
+    const userProfile = await loadUserProfile(user);
+    
+    const fullName = userProfile?.full_name || user.user_metadata?.full_name || 'کاربر گرامی';
+    const email = user.email;
+    const memberSince = userProfile?.member_since ? new Date(userProfile.member_since).toLocaleDateString('fa-IR') : '—';
+    const firstLetter = fullName.charAt(0).toUpperCase();
+    
+    // Update welcome bar
+    welcomeAvatar.textContent = firstLetter;
+    welcomeName.textContent = fullName;
+    welcomeEmail.textContent = email;
+    joinDateEl.textContent = `تاریخ عضویت: ${memberSince}`;
+    
+    // Update settings fields
+    document.getElementById('editFullName').value = fullName;
+    document.getElementById('editEmail').value = email;
+    document.getElementById('avatarPreview').textContent = firstLetter;
+    
+    // Update stats
+    document.getElementById('statPoints').textContent = '0';
+    document.getElementById('clubPoints').textContent = '0';
+    
+    // Load persisted data from Supabase with await
+    await loadPersistedData();
+    
+    // Render lists with loaded data
+    renderTicketList();
+    renderProjectList();
+    
+    // Render header user menu
+    renderHeaderMenu(fullName);
 }
 
 function renderHeaderMenu(userName) {
@@ -1250,7 +1248,7 @@ function renderHeaderMenu(userName) {
 // Logout handlers
 async function handleLogout() {
     try {
-        await signOut(auth);
+        await supabase.auth.signOut();
         localStorage.removeItem('currentUser');
         window.location.href = 'index.html';
     } catch (err) {
@@ -1274,9 +1272,9 @@ document.getElementById('submitProject').addEventListener('click', async () => {
         return;
     }
     
-    // Save to Firestore
+    // Save to Supabase
     const projectData = { type, desc, budget, status: 'pending', date: new Date().toISOString() };
-    await saveProjectToFirestore(projectData);
+    await saveProjectToSupabase(projectData);
     
     // Update local state and re-render
     userProjects.push({ ...projectData, date: new Date().toLocaleDateString('fa-IR') });
@@ -1330,9 +1328,9 @@ document.getElementById('submitTicket').addEventListener('click', async () => {
         return;
     }
     
-    // Save to Firestore
+    // Save to Supabase
     const ticketData = { subject, text: message, status: 'open', date: new Date().toISOString() };
-    await saveTicketToFirestore(ticketData);
+    await saveTicketToSupabase(ticketData);
     
     // Update local state and re-render
     userTickets.push({ ...ticketData, date: new Date().toLocaleDateString('fa-IR') });
@@ -1404,9 +1402,7 @@ document.getElementById('updateProfile').addEventListener('click', async () => {
     }
     
     try {
-        await setDoc(doc(db, 'users', currentUser.uid), {
-            fullName: fullName
-        }, { merge: true });
+        await supabase.from('users').update({ full_name: fullName }).eq('id', currentUser.id);
         alert('اطلاعات با موفقیت به‌روزرسانی شد');
         welcomeName.textContent = fullName;
         welcomeAvatar.textContent = fullName.charAt(0).toUpperCase();
@@ -1429,15 +1425,15 @@ document.getElementById('avatarInput').addEventListener('change', async (e) => {
             // Compress image before saving
             const compressedDataUrl = await compressImage(file, 100, 100, 0.8);
             
-            // Check size (should be under 1MB for Firestore)
+            // Check size (should be under 1MB for Supabase)
             const byteLength = (compressedDataUrl.length * 3) / 4;
             if (byteLength > 1024 * 1024) {
                 alert('حجم تصویر پس از فشرده‌سازی هنوز بیش از 1MB است');
                 return;
             }
             
-            // Save to Firestore
-            await saveAvatarToFirestore(compressedDataUrl);
+            // Save to Supabase
+            await saveAvatarToSupabase(compressedDataUrl);
             
             // Update UI
             document.getElementById('avatarPreview').textContent = '';

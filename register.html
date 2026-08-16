@@ -169,7 +169,7 @@ AI
 
 <script type="module">
 
-import { auth, db, createUserWithEmailAndPassword, doc, setDoc } from './js/firebase.js';
+import { supabase } from './js/supabase.js';
 
 const registerForm = document.getElementById('registerForm');
 const messageEl = document.getElementById('message');
@@ -214,14 +214,21 @@ registerForm.addEventListener('submit', async (e) => {
     showMessage('', '');
     
     try {
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        const user = userCredential.user;
+        const { data, error } = await supabase.auth.signUp({
+            email: email,
+            password: password,
+            options: { data: { full_name: fullName } }
+        });
         
-        await setDoc(doc(db, "users", user.uid), {
-            fullName: fullName,
+        if (error) throw error;
+        
+        // Save user profile to users table
+        await supabase.from('users').insert({
+            id: data.user.id,
+            full_name: fullName,
             email: email,
             phone: phone,
-            memberSince: new Date().toISOString()
+            member_since: new Date().toISOString()
         });
         
         showMessage(
@@ -238,11 +245,11 @@ registerForm.addEventListener('submit', async (e) => {
     } catch (err) {
         let errorMsg = 'خطا در ثبت‌نام. لطفاً دوباره تلاش کنید.';
         
-        if (err.code === 'auth/weak-password') {
+        if (err.message.includes('Weak password')) {
             errorMsg = 'رمز عبور باید حداقل ۶ کاراکتر باشد.';
-        } else if (err.code === 'auth/email-already-in-use') {
+        } else if (err.message.includes('already been registered') || err.message.includes('duplicate')) {
             errorMsg = 'این ایمیل قبلاً ثبت شده است.';
-        } else if (err.code === 'auth/invalid-email') {
+        } else if (err.message.includes('Invalid email')) {
             errorMsg = 'ایمیل وارد شده معتبر نیست.';
         }
         

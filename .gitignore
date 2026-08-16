@@ -1,3 +1,1 @@
-(js/firebase.js is a source file, so no need to add anything to .gitignore)
-
-Nothing to output since only a JavaScript source file was modified and no build artifacts, dependencies, or temporary files were detected in the changes.
+Nothing should be ignored since the changes only include HTML and JavaScript source files.

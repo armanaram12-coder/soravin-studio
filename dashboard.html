@@ -896,7 +896,6 @@ AI
 import { auth, db, signOut, onAuthStateChanged, doc, getDoc, setDoc, collection, addDoc, query, where, orderBy, getDocs, updateDoc } from './js/firebase.js';
 
 document.addEventListener('DOMContentLoaded', () => {
-console.log('Dashboard loaded, current user:', currentUser);
 
 // DOM Elements
 const welcomeAvatar = document.getElementById('welcomeAvatar');
@@ -1143,7 +1142,7 @@ async function loadDashboard() {
             document.getElementById('clubPoints').textContent = '0';
             
             // Load persisted data from localStorage (tickets, avatar, orders, etc.)
-            loadPersistedData();
+            await loadPersistedData();
             
             // Render lists with loaded data
             renderTicketList();
@@ -1357,7 +1356,7 @@ function renderTicketList() {
         <li class="data-item">
             <div class="data-item-info">
                 <h4>${t.subject} - ${t.date}</h4>
-                <p>${t.message.substring(0, 50)}...</p>
+                <p>${t.text.substring(0, 50)}...</p>
             </div>
             <span class="status-badge status-${t.status}">${getStatusText(t.status)}</span>
         </li>

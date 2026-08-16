@@ -1,1 +1,1 @@
-Nothing should be ignored based on the provided file changes, as they only include HTML source files (`admin.html`, `dashboard.html`) without any build artifacts, dependencies, or temporary files.
+Nothing should be ignored based on the provided file changes. The only modified file is `dashboard.html`, which is a source file and should not be added to .gitignore.

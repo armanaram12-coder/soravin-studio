@@ -2,10 +2,20 @@
 
 import { auth, db, collection, addDoc, onAuthStateChanged } from './js/firebase.js';
 
+// Clean up old cart keys with email suffixes - run immediately on module load
+(function cleanupOldCartKeys() {
+    const allKeys = Object.keys(localStorage);
+    allKeys.forEach(key => {
+        if (key.startsWith('soravin_cart_') || key === 'soravinCart') {
+            localStorage.removeItem(key);
+        }
+    });
+})();
+
 document.addEventListener('DOMContentLoaded', function() {
-    // State
+    // State - unified cart key 'soravin_cart' for both guest and logged-in users
     let products = [];
-    let cart = JSON.parse(localStorage.getItem('soravinCart')) || [];
+    let cart = JSON.parse(localStorage.getItem('soravin_cart')) || [];
     let wishlist = JSON.parse(localStorage.getItem('soravinWishlist')) || [];
     let flashSaleEnd = Date.now() + 6 * 60 * 60 * 1000;
     let currentUser = null;
@@ -187,7 +197,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Cart Functions
     function saveCart() {
-        localStorage.setItem('soravinCart', JSON.stringify(cart));
+        localStorage.setItem('soravin_cart', JSON.stringify(cart));
         updateCartUI();
     }
 

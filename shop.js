@@ -352,10 +352,13 @@ document.addEventListener('DOMContentLoaded', function() {
         if (e.target === checkoutModal) checkoutModal.classList.remove('active');
     });
 
-    // Order Submission - save to Firestore
+    // Order Submission - save to Firestore with proper error handling
     document.getElementById('checkoutForm')?.addEventListener('submit', async (e) => {
         e.preventDefault();
 
+        const submitBtn = e.target.querySelector('button[type="submit"]');
+        const originalBtnText = submitBtn.textContent;
+        
         const order = {
             uid: currentUser ? currentUser.uid : 'anonymous',
             email: currentUser ? currentUser.email : document.getElementById('customerEmail').value,
@@ -373,16 +376,76 @@ document.addEventListener('DOMContentLoaded', function() {
         };
 
         try {
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'در حال ثبت...';
+            
             await addDoc(collection(db, 'orders'), order);
+            
+            // Success: show green message with order code
+            cart = [];
+            saveCart();
+            
+            checkoutModal.classList.remove('active');
+            
+            // Update success message with order code
+            const successOverlay = document.getElementById('successOverlay');
+            const successMessage = successOverlay.querySelector('.success-message');
+            successMessage.innerHTML = `
+                <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#27ae60" stroke-width="2">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                    <polyline points="22 4 12 14.01 9 11.01"/>
+                </svg>
+                <h3 style="color: #27ae60;">سفارش شما با موفقیت ثبت شد!</h3>
+                <p>کد سفارش: <strong style="direction: ltr; display: inline-block;">${order.code}</strong></p>
+                <p>کارشناسان ما به زودی با شما تماس خواهند گرفت.</p>
+                <button class="btn-close-success" id="closeSuccess">بستن</button>
+            `;
+            
+            successOverlay.classList.add('active');
+            
+            // Re-bind close button
+            document.getElementById('closeSuccess')?.addEventListener('click', () => {
+                successOverlay.classList.remove('active');
+            });
+            
         } catch (error) {
             console.error('خطا در ثبت سفارش:', error);
+            
+            // Error: show red message with error text
+            const errorMsg = error.message || 'خطا در ثبت سفارش. لطفاً دوباره تلاش کنید.';
+            
+            const checkoutModal = document.getElementById('checkoutModal');
+            const checkoutForm = checkoutModal.querySelector('.checkout-form');
+            
+            checkoutForm.innerHTML = `
+                <button class=\"modal-close\" id=\"checkoutClose\">&times;</button>
+                <div style=\"text-align: center; color: #e74c3c;\">
+                    <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#e74c3c" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                    </svg>
+                    <h3 style="color: #e74c3c;">خطا در ثبت سفارش</h3>
+                    <p>${errorMsg}</p>
+                    <button class="btn-submit-order" id=\"retryBtn\">تلاش مجدد</button>
+                </div>
+            `;
+            
+            // Re-bind close and retry buttons
+            document.getElementById('checkoutClose')?.addEventListener('click', () => {
+                checkoutModal.classList.remove('active');
+            });
+            
+            document.getElementById('retryBtn')?.addEventListener('click', () => {
+                window.location.reload();
+            });
+            
+        } finally {
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalBtnText;
+            }
         }
-
-        cart = [];
-        saveCart();
-
-        checkoutModal.classList.remove('active');
-        successOverlay.classList.add('active');
     });
 
     document.getElementById('closeSuccess')?.addEventListener('click', () => {

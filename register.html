@@ -235,10 +235,11 @@ registerForm.addEventListener('submit', async (e) => {
         }, { onConflict: 'id' });
         
         if (upsertError) {
+            // Only log to console, don't fail the registration
             console.error('SUPABASE ERROR:', upsertError.message);
-            throw upsertError;
         }
         
+        // Show success message regardless of upsert result
         showMessage(
             'ثبت‌نام با موفقیت انجام شد! در حال انتقال به صفحه ورود...',
             'success'

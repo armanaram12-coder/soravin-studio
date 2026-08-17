@@ -1,1 +1,1 @@
-Nothing needs to be added to .gitignore since the changes only include JavaScript source files (.js), shell scripts (.sh), and HTML files, which are all source code/config files that should not be ignored.
+Nothing should be ignored based on the provided file changes, as they only include source files (.js and .html) without any build artifacts, dependencies, or temporary files.

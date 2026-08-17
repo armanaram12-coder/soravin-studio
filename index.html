@@ -692,12 +692,67 @@ if(mobileToggle && mobileMenu) {
 
 
 <script type="module">
-import { initSmartCTA, updateHeaderAuth } from './js/firebase-auth.js';
+import { supabase } from './js/supabase.js';
 
 // Initialize smart CTA button
-initSmartCTA();
+async function initSmartCTA() {
+    try {
+        const ctaBtn = document.getElementById('smart-cta-btn');
+        if (!ctaBtn) return;
+        
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session) {
+            ctaBtn.href = 'dashboard.html';
+        }
+    } catch (error) {
+        console.error('Smart CTA error:', error);
+    }
+}
 
-// Update header auth UI - show greeting when logged in
+// Update header auth UI - show greeting when logged in via Supabase only
+async function updateHeaderAuth() {
+    try {
+        // Clear old localStorage auth keys
+        const oldAuthKeys = ['currentUser', 'soravin_user', 'user_token', 'auth_token'];
+        oldAuthKeys.forEach(key => localStorage.removeItem(key));
+        
+        const { data: { session } } = await supabase.auth.getSession();
+        const authLink = document.getElementById('authLink');
+        const mobileAuthLink = document.getElementById('mobileAuthLink');
+        
+        if (session) {
+            const fullName = session.user.user_metadata?.full_name || session.user.email.split('@')[0];
+            const greeting = `سلام ${fullName}`;
+            
+            if (authLink) {
+                authLink.textContent = greeting;
+                authLink.href = 'dashboard.html';
+                authLink.classList.remove('btn-outline-small');
+                authLink.classList.add('auth-greeting');
+            }
+            
+            if (mobileAuthLink) {
+                mobileAuthLink.textContent = greeting;
+                mobileAuthLink.href = 'dashboard.html';
+                mobileAuthLink.classList.add('auth-greeting');
+            }
+        }
+    } catch (error) {
+        console.error('Header auth update error:', error);
+    }
+}
+
+// Listen for auth state changes
+supabase.auth.onAuthStateChange(async (event, session) => {
+    if (event === 'SIGNED_OUT') {
+        // Clear old auth keys on sign out
+        const oldAuthKeys = ['currentUser', 'soravin_user', 'user_token', 'auth_token'];
+        oldAuthKeys.forEach(key => localStorage.removeItem(key));
+    }
+    updateHeaderAuth();
+});
+
+initSmartCTA();
 updateHeaderAuth();
 </script>
 

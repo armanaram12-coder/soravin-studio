@@ -1,1 +1,1 @@
-Nothing should be ignored since the changes only include HTML and JavaScript source files.
+Nothing should be ignored since the changes only include HTML source files (dashboard.html, index.html, register.html) which are legitimate source code files that should be tracked in version control.

@@ -869,6 +869,10 @@ AI
                     <label>ایمیل</label>
                     <input type="email" id="editEmail" placeholder="ایمیل" disabled>
                 </div>
+                <div class="form-row">
+                    <label>شماره موبایل</label>
+                    <input type="tel" id="editPhone" placeholder="09xxxxxxxxx" disabled>
+                </div>
                 <button class="btn-submit-gold" id="updateProfile">ذخیره تغییرات</button>
             </div>
             <div class="settings-card">
@@ -1002,67 +1006,95 @@ async function loadPersistedData() {
 // Save data to Supabase
 async function saveTicketToSupabase(ticketData) {
     try {
-        await supabase.from('tickets').insert({
+        const { error } = await supabase.from('tickets').insert({
             uid: currentUser.id,
             email: currentUser.email,
             ...ticketData
         });
+        if (error) {
+            console.error('SUPABASE ERROR:', error.message);
+            alert('خطا در ذخیره تیکت: ' + error.message);
+        }
     } catch (error) {
-        console.error('Error saving ticket:', error);
+        console.error('SUPABASE ERROR:', error.message);
+        alert('خطا در ذخیره تیکت: ' + error.message);
     }
 }
 
 async function saveProjectToSupabase(projectData) {
     try {
-        await supabase.from('projects').insert({
+        const { error } = await supabase.from('projects').insert({
             uid: currentUser.id,
             email: currentUser.email,
             ...projectData
         });
+        if (error) {
+            console.error('SUPABASE ERROR:', error.message);
+            alert('خطا در ذخیره پروژه: ' + error.message);
+        }
     } catch (error) {
-        console.error('Error saving project:', error);
+        console.error('SUPABASE ERROR:', error.message);
+        alert('خطا در ذخیره پروژه: ' + error.message);
     }
 }
 
 async function saveOrderToSupabase(orderData) {
     try {
-        await supabase.from('orders').insert({
+        const { error } = await supabase.from('orders').insert({
             uid: currentUser.id,
             email: currentUser.email,
             ...orderData
         });
+        if (error) {
+            console.error('SUPABASE ERROR:', error.message);
+            alert('خطا در ذخیره سفارش: ' + error.message);
+        }
     } catch (error) {
-        console.error('Error saving order:', error);
+        console.error('SUPABASE ERROR:', error.message);
+        alert('خطا در ذخیره سفارش: ' + error.message);
     }
 }
 
 async function saveCommentToSupabase(commentData) {
     try {
-        await supabase.from('comments').insert({
+        const { error } = await supabase.from('comments').insert({
             uid: currentUser.id,
             ...commentData
         });
+        if (error) {
+            console.error('SUPABASE ERROR:', error.message);
+            alert('خطا در ذخیره نظر: ' + error.message);
+        }
     } catch (error) {
-        console.error('Error saving comment:', error);
+        console.error('SUPABASE ERROR:', error.message);
+        alert('خطا در ذخیره نظر: ' + error.message);
     }
 }
 
 async function saveNotificationToSupabase(notificationData) {
     try {
-        await supabase.from('notifications').insert({
+        const { error } = await supabase.from('notifications').insert({
             uid: currentUser.id,
             ...notificationData
         });
+        if (error) {
+            console.error('SUPABASE ERROR:', error.message);
+        }
     } catch (error) {
-        console.error('Error saving notification:', error);
+        console.error('SUPABASE ERROR:', error.message);
     }
 }
 
 async function saveAvatarToSupabase(dataUrl) {
     try {
-        await supabase.from('users').update({ avatar_url: dataUrl }).eq('id', currentUser.id);
+        const { error } = await supabase.from('users').update({ avatar_url: dataUrl }).eq('id', currentUser.id);
+        if (error) {
+            console.error('SUPABASE ERROR:', error.message);
+            alert('خطا در ذخیره آواتار: ' + error.message);
+        }
     } catch (error) {
-        console.error('Error saving avatar:', error);
+        console.error('SUPABASE ERROR:', error.message);
+        alert('خطا در ذخیره آواتار: ' + error.message);
     }
 }
 
@@ -1121,37 +1153,68 @@ async function loadDashboard() {
 
 async function handleUserSignedIn(user) {
     currentUser = user;
+
+    // Load user profile from Supabase using upsert pattern if not exists
+    let userProfile = await loadUserProfile(user);
     
-    // Load user profile from Supabase
-    const userProfile = await loadUserProfile(user);
-    
+    // If no profile exists, create one with upsert
+    if (!userProfile) {
+        const { data: upsertedData, error: upsertError } = await supabase.from('users').upsert({
+            id: user.id,
+            full_name: user.user_metadata?.full_name || 'کاربر گرامی',
+            email: user.email,
+            phone: user.user_metadata?.phone || '',
+            member_since: new Date().toISOString()
+        }, { onConflict: 'id' }).select().single();
+        
+        if (upsertError) {
+            console.error('SUPABASE ERROR:', upsertError.message);
+        } else {
+            userProfile = upsertedData;
+        }
+    }
+
     const fullName = userProfile?.full_name || user.user_metadata?.full_name || 'کاربر گرامی';
     const email = user.email;
+    const phone = userProfile?.phone || '';
     const memberSince = userProfile?.member_since ? new Date(userProfile.member_since).toLocaleDateString('fa-IR') : '—';
     const firstLetter = fullName.charAt(0).toUpperCase();
-    
+
     // Update welcome bar
     welcomeAvatar.textContent = firstLetter;
     welcomeName.textContent = fullName;
     welcomeEmail.textContent = email;
     joinDateEl.textContent = `تاریخ عضویت: ${memberSince}`;
-    
+
     // Update settings fields
     document.getElementById('editFullName').value = fullName;
     document.getElementById('editEmail').value = email;
+    document.getElementById('editPhone').value = phone;
     document.getElementById('avatarPreview').textContent = firstLetter;
     
+    // Update avatar display if avatar_url exists
+    if (userProfile?.avatar_url) {
+        document.getElementById('avatarPreview').textContent = '';
+        document.getElementById('avatarPreview').style.backgroundImage = `url(${userProfile.avatar_url})`;
+        document.getElementById('avatarPreview').style.backgroundSize = 'cover';
+        document.getElementById('avatarPreview').style.backgroundPosition = 'center';
+        welcomeAvatar.style.backgroundImage = `url(${userProfile.avatar_url})`;
+        welcomeAvatar.style.backgroundSize = 'cover';
+        welcomeAvatar.style.backgroundPosition = 'center';
+        welcomeAvatar.textContent = '';
+    }
+
     // Update stats
     document.getElementById('statPoints').textContent = '0';
     document.getElementById('clubPoints').textContent = '0';
-    
+
     // Load persisted data from Supabase with await
     await loadPersistedData();
-    
+
     // Render lists with loaded data
     renderTicketList();
     renderProjectList();
-    
+
     // Render header user menu
     renderHeaderMenu(fullName);
 }

@@ -168,8 +168,11 @@ AI
 
 
 <script type="module">
-
 import { supabase } from './js/supabase.js';
+
+// Clear any old localStorage auth keys (not Supabase session)
+const oldAuthKeys = ['currentUser', 'soravin_user', 'user_token', 'auth_token'];
+oldAuthKeys.forEach(key => localStorage.removeItem(key));
 
 const registerForm = document.getElementById('registerForm');
 const messageEl = document.getElementById('message');
@@ -222,14 +225,19 @@ registerForm.addEventListener('submit', async (e) => {
         
         if (error) throw error;
         
-        // Save user profile to users table
-        await supabase.from('users').insert({
+        // Upsert user profile to users table
+        const { error: upsertError } = await supabase.from('users').upsert({
             id: data.user.id,
             full_name: fullName,
             email: email,
             phone: phone,
             member_since: new Date().toISOString()
-        });
+        }, { onConflict: 'id' });
+        
+        if (upsertError) {
+            console.error('SUPABASE ERROR:', upsertError.message);
+            throw upsertError;
+        }
         
         showMessage(
             'ثبت‌نام با موفقیت انجام شد! در حال انتقال به صفحه ورود...',

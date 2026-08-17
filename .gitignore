@@ -1,1 +1,1 @@
-Nothing should be ignored since the changes only include HTML source files (dashboard.html, index.html, register.html) which are legitimate source code files that should be tracked in version control.
+Nothing needs to be added to .gitignore since the changes only include JavaScript source files (.js), shell scripts (.sh), and HTML files, which are all source code/config files that should not be ignored.

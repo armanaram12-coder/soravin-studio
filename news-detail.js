@@ -7,13 +7,18 @@ const newsId = urlParams.get('id');
 
 let newsData = [];
 
-// Load news archive
+// Load news from auto-news.json
 fetch("data/auto-news.json")
-.then(response => response.json())
+.then(response => {
+    if (!response.ok) {
+        throw new Error("auto-news.json not found");
+    }
+    return response.json();
+})
 .then(data => {
     newsData = data;
     if (newsId) {
-        const news = newsData.find(n => n.id == newsId || String(n.id) === newsId);
+        const news = newsData.find(n => String(n.id) === String(newsId));
         if (news) {
             renderNewsDetail(news);
         } else {

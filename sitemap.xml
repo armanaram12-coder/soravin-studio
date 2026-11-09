@@ -166,12 +166,27 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://soravin-studio.vercel.app/news/رئیس-مرکز-آمار-قوه-قضائیه-برخی-صفحات-تقلبی-از-نام-عدل-ایران-.html</loc>
+    <loc>https://soravin-studio.vercel.app/news/شگفتی-در-بازار-خودروهای-برقی؛-مالک-فورد-f-150-تقریبا-به-قیمت.html</loc>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://soravin-studio.vercel.app/news/مجوز-فروش-تراشههای-انویدیا-به-شرکتی-با-دفتر-خالی-در-چین.html</loc>
+    <loc>https://soravin-studio.vercel.app/news/توانیر-شایعه-حمله-سایبری-به-شبکه-برق-تهران-را-رد-کرد.html</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://soravin-studio.vercel.app/news/روسیه-رسماً-به-بیتکوین-و-تتر-چراغ-سبز-نشان-داد؛-آغاز-فصل-جدی.html</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://soravin-studio.vercel.app/news/موفقیت-غافلگیرکننده-اسنپچت؛-عبور-از-مرز-۳۰-میلیون-مشترک-پولی.html</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://soravin-studio.vercel.app/news/تصاویر-جدید-gta-6-را-ببینید؛-جزئیات-دیوانهوار-خودروها.html</loc>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -181,37 +196,22 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://soravin-studio.vercel.app/news/شرکت-سازنده-chatgpt-حالا-۱٫۲۵-تریلیون-دلار-ارزش-دارد.html</loc>
+    <loc>https://soravin-studio.vercel.app/news/ریزر-یک-هندزفری-سیمی-با-پورت-تایپ-سی-رونمایی-کرد.html</loc>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://soravin-studio.vercel.app/news/۱۶-روش-بهتری-که-ایلان-ماسک-میتوانست-۴۵۰-میلیون-دلارش-را-به-ب.html</loc>
+    <loc>https://soravin-studio.vercel.app/news/رمزگشایی-از-دیانای-باستانی،-ریشه-مشترک-وایکینگها-و-آنگلوساکس.html</loc>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://soravin-studio.vercel.app/news/دیوان-محاسبات-حذف-برخی-خانوارها-از-کالابرگ-مجوز-قانونی-ندارد.html</loc>
+    <loc>https://soravin-studio.vercel.app/news/چرا-کدهای-کیوآر-سه-مربع-بزرگ-دارند؟.html</loc>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://soravin-studio.vercel.app/news/حادثه-عجیب-برای-لوکانو-l5؛-چرخ-شاسیبلند-چینی-از-جا-کنده-شد.html</loc>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://soravin-studio.vercel.app/news/مدیر-ناسا-در-مسابقه-فضایی-برای-فرود-انسان-روی-ماه،-چین-را-شک.html</loc>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://soravin-studio.vercel.app/news/روزی-که-نور-خم-شد-تونل-زمان-۱۵-آبان.html</loc>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://soravin-studio.vercel.app/news/معاون-رئیسجمهور-صدور-گواهینامه-موتورسیکلت-زنان-از-نظر-قانونی.html</loc>
+    <loc>https://soravin-studio.vercel.app/news/یک-آسیبپذیری-بحرانی-در-توزیع-لینوکس-آلپاین-کشف-شد.html</loc>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
